@@ -473,6 +473,15 @@ html.es-darkfix canvas {
   .acc-stats { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 6px; }
   .acc-stat { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: var(--txt2); background: var(--bg); border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; }
   .acc-stat b { color: var(--acc); font-size: 13px; }
+  .acc-preview { text-align: center; margin: 4px 0 8px; }
+  .acc-preview-img { max-width: 46%; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,.15); }
+  .acc-preview-name { font-size: 12px; color: var(--txt2); margin-top: 4px; }
+  .acc-item { cursor: pointer; }
+  .acc-item.sel { outline: 2px solid var(--acc); border-radius: 8px; }
+  .acc-item.sel .acc-item-img { border-radius: 8px; }
+  .star5 { color: #e8a33d; font-weight: 700; }
+  .star4 { color: #a678d8; font-weight: 700; }
+  .star3 { color: #5a9bd6; font-weight: 700; }
   .acc-edit { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
   .acc-edit label { font-size: 12px; color: var(--txt2); }
   .acc-edit input, .acc-edit textarea {
@@ -3134,7 +3143,7 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
   // 深海奏汰预置 MV 服装（用户提供的游戏内截图，按从上到下、从左到右顺序）
   function accSeed() {
     return [
-      { name: "琉璃凤蝶", img: "assets/acc/kanata-01.jpg" },
+      { name: "MV 服装 1", img: "assets/acc/kanata-01.jpg" },
       { name: "MV 服装 2", img: "assets/acc/kanata-02.jpg" },
       { name: "MV 服装 3", img: "assets/acc/kanata-03.jpg" },
       { name: "MV 服装 4", img: "assets/acc/kanata-04.jpg" },
@@ -3153,6 +3162,7 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
   let accEditId = "";
   let accRoleEdit = {};
   let accOutfitNew = {};
+  let accSel = {}; // 角色当前选中预览的服装下标
   let accPwShow = {};
   // 本地图压缩转 dataURL（MV 服装预览，控制 localStorage 体积）
   function accFileToDataUrl(file, cb) {
@@ -3179,18 +3189,21 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
     const box = $("accList");
     if (!box) return;
     box.innerHTML = "";
-    list.forEach((a) => {
+    list.forEach((a, ai) => {
       const g = document.createElement("div");
       g.className = "acc-group";
       const showPw = !!accPwShow[a.id];
       const editing = accEditId === a.id;
+      const help = accHelpOn();
+      // 标题：开账号帮助=昵称+区服；关=账号N（自定义名称）
+      const title = help ? `${esc(a.label)}<span class="acc-server">${esc(a.server || "")}</span>` : `账号${ai + 1}（${esc(a.label)}）`;
       let html = `<div class="acc-head">
-          <span class="acc-title">${esc(a.label)}<span class="acc-server">${esc(a.server || "")}</span></span>
+          <span class="acc-title">${title}</span>
           <span class="acc-row">
-            <button type="button" class="acc-btn" data-acc-edit="${escAttr(a.id)}">${editing ? "收起" : "编辑账号"}</button>
+            ${help ? `<button type="button" class="acc-btn" data-acc-edit="${escAttr(a.id)}">${editing ? "收起" : "编辑账号"}</button>` : ""}
           </span>
         </div>`;
-      if (editing) {
+      if (help && editing) {
         html += `<div class="acc-edit">
           <label>账号昵称</label><input id="ed-label" value="${escAttr(a.label)}" />
           <label>区服</label><input id="ed-server" value="${escAttr(a.server || "")}" />
@@ -3200,45 +3213,54 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
           <textarea id="ed-stars">${esc((a.stars || []).map((s) => [s.char || "", s.name || "", s.img || ""].join("|")).join("\n"))}</textarea>
           <div class="ed-actions">
             <button type="button" class="acc-btn primary" data-acc-save="${escAttr(a.id)}">保存</button>
+            <button type="button" class="acc-btn" data-acc-pack-export="${escAttr(a.id)}">导出数据包</button>
+            <label class="acc-btn">导入数据包<input type="file" class="of-pack" accept=".json,application/json" hidden data-acc-pack-import="${escAttr(a.id)}" /></label>
             <button type="button" class="acc-btn" data-acc-cancel>取消</button>
           </div>
         </div>`;
-      } else {
+      } else if (help) {
         html += `<div class="acc-info">
           区服：${esc(a.server || "—")}<br/>
           账号：${esc(a.user || "—")}<br/>
           密码：<span class="pw">${showPw ? esc(a.pass || "—") : "••••••"}</span>
           <button type="button" class="acc-btn" data-acc-pw="${escAttr(a.id)}">${showPw ? "隐藏" : "显示"}</button>
         </div>`;
-        // 总五星：按偶像统计 + 卡面网格
-        const stMap = {};
-        (a.stars || []).forEach((s) => { const k = s.char || "未标注"; stMap[k] = (stMap[k] || 0) + 1; });
-        const stKeys = Object.keys(stMap);
-        if ((a.stars || []).length) {
-          html += `<div class="enc-sec">总五星（${(a.stars || []).length}）</div>
-            <div class="acc-stats">${stKeys.map((k) => `<span class="acc-stat">${esc(k)}<b>${stMap[k]}</b></span>`).join("")}</div>
-            <div class="acc-grid">`;
-          (a.stars || []).forEach((s) => {
-            html += `<div class="acc-item">
-              ${s.img ? `<img class="acc-item-img" src="${escAttr(s.img)}" alt="" data-zoom="${escAttr(s.img)}" />` : `<div class="acc-empty">无卡面</div>`}
-              <div class="acc-item-name">${esc(s.name || "未命名")}${s.char ? `<br/>${esc(s.char)}` : ""}</div>
-            </div>`;
-          });
-          html += `</div>`;
-        }
       }
-      // 角色区（MV 服装写真集）
+      // 总五星：按偶像统计 + 卡面网格（与帮助开关无关）
+      const stMap = {};
+      (a.stars || []).forEach((s) => { const k = s.char || "未标注"; stMap[k] = (stMap[k] || 0) + 1; });
+      const stKeys = Object.keys(stMap);
+      if ((a.stars || []).length) {
+        html += `<div class="enc-sec">总五星（${(a.stars || []).length}）</div>
+          <div class="acc-stats">${stKeys.map((k) => `<span class="acc-stat">${esc(k)}<b>${stMap[k]}</b></span>`).join("")}</div>
+          <div class="acc-grid">`;
+        (a.stars || []).forEach((s) => {
+          html += `<div class="acc-item">
+            ${s.img ? `<img class="acc-item-img" src="${escAttr(s.img)}" alt="" data-zoom="${escAttr(s.img)}" />` : `<div class="acc-empty">无卡面</div>`}
+            <div class="acc-item-name">${esc(s.name || "未命名")}${s.char ? `<br/>${esc(s.char)}` : ""}</div>
+          </div>`;
+        });
+        html += `</div>`;
+      }
+      // 角色区（MV 服装写真集：大预览 + 缩略图网格，点击缩略图切换）
       (a.roles || []).forEach((r) => {
         const roleEditing = accRoleEdit[a.id] === r.id;
+        const outfits = r.outfits || [];
+        const st5 = outfits.filter((o) => o.star == 5).length;
+        const st4 = outfits.filter((o) => o.star == 4).length;
+        const st3 = outfits.filter((o) => o.star == 3).length;
+        const selKey = a.id + "::" + r.id;
+        const selIdx = accSel[selKey] || 0;
+        const cur = outfits[selIdx] || null;
         html += `<div class="acc-role">
           <div class="acc-role-head">
             <span class="acc-role-name">${esc(r.name || "未命名角色")}</span>
             <span class="acc-row">
-              <button type="button" class="acc-btn" data-acc-role-edit="${escAttr(a.id)}::${escAttr(r.id)}">${roleEditing ? "收起" : "改名"}</button>
-              <button type="button" class="acc-btn" data-acc-role-del="${escAttr(a.id)}::${escAttr(r.id)}">删除</button>
+              ${help ? `<button type="button" class="acc-btn" data-acc-role-edit="${escAttr(a.id)}::${escAttr(r.id)}">${roleEditing ? "收起" : "改名"}</button>
+              <button type="button" class="acc-btn" data-acc-role-del="${escAttr(a.id)}::${escAttr(r.id)}">删除</button>` : ""}
             </span>
           </div>`;
-        if (roleEditing) {
+        if (help && roleEditing) {
           html += `<div class="acc-edit">
             <label>角色名</label><input id="ed-role-name" value="${escAttr(r.name || "")}" />
             <div class="ed-actions">
@@ -3246,21 +3268,29 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
             </div>
           </div>`;
         }
-        html += `<div class="enc-sec">MV 服装（${(r.outfits || []).length}）</div><div class="acc-grid">`;
-        (r.outfits || []).forEach((o, oi) => {
-          html += `<div class="acc-item">
+        html += `<div class="enc-sec">MV 服装（${outfits.length}）${st5 ? `<span class="star5"> ★5×${st5}</span>` : ""}${st4 ? `<span class="star4"> ★4×${st4}</span>` : ""}${st3 ? `<span class="star3"> ★3×${st3}</span>` : ""}</div>`;
+        if (cur && cur.img) {
+          html += `<div class="acc-preview"><img class="acc-preview-img" src="${escAttr(cur.img)}" alt="" data-zoom="${escAttr(cur.img)}" />
+            <div class="acc-preview-name">${esc(cur.name || "未命名")}${cur.star ? `<span class="star${cur.star}"> ★${cur.star}</span>` : ""}</div></div>`;
+        }
+        html += `<div class="acc-grid">`;
+        outfits.forEach((o, oi) => {
+          html += `<div class="acc-item${oi === selIdx ? " sel" : ""}" data-acc-outfit-pick="${escAttr(a.id)}::${escAttr(r.id)}::${oi}">
             ${o.img ? `<img class="acc-item-img" src="${escAttr(o.img)}" alt="" data-zoom="${escAttr(o.img)}" />` : `<div class="acc-empty">无图</div>`}
-            <div class="acc-item-name">${esc(o.name || "未命名")}</div>
-            <button type="button" class="acc-btn" data-acc-outfit-del="${escAttr(a.id)}::${escAttr(r.id)}::${oi}">删除</button>
+            <div class="acc-item-name">${esc(o.name || "未命名")}${o.star ? `<span class="star${o.star}">★${o.star}</span>` : ""}</div>
+            ${help ? `<button type="button" class="acc-btn" data-acc-outfit-del="${escAttr(a.id)}::${escAttr(r.id)}::${oi}">删除</button>` : ""}
           </div>`;
         });
         html += `</div>`;
-        const nk = accOutfitNew[a.id + "::" + r.id];
-        const nv = nk || {};
-        html += `<div class="acc-add">
+        if (help) {
+          const nk = accOutfitNew[a.id + "::" + r.id];
+          const nv = nk || {};
+          html += `<div class="acc-add">
           <button type="button" class="acc-btn" data-acc-outfit-new="${escAttr(a.id)}::${escAttr(r.id)}">${nk ? "收起" : "+ 添加 MV 服装"}</button>
           ${nk ? `<div class="acc-edit">
             <label>服装名</label><input class="of-name" value="${escAttr(nv.name || "")}" placeholder="如：XXX MV衣装" />
+            <label>星级</label>
+            <select class="of-star"><option value="">未知</option><option value="5" ${nv.star == 5 ? "selected" : ""}>★5</option><option value="4" ${nv.star == 4 ? "selected" : ""}>★4</option><option value="3" ${nv.star == 3 ? "selected" : ""}>★3</option></select>
             <label>上传本地图片（自动压缩，选图即用）</label>
             <input type="file" class="of-file" accept="image/*" />
             <label>或填图片链接</label>
@@ -3269,9 +3299,11 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
               <button type="button" class="acc-btn primary" data-acc-outfit-save="${escAttr(a.id)}::${escAttr(r.id)}">保存服装</button>
             </div>
           </div>` : ""}
-        </div></div>`;
+        </div>`;
+        }
+        html += `</div>`;
       });
-      html += `<div class="acc-add"><button type="button" class="acc-btn" data-acc-role-add="${escAttr(a.id)}">+ 添加角色</button></div>`;
+      html += help ? `<div class="acc-add"><button type="button" class="acc-btn" data-acc-role-add="${escAttr(a.id)}">+ 添加角色</button></div>` : "";
       g.innerHTML = html;
       box.appendChild(g);
     });
@@ -3358,6 +3390,7 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
       const [ai, ri] = b.dataset.accOutfitSave.split("::");
       const name = ((grp.querySelector(".of-name") || {}).value || "").trim();
       const url = ((grp.querySelector(".of-url") || {}).value || "").trim();
+      const star = ((grp.querySelector(".of-star") || {}).value || "").trim();
       const file = (grp.querySelector(".of-file") || {}).files && grp.querySelector(".of-file").files[0];
       const done = (img) => {
         if (!name && !img) return;
@@ -3365,13 +3398,69 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
         const a = list2.find((x) => x.id === ai);
         const r = a && a.roles.find((y) => y.id === ri);
         if (!r) return;
-        r.outfits.push({ name: name || "未命名", img: img || url });
+        r.outfits.push({ name: name || "未命名", img: img || url, star: star ? Number(star) : 0 });
         accSave(list2);
         accOutfitNew[ai + "::" + ri] = null;
         renderAcc();
       };
       if (file) accFileToDataUrl(file, done);
       else done(url);
+    });
+    // —— 服装缩略图点击切换大预览 ——
+    box.querySelectorAll("[data-acc-outfit-pick]").forEach((b) => b.onclick = () => {
+      const [ai, ri, oi] = b.dataset.accOutfitPick.split("::");
+      accSel[ai + "::" + ri] = Number(oi);
+      renderAcc();
+    });
+    // —— 数据包：导出 / 导入（账号密码仅存本机，导入时合并到当前账号）——
+    box.querySelectorAll("[data-acc-pack-export]").forEach((b) => b.onclick = () => {
+      const list2 = accLoad();
+      const a = list2.find((x) => x.id === b.dataset.accPackExport);
+      if (!a) return;
+      const pack = { ver: 1, kind: "es-account-pack", note: "偶像梦幻祭账号所持数据包（个人本地数据，请勿公开分享）", accounts: [a] };
+      const blob = new Blob([JSON.stringify(pack, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const aEl = document.createElement("a");
+      aEl.href = url;
+      aEl.download = (a.label || "账号") + "-数据包.json";
+      aEl.click();
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
+    });
+    box.querySelectorAll("[data-acc-pack-import]").forEach((input) => input.onchange = () => {
+      const f = input.files && input.files[0];
+      if (!f) return;
+      const aid = input.dataset.accPackImport;
+      const rd = new FileReader();
+      rd.onload = () => {
+        try {
+          const p = JSON.parse(rd.result);
+          const pk = (p && p.accounts && p.accounts[0]) || p;
+          const list2 = accLoad();
+          const a = list2.find((x) => x.id === aid);
+          if (!a) return;
+          if (Array.isArray(pk.stars)) {
+            const ex = new Set((a.stars || []).map((s) => (s.char || "") + "|" + (s.name || "")));
+            (pk.stars || []).forEach((s) => {
+              const k = (s.char || "") + "|" + (s.name || "");
+              if (!ex.has(k)) { a.stars.push({ char: s.char || "", name: s.name || "", img: s.img || "" }); ex.add(k); }
+            });
+          }
+          (pk.roles || []).forEach((pr) => {
+            const nr = pr.name || "";
+            let r = a.roles.find((y) => y.name === nr);
+            if (!r) { r = { id: "r" + Date.now() + Math.random().toString(16).slice(2, 7), name: nr, outfits: [] }; a.roles.push(r); }
+            const exo = new Set((r.outfits || []).map((o) => o.name));
+            (pr.outfits || []).forEach((o) => {
+              if (!exo.has(o.name)) { r.outfits.push({ name: o.name || "未命名", img: o.img || "", star: o.star || 0 }); exo.add(o.name); }
+            });
+          });
+          accSave(list2);
+          accEditId = "";
+          renderAcc();
+        } catch (e) { if (window.alert) window.alert("数据包解析失败：" + e.message); }
+      };
+      rd.readAsText(f);
+      input.value = "";
     });
     // —— 服装图点击放大 ——
     box.querySelectorAll("[data-zoom]").forEach((img) => img.onclick = () => openZoom(img.dataset.zoom));
