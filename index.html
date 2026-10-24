@@ -3333,9 +3333,21 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
           </div>`;
         }
         html += `<div class="enc-sec">MV 服装（${outfits.length}）${st5 ? `<span class="star5"> ★5×${st5}</span>` : ""}${st4 ? `<span class="star4"> ★4×${st4}</span>` : ""}${st3 ? `<span class="star3"> ★3×${st3}</span>` : ""}</div>`;
-        html += `<div class="acc-换衣入口">
-          <button type="button" class="acc-btn primary" data-acc-outfit-open="${escAttr(a.id)}::${escAttr(r.id)}">更换服装（${outfits.length}）</button>
-        </div>`;
+        html += `<div class="acc-preview-wrap">`;
+        if (cur && cur.img) {
+          html += `<div class="acc-preview"><img class="acc-preview-img" src="${escAttr(cur.img)}" alt="" />
+            <div class="acc-preview-name">${cur.name ? esc(cur.name) : " "}${cur.star ? `<span class="star${cur.star}"> ★${cur.star}</span>` : ""}</div></div>`;
+        }
+        html += `<div class="acc-mv-grid">`;
+        outfits.forEach((o, oi) => {
+          html += `<div class="acc-item${oi === selIdx ? " sel" : ""}" data-acc-outfit-pick="${escAttr(a.id)}::${escAttr(r.id)}::${oi}">
+            ${o.img ? `<img class="acc-item-img" src="${escAttr(o.img)}" alt="" data-zoom="${escAttr(o.img)}" />` : `<div class="acc-empty">无图</div>`}
+            <div class="acc-item-name">${o.name ? esc(o.name) : " "}${o.star ? `<span class="star${o.star}">★${o.star}</span>` : ""}</div>
+            ${help ? `<button type="button" class="acc-btn" data-acc-outfit-del="${escAttr(a.id)}::${escAttr(r.id)}::${oi}">删除</button>` : ""}
+          </div>`;
+        });
+        html += `</div>`;
+        html += `</div>`;
         if (help) {
           const nk = accOutfitNew[a.id + "::" + r.id];
           const nv = nk || {};
