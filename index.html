@@ -470,6 +470,9 @@ html.es-darkfix canvas {
   .acc-item-img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 8px; cursor: pointer; display: block; background: var(--bg); }
   .acc-item-name { font-size: 12px; line-height: 1.4; color: var(--txt2); }
   .acc-add { margin: 6px 0 2px; }
+  .acc-stats { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 6px; }
+  .acc-stat { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: var(--txt2); background: var(--bg); border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; }
+  .acc-stat b { color: var(--acc); font-size: 13px; }
   .acc-edit { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
   .acc-edit label { font-size: 12px; color: var(--txt2); }
   .acc-edit input, .acc-edit textarea {
@@ -2427,6 +2430,10 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
 
   // —— 版本日志（与 pet.js / CHANGELOG.md 同步）——
   const CHANGELOG = [
+    { ver: "2.9.1", date: "2026-10-24", items: [
+      "账号卡新增「总五星」：记录每张五星卡的偶像/卡名/卡面图，自动按偶像统计数量",
+      "五星卡以网格展示，点卡面图可放大预览",
+    ] },
     { ver: "2.9.0", date: "2026-10-24", items: [
       "新增「账号所持卡一览」：设置里开启「账号帮助」后，偶像梦幻祭页签显示「账号」",
       "角色制：每个账号下可添加多个角色，记录区服/账号/密码（密码可显示/隐藏）",
@@ -3088,9 +3095,9 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
   const ACC_HELP_KEY = "es_acc_help";
   function accDefault() {
     return [
-      { id: "acc1", label: "奏汰", server: "4399", user: "ybxo0368----", pass: "Qwasd123", roles: [{ id: "r1", name: "深海奏汰", outfits: [] }] },
-      { id: "acc2", label: "朔间零", server: "4399", user: "jiedang143", pass: "abcd1234", roles: [{ id: "r1", name: "朔間零", outfits: [] }] },
-      { id: "acc3", label: "斑", server: "4399", user: "aq5575256182", pass: "qq137805953", roles: [{ id: "r1", name: "三毛縞斑", outfits: [] }] }
+      { id: "acc1", label: "奏汰", server: "4399", user: "ybxo0368----", pass: "Qwasd123", stars: [], roles: [{ id: "r1", name: "深海奏汰", outfits: [] }] },
+      { id: "acc2", label: "朔间零", server: "4399", user: "jiedang143", pass: "abcd1234", stars: [], roles: [{ id: "r1", name: "朔間零", outfits: [] }] },
+      { id: "acc3", label: "斑", server: "4399", user: "aq5575256182", pass: "qq137805953", stars: [], roles: [{ id: "r1", name: "三毛縞斑", outfits: [] }] }
     ];
   }
   function accLoad() {
@@ -3107,6 +3114,7 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
               changed = true;
             }
             if (!Array.isArray(a.roles)) { a.roles = [{ id: "r1", name: a.char || "", outfits: [] }]; changed = true; }
+            if (!Array.isArray(a.stars)) { a.stars = []; changed = true; }
             // 深海奏汰角色自动回填预置 MV 服装（仅当该角色还没有任何服装时）
             if (a.id === "acc1") {
               const r1 = (a.roles || []).find((r) => r.id === "r1" && r.name.indexOf("奏汰") >= 0);
@@ -3188,6 +3196,8 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
           <label>区服</label><input id="ed-server" value="${escAttr(a.server || "")}" />
           <label>账号</label><input id="ed-user" value="${escAttr(a.user || "")}" />
           <label>密码</label><input id="ed-pass" type="text" value="${escAttr(a.pass || "")}" />
+          <label>总五星卡（每行：偶像 | 卡名 | 图片链接，可留空）</label>
+          <textarea id="ed-stars">${esc((a.stars || []).map((s) => [s.char || "", s.name || "", s.img || ""].join("|")).join("\n"))}</textarea>
           <div class="ed-actions">
             <button type="button" class="acc-btn primary" data-acc-save="${escAttr(a.id)}">保存</button>
             <button type="button" class="acc-btn" data-acc-cancel>取消</button>
@@ -3200,6 +3210,22 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
           密码：<span class="pw">${showPw ? esc(a.pass || "—") : "••••••"}</span>
           <button type="button" class="acc-btn" data-acc-pw="${escAttr(a.id)}">${showPw ? "隐藏" : "显示"}</button>
         </div>`;
+        // 总五星：按偶像统计 + 卡面网格
+        const stMap = {};
+        (a.stars || []).forEach((s) => { const k = s.char || "未标注"; stMap[k] = (stMap[k] || 0) + 1; });
+        const stKeys = Object.keys(stMap);
+        if ((a.stars || []).length) {
+          html += `<div class="enc-sec">总五星（${(a.stars || []).length}）</div>
+            <div class="acc-stats">${stKeys.map((k) => `<span class="acc-stat">${esc(k)}<b>${stMap[k]}</b></span>`).join("")}</div>
+            <div class="acc-grid">`;
+          (a.stars || []).forEach((s) => {
+            html += `<div class="acc-item">
+              ${s.img ? `<img class="acc-item-img" src="${escAttr(s.img)}" alt="" data-zoom="${escAttr(s.img)}" />` : `<div class="acc-empty">无卡面</div>`}
+              <div class="acc-item-name">${esc(s.name || "未命名")}${s.char ? `<br/>${esc(s.char)}` : ""}</div>
+            </div>`;
+          });
+          html += `</div>`;
+        }
       }
       // 角色区（MV 服装写真集）
       (a.roles || []).forEach((r) => {
@@ -3262,6 +3288,11 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
       a.server = (grp.querySelector("#ed-server") || {}).value || "";
       a.user = (grp.querySelector("#ed-user") || {}).value || "";
       a.pass = (grp.querySelector("#ed-pass") || {}).value || "";
+      const stTxt = (grp.querySelector("#ed-stars") || {}).value || "";
+      a.stars = stTxt.split("\n").map((line) => line.trim()).filter(Boolean).map((line) => {
+        const parts = line.split("|");
+        return { char: (parts[0] || "").trim(), name: (parts[1] || "").trim(), img: (parts[2] || "").trim() };
+      });
       accSave(list2);
       accEditId = "";
       renderAcc();
@@ -3419,7 +3450,7 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
 
   // —— 初始化 ——
   function init() {
-    $("libVer").textContent = "v2.9.0";
+    $("libVer").textContent = "v2.9.1";
     document.querySelectorAll(".nav-item").forEach((b) => {
       b.onclick = () => switchPage(b.dataset.page);
     });
