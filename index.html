@@ -447,6 +447,34 @@ html.es-darkfix canvas {
   .enc-src { font-size: 11px; color: var(--txt3); line-height: 1.4; }
   .enc-src a { color: var(--acc2); cursor: pointer; text-decoration: underline; }
   .empty2 { font-size: 13px; color: var(--txt3); padding: 8px 0; }
+  /* ===== 账号所持卡一览 ===== */
+  .acc-group { background: var(--bg2); border: 1px solid var(--line2); border-radius: 10px; padding: 10px; margin-bottom: 10px; }
+  .acc-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+  .acc-title { font-size: 15px; font-weight: 600; }
+  .acc-title .acc-server { font-size: 12px; color: var(--txt3); font-weight: 400; margin-left: 6px; }
+  .acc-info { font-size: 13px; color: var(--txt2); margin-top: 4px; line-height: 1.6; }
+  .acc-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .acc-btn { min-height: 36px; font-size: 12px; padding: 4px 10px; border: 1px solid var(--line2); border-radius: 8px; background: transparent; color: var(--txt); cursor: pointer; }
+  .acc-btn.primary { background: var(--acc); color: #fff; border-color: var(--acc); }
+  .acc-cards { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+  .acc-card { display: flex; align-items: center; gap: 8px; background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; }
+  .acc-card img { width: 44px; height: 44px; object-fit: cover; border-radius: 6px; flex: none; }
+  .acc-card .t { font-size: 13px; line-height: 1.4; }
+  .acc-card .s { font-size: 11px; color: var(--txt3); }
+  .acc-empty { font-size: 12px; color: var(--txt3); padding: 6px 0; }
+  .acc-edit { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+  .acc-edit label { font-size: 12px; color: var(--txt2); }
+  .acc-edit input, .acc-edit textarea {
+    width: 100%; min-height: 40px; font-size: 14px; padding: 0 10px;
+    border: 1px solid var(--line2); border-radius: 8px; background: #fff; color: var(--txt);
+    box-sizing: border-box;
+  }
+  .acc-edit textarea { padding: 8px 10px; min-height: 60px; resize: vertical; }
+  .acc-edit .ed-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .set-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+  .set-row:last-child { border-bottom: none; }
+  .set-row span { font-size: 13px; }
+  .set-row input[type=checkbox] { width: 20px; height: 20px; }
   </style>
   <script>
 // 心情钟 · 强制暗色反制开关（仅 Electron 运行时生效）
@@ -544,10 +572,14 @@ html.es-darkfix canvas {
         <!-- 偶像梦幻祭 -->
         <section class="page" id="page-es" hidden>
           <div class="es-tabs">
+            <button type="button" class="es-tab" data-view="acc" id="esTabAcc" hidden>账号</button>
             <button type="button" class="es-tab" data-view="enc">图鉴</button>
             <button type="button" class="es-tab active" data-view="timeline">五星时间线</button>
             <button type="button" class="es-tab" data-view="jp">日服情报</button>
             <button type="button" class="es-tab" data-view="sched">卡池排期</button>
+          </div>
+          <div class="es-view" id="view-acc" hidden>
+            <div class="acc-list" id="accList"></div>
           </div>
           <div class="es-view" id="view-enc" hidden>
             <div class="enc-wrap">
@@ -2387,6 +2419,11 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
 
   // —— 版本日志（与 pet.js / CHANGELOG.md 同步）——
   const CHANGELOG = [
+    { ver: "2.9.0", date: "2026-10-24", items: [
+      "新增「账号所持卡一览」：设置里开启「账号帮助」后，偶像梦幻祭页签显示「账号」",
+      "记录各账号（区服/账号/密码，密码可显示/隐藏）与所持卡（卡名+备注+图），数据仅保存在本机浏览器",
+      "账号信息与所持卡随时可编辑修改",
+    ] },
     { ver: "2.8.0", date: "2026-10-24", items: [
       "网页版手机端适配：按钮/字号触屏优化，模式按钮不再截断",
       "「确定搜索」浮动固定在左上角，随时可点",
@@ -2468,10 +2505,11 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
 
   function switchEsView(view) {
     document.querySelectorAll(".es-tab").forEach((b) => b.classList.toggle("active", b.dataset.view === view));
-    ["enc", "timeline", "jp", "sched"].forEach((v) => {
+    ["acc", "enc", "timeline", "jp", "sched"].forEach((v) => {
       const el = $("view-" + v);
       if (el) el.hidden = v !== view;
     });
+    if (view === "acc") renderAcc();
     if (view === "enc") renderEnc();
     if (view === "timeline") renderTimeline();
     if (view === "jp") renderJp();
@@ -3036,11 +3074,122 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
     wrap.innerHTML = html || `<div class="empty2">没有匹配的术语</div>`;
   }
 
+  // —— 账号所持卡一览（设置「账号帮助」开启后显示；localStorage 本地保存，可随时修改）——
+  const ACC_KEY = "es_acc_v1";
+  const ACC_HELP_KEY = "es_acc_help";
+  function accDefault() {
+    return [
+      { id: "acc1", label: "奏汰", char: "深海奏汰", server: "4399", user: "ybxo0368----", pass: "Qwasd123", cards: [] },
+      { id: "acc2", label: "朔间零", char: "朔間零", server: "4399", user: "jiedang143", pass: "abcd1234", cards: [] },
+      { id: "acc3", label: "斑", char: "三毛縞斑", server: "4399", user: "aq5575256182", pass: "qq137805953", cards: [] }
+    ];
+  }
+  function accLoad() {
+    try {
+      const raw = localStorage.getItem(ACC_KEY);
+      if (raw) { const d = JSON.parse(raw); if (Array.isArray(d)) return d; }
+    } catch (e) {}
+    const d = accDefault();
+    accSave(d);
+    return d;
+  }
+  function accSave(list) { try { localStorage.setItem(ACC_KEY, JSON.stringify(list)); } catch (e) {} }
+  function accHelpOn() { return localStorage.getItem(ACC_HELP_KEY) === "1"; }
+  function accSetHelp(on) { try { localStorage.setItem(ACC_HELP_KEY, on ? "1" : "0"); } catch (e) {} }
+  function applyAccTab() {
+    const tab = $("esTabAcc");
+    if (tab) tab.hidden = !accHelpOn();
+    if (!accHelpOn() && $("view-acc") && !$("view-acc").hidden) switchEsView("enc");
+  }
+  let accEditId = "";
+  let accPwShow = {};
+  function renderAcc() {
+    const list = accLoad();
+    const box = $("accList");
+    if (!box) return;
+    box.innerHTML = "";
+    list.forEach((a) => {
+      const g = document.createElement("div");
+      g.className = "acc-group";
+      const showPw = !!accPwShow[a.id];
+      let html = `<div class="acc-head">
+          <span class="acc-title">${esc(a.label)}<span class="acc-server">${esc(a.server || "")}</span></span>
+          <span class="acc-row">
+            <button type="button" class="acc-btn" data-acc-edit="${escAttr(a.id)}">${accEditId === a.id ? "收起" : "编辑"}</button>
+          </span>
+        </div>`;
+      if (accEditId === a.id) {
+        html += `<div class="acc-edit">
+          <label>昵称 / 角色</label><input id="ed-label" value="${escAttr(a.label)}" />
+          <label>角色名</label><input id="ed-char" value="${escAttr(a.char || "")}" />
+          <label>区服</label><input id="ed-server" value="${escAttr(a.server || "")}" />
+          <label>账号</label><input id="ed-user" value="${escAttr(a.user || "")}" />
+          <label>密码</label><input id="ed-pass" type="text" value="${escAttr(a.pass || "")}" />
+          <label>所持卡（每行：卡名 | 备注 | 图片链接，可留空）</label>
+          <textarea id="ed-cards">${esc((a.cards || []).map((c) => [c.name || "", c.note || "", c.img || ""].join("|")).join("\n"))}</textarea>
+          <div class="ed-actions">
+            <button type="button" class="acc-btn primary" data-acc-save="${escAttr(a.id)}">保存</button>
+            <button type="button" class="acc-btn" data-acc-cancel>取消</button>
+          </div>
+        </div>`;
+      } else {
+        html += `<div class="acc-info">
+          角色：${esc(a.char || "—")}<br/>
+          区服：${esc(a.server || "—")}<br/>
+          账号：${esc(a.user || "—")}<br/>
+          密码：<span class="pw">${showPw ? esc(a.pass || "—") : "••••••"}</span>
+          <span class="acc-row"><button type="button" class="acc-btn" data-acc-pw="${escAttr(a.id)}">${showPw ? "隐藏" : "显示"}</button></span>
+        </div>`;
+      }
+      html += `<div class="enc-sec">所持卡（${(a.cards || []).length}）</div><div class="acc-cards">`;
+      if (a.cards && a.cards.length) {
+        a.cards.forEach((c) => {
+          html += `<div class="acc-card">
+            ${c.img ? `<img src="${escAttr(c.img)}" alt="" />` : ""}
+            <div><div class="t">${esc(c.name || "未命名")}</div>${c.note ? `<div class="s">${esc(c.note)}</div>` : ""}</div>
+          </div>`;
+        });
+      } else {
+        html += `<div class="acc-empty">暂无记录，点「编辑」添加所持卡</div>`;
+      }
+      html += `</div>`;
+      g.innerHTML = html;
+      box.appendChild(g);
+    });
+    box.querySelectorAll("[data-acc-edit]").forEach((b) => b.onclick = () => { accEditId = accEditId === b.dataset.accEdit ? "" : b.dataset.accEdit; renderAcc(); });
+    box.querySelectorAll("[data-acc-pw]").forEach((b) => b.onclick = () => { accPwShow[b.dataset.accPw] = !accPwShow[b.dataset.accPw]; renderAcc(); });
+    box.querySelectorAll("[data-acc-cancel]").forEach((b) => b.onclick = () => { accEditId = ""; renderAcc(); });
+    box.querySelectorAll("[data-acc-save]").forEach((b) => b.onclick = () => {
+      const grp = b.closest(".acc-group");
+      const list2 = accLoad();
+      const a = list2.find((x) => x.id === b.dataset.accSave);
+      if (!a) return;
+      a.label = (grp.querySelector("#ed-label") || {}).value || a.label;
+      a.char = (grp.querySelector("#ed-char") || {}).value || "";
+      a.server = (grp.querySelector("#ed-server") || {}).value || "";
+      a.user = (grp.querySelector("#ed-user") || {}).value || "";
+      a.pass = (grp.querySelector("#ed-pass") || {}).value || "";
+      const txt = (grp.querySelector("#ed-cards") || {}).value || "";
+      a.cards = txt.split("\n").map((line) => line.trim()).filter(Boolean).map((line) => {
+        const parts = line.split("|");
+        return { name: (parts[0] || "").trim(), note: (parts[1] || "").trim(), img: (parts[2] || "").trim() };
+      });
+      accSave(list2);
+      accEditId = "";
+      renderAcc();
+    });
+  }
+
   // —— 版本日志 ——
   function renderLog() {
     const body = $("logBody");
     let html = `<div class="log-ver">显示设置</div>
+      <div class="set-row">
+        <span>账号帮助（账号所持卡一览）</span>
+        <input type="checkbox" id="accHelpToggle" ${accHelpOn() ? "checked" : ""} />
+      </div>
       <ul class="log-items">
+        <li>开启后，偶像梦幻祭页签将显示「账号」，记录各账号与所持卡（仅保存在本机浏览器）。</li>
         <li>本资料库所有数据（曲目、卡池、卡面、服装、时间线）均来自官网 ensemble-stars.jp 与官方公告。</li>
       </ul>`;
     CHANGELOG.forEach((v) => {
@@ -3048,6 +3197,9 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
         <ul class="log-items">${v.items.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>`;
     });
     body.innerHTML = html;
+    const tg = $("accHelpToggle");
+    if (tg) tg.onchange = () => { accSetHelp(tg.checked); applyAccTab(); };
+    applyAccTab();
   }
 
   // —— 图片放大 ——
@@ -3101,13 +3253,14 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
 
   // —— 初始化 ——
   function init() {
-    $("libVer").textContent = "v2.8.0";
+    $("libVer").textContent = "v2.9.0";
     document.querySelectorAll(".nav-item").forEach((b) => {
       b.onclick = () => switchPage(b.dataset.page);
     });
     document.querySelectorAll(".es-tab").forEach((b) => {
       b.onclick = () => switchEsView(b.dataset.view);
     });
+    applyAccTab();
     document.querySelectorAll(".sm-btn").forEach((b) => {
       b.onclick = () => setLibSongMode(b.dataset.sm);
     });
