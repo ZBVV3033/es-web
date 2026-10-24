@@ -470,14 +470,13 @@ html.es-darkfix canvas {
   (function () {
     var go = document.getElementById("songGo");
     if (!go || !window.PointerEvent) return;
-    var dragging = false, moved = false, sx = 0, sy = 0, ox = 0, oy = 0;
+    var dragging = false, moved = false, suppress = false, sx = 0, sy = 0, ox = 0, oy = 0;
     go.addEventListener("pointerdown", function (e) {
-      dragging = true; moved = false;
+      dragging = true; moved = false; suppress = false;
       sx = e.clientX; sy = e.clientY;
       var r = go.getBoundingClientRect();
       ox = r.left; oy = r.top;
       try { go.setPointerCapture(e.pointerId); } catch (err) {}
-      e.preventDefault();
     });
     go.addEventListener("pointermove", function (e) {
       if (!dragging) return;
@@ -490,10 +489,14 @@ html.es-darkfix canvas {
       go.style.top = ny + "px";
       go.style.right = "auto";
     });
-    go.addEventListener("pointerup", function () { dragging = false; });
+    go.addEventListener("pointerup", function () {
+      dragging = false;
+      if (moved) suppress = true;
+    });
     go.addEventListener("pointercancel", function () { dragging = false; });
     go.addEventListener("click", function (e) {
-      if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; }
+      if (suppress) { e.preventDefault(); e.stopPropagation(); suppress = false; }
+      moved = false;
     });
   })();
   </script>
