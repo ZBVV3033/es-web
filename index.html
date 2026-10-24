@@ -462,6 +462,14 @@ html.es-darkfix canvas {
   .acc-card .t { font-size: 13px; line-height: 1.4; }
   .acc-card .s { font-size: 11px; color: var(--txt3); }
   .acc-empty { font-size: 12px; color: var(--txt3); padding: 6px 0; }
+  .acc-role { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 8px; margin-top: 8px; }
+  .acc-role-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+  .acc-role-name { font-size: 14px; font-weight: 600; }
+  .acc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 6px; }
+  .acc-item { display: flex; flex-direction: column; gap: 4px; }
+  .acc-item-img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 8px; cursor: pointer; display: block; background: var(--bg); }
+  .acc-item-name { font-size: 12px; line-height: 1.4; color: var(--txt2); }
+  .acc-add { margin: 6px 0 2px; }
   .acc-edit { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
   .acc-edit label { font-size: 12px; color: var(--txt2); }
   .acc-edit input, .acc-edit textarea {
@@ -2421,8 +2429,9 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
   const CHANGELOG = [
     { ver: "2.9.0", date: "2026-10-24", items: [
       "新增「账号所持卡一览」：设置里开启「账号帮助」后，偶像梦幻祭页签显示「账号」",
-      "记录各账号（区服/账号/密码，密码可显示/隐藏）与所持卡（卡名+备注+图），数据仅保存在本机浏览器",
-      "账号信息与所持卡随时可编辑修改",
+      "角色制：每个账号下可添加多个角色，记录区服/账号/密码（密码可显示/隐藏）",
+      "MV 服装写真集：角色服装图以网格拼起展示，点图放大，支持上传本地服装截图（自动压缩保存）与图片链接",
+      "账号信息、角色与服装随时可编辑修改，数据仅保存在本机浏览器",
     ] },
     { ver: "2.8.0", date: "2026-10-24", items: [
       "网页版手机端适配：按钮/字号触屏优化，模式按钮不再截断",
@@ -3074,26 +3083,58 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
     wrap.innerHTML = html || `<div class="empty2">没有匹配的术语</div>`;
   }
 
-  // —— 账号所持卡一览（设置「账号帮助」开启后显示；localStorage 本地保存，可随时修改）——
+  // —— 账号所持卡一览（角色制 + MV 服装写真集；设置「账号帮助」开启后显示；localStorage 本地保存，可随时修改）——
   const ACC_KEY = "es_acc_v1";
   const ACC_HELP_KEY = "es_acc_help";
   function accDefault() {
     return [
-      { id: "acc1", label: "奏汰", char: "深海奏汰", server: "4399", user: "ybxo0368----", pass: "Qwasd123", cards: [] },
-      { id: "acc2", label: "朔间零", char: "朔間零", server: "4399", user: "jiedang143", pass: "abcd1234", cards: [] },
-      { id: "acc3", label: "斑", char: "三毛縞斑", server: "4399", user: "aq5575256182", pass: "qq137805953", cards: [] }
+      { id: "acc1", label: "奏汰", server: "4399", user: "ybxo0368----", pass: "Qwasd123", roles: [{ id: "r1", name: "深海奏汰", outfits: [] }] },
+      { id: "acc2", label: "朔间零", server: "4399", user: "jiedang143", pass: "abcd1234", roles: [{ id: "r1", name: "朔間零", outfits: [] }] },
+      { id: "acc3", label: "斑", server: "4399", user: "aq5575256182", pass: "qq137805953", roles: [{ id: "r1", name: "三毛縞斑", outfits: [] }] }
     ];
   }
   function accLoad() {
     try {
       const raw = localStorage.getItem(ACC_KEY);
-      if (raw) { const d = JSON.parse(raw); if (Array.isArray(d)) return d; }
+      if (raw) {
+        const d = JSON.parse(raw);
+        if (Array.isArray(d)) {
+          let changed = false;
+          d.forEach((a) => {
+            if (a.cards && !a.roles) {
+              a.roles = [{ id: "r1", name: a.char || a.label || "", outfits: (a.cards || []).map((c) => ({ name: c.name || "", img: c.img || "" })) }];
+              delete a.cards; delete a.char;
+              changed = true;
+            }
+            if (!Array.isArray(a.roles)) { a.roles = [{ id: "r1", name: a.char || "", outfits: [] }]; changed = true; }
+            // 深海奏汰角色自动回填预置 MV 服装（仅当该角色还没有任何服装时）
+            if (a.id === "acc1") {
+              const r1 = (a.roles || []).find((r) => r.id === "r1" && r.name.indexOf("奏汰") >= 0);
+              if (r1 && (!r1.outfits || r1.outfits.length === 0)) { r1.outfits = accSeed(); changed = true; }
+            }
+          });
+          if (changed) accSave(d);
+          return d;
+        }
+      }
     } catch (e) {}
     const d = accDefault();
     accSave(d);
     return d;
   }
   function accSave(list) { try { localStorage.setItem(ACC_KEY, JSON.stringify(list)); } catch (e) {} }
+  // 深海奏汰预置 MV 服装（用户提供的游戏内截图，按从上到下、从左到右顺序）
+  function accSeed() {
+    return [
+      { name: "琉璃凤蝶", img: "assets/acc/kanata-01.jpg" },
+      { name: "MV 服装 2", img: "assets/acc/kanata-02.jpg" },
+      { name: "MV 服装 3", img: "assets/acc/kanata-03.jpg" },
+      { name: "MV 服装 4", img: "assets/acc/kanata-04.jpg" },
+      { name: "MV 服装 5", img: "assets/acc/kanata-05.jpg" },
+      { name: "MV 服装 6", img: "assets/acc/kanata-06.jpg" },
+      { name: "MV 服装 7", img: "assets/acc/kanata-07.jpg" }
+    ];
+  }
   function accHelpOn() { return localStorage.getItem(ACC_HELP_KEY) === "1"; }
   function accSetHelp(on) { try { localStorage.setItem(ACC_HELP_KEY, on ? "1" : "0"); } catch (e) {} }
   function applyAccTab() {
@@ -3102,7 +3143,29 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
     if (!accHelpOn() && $("view-acc") && !$("view-acc").hidden) switchEsView("enc");
   }
   let accEditId = "";
+  let accRoleEdit = {};
+  let accOutfitNew = {};
   let accPwShow = {};
+  // 本地图压缩转 dataURL（MV 服装预览，控制 localStorage 体积）
+  function accFileToDataUrl(file, cb) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        const maxW = 600;
+        if (img.width <= maxW && img.height <= maxW) { cb(reader.result); return; }
+        const scale = Math.min(1, maxW / Math.max(img.width, img.height));
+        const c = document.createElement("canvas");
+        c.width = Math.max(1, Math.round(img.width * scale));
+        c.height = Math.max(1, Math.round(img.height * scale));
+        c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+        cb(c.toDataURL("image/jpeg", 0.82));
+      };
+      img.onerror = () => cb(reader.result);
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  }
   function renderAcc() {
     const list = accLoad();
     const box = $("accList");
@@ -3112,21 +3175,19 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
       const g = document.createElement("div");
       g.className = "acc-group";
       const showPw = !!accPwShow[a.id];
+      const editing = accEditId === a.id;
       let html = `<div class="acc-head">
           <span class="acc-title">${esc(a.label)}<span class="acc-server">${esc(a.server || "")}</span></span>
           <span class="acc-row">
-            <button type="button" class="acc-btn" data-acc-edit="${escAttr(a.id)}">${accEditId === a.id ? "收起" : "编辑"}</button>
+            <button type="button" class="acc-btn" data-acc-edit="${escAttr(a.id)}">${editing ? "收起" : "编辑账号"}</button>
           </span>
         </div>`;
-      if (accEditId === a.id) {
+      if (editing) {
         html += `<div class="acc-edit">
-          <label>昵称 / 角色</label><input id="ed-label" value="${escAttr(a.label)}" />
-          <label>角色名</label><input id="ed-char" value="${escAttr(a.char || "")}" />
+          <label>账号昵称</label><input id="ed-label" value="${escAttr(a.label)}" />
           <label>区服</label><input id="ed-server" value="${escAttr(a.server || "")}" />
           <label>账号</label><input id="ed-user" value="${escAttr(a.user || "")}" />
           <label>密码</label><input id="ed-pass" type="text" value="${escAttr(a.pass || "")}" />
-          <label>所持卡（每行：卡名 | 备注 | 图片链接，可留空）</label>
-          <textarea id="ed-cards">${esc((a.cards || []).map((c) => [c.name || "", c.note || "", c.img || ""].join("|")).join("\n"))}</textarea>
           <div class="ed-actions">
             <button type="button" class="acc-btn primary" data-acc-save="${escAttr(a.id)}">保存</button>
             <button type="button" class="acc-btn" data-acc-cancel>取消</button>
@@ -3134,28 +3195,61 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
         </div>`;
       } else {
         html += `<div class="acc-info">
-          角色：${esc(a.char || "—")}<br/>
           区服：${esc(a.server || "—")}<br/>
           账号：${esc(a.user || "—")}<br/>
           密码：<span class="pw">${showPw ? esc(a.pass || "—") : "••••••"}</span>
-          <span class="acc-row"><button type="button" class="acc-btn" data-acc-pw="${escAttr(a.id)}">${showPw ? "隐藏" : "显示"}</button></span>
+          <button type="button" class="acc-btn" data-acc-pw="${escAttr(a.id)}">${showPw ? "隐藏" : "显示"}</button>
         </div>`;
       }
-      html += `<div class="enc-sec">所持卡（${(a.cards || []).length}）</div><div class="acc-cards">`;
-      if (a.cards && a.cards.length) {
-        a.cards.forEach((c) => {
-          html += `<div class="acc-card">
-            ${c.img ? `<img src="${escAttr(c.img)}" alt="" />` : ""}
-            <div><div class="t">${esc(c.name || "未命名")}</div>${c.note ? `<div class="s">${esc(c.note)}</div>` : ""}</div>
+      // 角色区（MV 服装写真集）
+      (a.roles || []).forEach((r) => {
+        const roleEditing = accRoleEdit[a.id] === r.id;
+        html += `<div class="acc-role">
+          <div class="acc-role-head">
+            <span class="acc-role-name">${esc(r.name || "未命名角色")}</span>
+            <span class="acc-row">
+              <button type="button" class="acc-btn" data-acc-role-edit="${escAttr(a.id)}::${escAttr(r.id)}">${roleEditing ? "收起" : "改名"}</button>
+              <button type="button" class="acc-btn" data-acc-role-del="${escAttr(a.id)}::${escAttr(r.id)}">删除</button>
+            </span>
+          </div>`;
+        if (roleEditing) {
+          html += `<div class="acc-edit">
+            <label>角色名</label><input id="ed-role-name" value="${escAttr(r.name || "")}" />
+            <div class="ed-actions">
+              <button type="button" class="acc-btn primary" data-acc-role-save="${escAttr(a.id)}::${escAttr(r.id)}">保存</button>
+            </div>
+          </div>`;
+        }
+        html += `<div class="enc-sec">MV 服装（${(r.outfits || []).length}）</div><div class="acc-grid">`;
+        (r.outfits || []).forEach((o, oi) => {
+          html += `<div class="acc-item">
+            ${o.img ? `<img class="acc-item-img" src="${escAttr(o.img)}" alt="" data-zoom="${escAttr(o.img)}" />` : `<div class="acc-empty">无图</div>`}
+            <div class="acc-item-name">${esc(o.name || "未命名")}</div>
+            <button type="button" class="acc-btn" data-acc-outfit-del="${escAttr(a.id)}::${escAttr(r.id)}::${oi}">删除</button>
           </div>`;
         });
-      } else {
-        html += `<div class="acc-empty">暂无记录，点「编辑」添加所持卡</div>`;
-      }
-      html += `</div>`;
+        html += `</div>`;
+        const nk = accOutfitNew[a.id + "::" + r.id];
+        const nv = nk || {};
+        html += `<div class="acc-add">
+          <button type="button" class="acc-btn" data-acc-outfit-new="${escAttr(a.id)}::${escAttr(r.id)}">${nk ? "收起" : "+ 添加 MV 服装"}</button>
+          ${nk ? `<div class="acc-edit">
+            <label>服装名</label><input class="of-name" value="${escAttr(nv.name || "")}" placeholder="如：XXX MV衣装" />
+            <label>上传本地图片（自动压缩，选图即用）</label>
+            <input type="file" class="of-file" accept="image/*" />
+            <label>或填图片链接</label>
+            <input class="of-url" value="${escAttr(nv.url || "")}" placeholder="https://… 或 图鉴 assets/cards/…" />
+            <div class="ed-actions">
+              <button type="button" class="acc-btn primary" data-acc-outfit-save="${escAttr(a.id)}::${escAttr(r.id)}">保存服装</button>
+            </div>
+          </div>` : ""}
+        </div></div>`;
+      });
+      html += `<div class="acc-add"><button type="button" class="acc-btn" data-acc-role-add="${escAttr(a.id)}">+ 添加角色</button></div>`;
       g.innerHTML = html;
       box.appendChild(g);
     });
+    // —— 账号编辑 ——
     box.querySelectorAll("[data-acc-edit]").forEach((b) => b.onclick = () => { accEditId = accEditId === b.dataset.accEdit ? "" : b.dataset.accEdit; renderAcc(); });
     box.querySelectorAll("[data-acc-pw]").forEach((b) => b.onclick = () => { accPwShow[b.dataset.accPw] = !accPwShow[b.dataset.accPw]; renderAcc(); });
     box.querySelectorAll("[data-acc-cancel]").forEach((b) => b.onclick = () => { accEditId = ""; renderAcc(); });
@@ -3165,19 +3259,91 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
       const a = list2.find((x) => x.id === b.dataset.accSave);
       if (!a) return;
       a.label = (grp.querySelector("#ed-label") || {}).value || a.label;
-      a.char = (grp.querySelector("#ed-char") || {}).value || "";
       a.server = (grp.querySelector("#ed-server") || {}).value || "";
       a.user = (grp.querySelector("#ed-user") || {}).value || "";
       a.pass = (grp.querySelector("#ed-pass") || {}).value || "";
-      const txt = (grp.querySelector("#ed-cards") || {}).value || "";
-      a.cards = txt.split("\n").map((line) => line.trim()).filter(Boolean).map((line) => {
-        const parts = line.split("|");
-        return { name: (parts[0] || "").trim(), note: (parts[1] || "").trim(), img: (parts[2] || "").trim() };
-      });
       accSave(list2);
       accEditId = "";
       renderAcc();
     });
+    // —— 角色：添加 / 改名 / 删除 ——
+    box.querySelectorAll("[data-acc-role-add]").forEach((b) => b.onclick = () => {
+      const list2 = accLoad();
+      const a = list2.find((x) => x.id === b.dataset.accRoleAdd);
+      if (!a) return;
+      const name = window.prompt ? window.prompt("新角色名：") : "";
+      if (name && name.trim()) {
+        a.roles.push({ id: "r" + Date.now(), name: name.trim(), outfits: [] });
+        accSave(list2);
+      }
+      renderAcc();
+    });
+    box.querySelectorAll("[data-acc-role-edit]").forEach((b) => b.onclick = () => {
+      const [ai, ri] = b.dataset.accRoleEdit.split("::");
+      accRoleEdit[ai] = accRoleEdit[ai] === ri ? "" : ri;
+      renderAcc();
+    });
+    box.querySelectorAll("[data-acc-role-save]").forEach((b) => {
+      const [ai, ri] = b.dataset.accRoleSave.split("::");
+      b.onclick = () => {
+        const grp = b.closest(".acc-group");
+        const list2 = accLoad();
+        const a = list2.find((x) => x.id === ai);
+        const r = a && a.roles.find((y) => y.id === ri);
+        if (!r) return;
+        r.name = (grp.querySelector("#ed-role-name") || {}).value || r.name;
+        accSave(list2);
+        accRoleEdit[ai] = "";
+        renderAcc();
+      };
+    });
+    box.querySelectorAll("[data-acc-role-del]").forEach((b) => b.onclick = () => {
+      const [ai, ri] = b.dataset.accRoleDel.split("::");
+      const list2 = accLoad();
+      const a = list2.find((x) => x.id === ai);
+      if (!a) return;
+      a.roles = (a.roles || []).filter((y) => y.id !== ri);
+      accSave(list2);
+      renderAcc();
+    });
+    // —— 服装：添加表单 / 删除 / 保存（含本地图上传压缩）——
+    box.querySelectorAll("[data-acc-outfit-new]").forEach((b) => b.onclick = () => {
+      const k = b.dataset.accOutfitNew;
+      if (accOutfitNew[k]) { accOutfitNew[k] = null; } else { accOutfitNew[k] = {}; }
+      renderAcc();
+    });
+    box.querySelectorAll("[data-acc-outfit-del]").forEach((b) => b.onclick = () => {
+      const [ai, ri, oi] = b.dataset.accOutfitDel.split("::");
+      const list2 = accLoad();
+      const a = list2.find((x) => x.id === ai);
+      const r = a && a.roles.find((y) => y.id === ri);
+      if (!r) return;
+      r.outfits.splice(Number(oi), 1);
+      accSave(list2);
+      renderAcc();
+    });
+    box.querySelectorAll("[data-acc-outfit-save]").forEach((b) => b.onclick = () => {
+      const grp = b.closest(".acc-group");
+      const [ai, ri] = b.dataset.accOutfitSave.split("::");
+      const name = ((grp.querySelector(".of-name") || {}).value || "").trim();
+      const url = ((grp.querySelector(".of-url") || {}).value || "").trim();
+      const file = (grp.querySelector(".of-file") || {}).files && grp.querySelector(".of-file").files[0];
+      const done = (img) => {
+        if (!name && !img) return;
+        const list2 = accLoad();
+        const a = list2.find((x) => x.id === ai);
+        const r = a && a.roles.find((y) => y.id === ri);
+        if (!r) return;
+        r.outfits.push({ name: name || "未命名", img: img || url });
+        accSave(list2);
+        accOutfitNew[ai + "::" + ri] = null;
+        renderAcc();
+      };
+      if (file) accFileToDataUrl(file, done);
+      else done(url);
+    });
+    // —— 服装图点击放大 ——
+    box.querySelectorAll("[data-zoom]").forEach((img) => img.onclick = () => openZoom(img.dataset.zoom));
   }
 
   // —— 版本日志 ——
