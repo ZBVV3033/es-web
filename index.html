@@ -424,6 +424,29 @@ html.es-darkfix canvas {
     .song-toolbar .lib-sf { flex-wrap: wrap; }
     .top-title .ver { font-size: 11px; }
   }
+  /* ===== 图鉴页 ===== */
+  .enc-wrap { display: flex; flex-direction: column; gap: 10px; }
+  .enc-side { display: flex; flex-wrap: wrap; gap: 8px; }
+  .enc-char {
+    min-height: 40px; font-size: 13px; padding: 6px 10px;
+    border: 1px solid var(--line2); border-radius: 9px;
+    background: var(--bg2); color: var(--txt);
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+    cursor: pointer;
+  }
+  .enc-char.active { background: var(--acc); border-color: var(--acc); color: #fff; }
+  .enc-char .unit { font-size: 11px; opacity: .8; }
+  .enc-info { font-size: 13px; line-height: 1.6; padding: 6px 0; color: var(--txt2); }
+  .enc-sec { font-size: 14px; font-weight: 600; padding: 12px 0 8px; color: var(--txt); }
+  .enc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .enc-item { display: flex; flex-direction: column; gap: 5px; }
+  .enc-img { width: 100%; border-radius: 8px; cursor: pointer; display: block; }
+  .enc-name { font-size: 13px; line-height: 1.4; }
+  .enc-star { font-size: 12px; color: var(--acc); }
+  .enc-note { font-size: 12px; color: var(--txt2); line-height: 1.4; }
+  .enc-src { font-size: 11px; color: var(--txt3); line-height: 1.4; }
+  .enc-src a { color: var(--acc2); cursor: pointer; text-decoration: underline; }
+  .empty2 { font-size: 13px; color: var(--txt3); padding: 8px 0; }
   </style>
   <script>
 // 心情钟 · 强制暗色反制开关（仅 Electron 运行时生效）
@@ -521,9 +544,16 @@ html.es-darkfix canvas {
         <!-- 偶像梦幻祭 -->
         <section class="page" id="page-es" hidden>
           <div class="es-tabs">
+            <button type="button" class="es-tab" data-view="enc">图鉴</button>
             <button type="button" class="es-tab active" data-view="timeline">五星时间线</button>
             <button type="button" class="es-tab" data-view="jp">日服情报</button>
             <button type="button" class="es-tab" data-view="sched">卡池排期</button>
+          </div>
+          <div class="es-view" id="view-enc" hidden>
+            <div class="enc-wrap">
+              <div class="enc-side" id="encCharList"></div>
+              <div class="enc-detail" id="encDetail"></div>
+            </div>
           </div>
           <div class="es-view" id="view-timeline">
             <div class="tl-toolbar">
@@ -1921,7 +1951,7 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
       info: "『爛漫スプリング』★5 卡池",
       cards: [],
       outfits: [
-        { name: "MV衣装展示［爛漫スプリング］", note: "卡池五星 SPP＋MV衣装", src: "B站 视频展示", link: "https://www.bilibili.com/v/game/music" }
+        { name: "MV衣装展示［爛漫スプリング］", img: "assets/cards/mv_spring.png", note: "卡池五星 SPP＋MV衣装", src: "B站 视频展示", link: "https://www.bilibili.com/v/game/music" }
       ]
     },
     {
@@ -1929,7 +1959,7 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
       info: "『play \"tag\"』卡池衣装（2wink 舞台）",
       cards: [],
       outfits: [
-        { name: "卡池衣装『play \"tag\"』", note: "闺蜜组卡池衣装舞台展示", src: "B站 视频展示", link: "https://www.bilibili.com/v/game/music" }
+        { name: "卡池衣装『play \"tag\"』", img: "assets/cards/mv_tag.png", note: "闺蜜组卡池衣装舞台展示", src: "B站 视频展示", link: "https://www.bilibili.com/v/game/music" }
       ]
     },
   ];
