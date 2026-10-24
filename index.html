@@ -504,6 +504,24 @@ html.es-darkfix canvas {
   .set-row:last-child { border-bottom: none; }
   .set-row span { font-size: 13px; }
   .set-row input[type=checkbox] { width: 20px; height: 20px; }
+  /* 更换服装弹窗 */
+  .outfit-mask { position: fixed; inset: 0; background: rgba(0,0,0,.55); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 12px; }
+  .outfit-dialog { background: #f4f9ee; border-radius: 16px; width: 100%; max-width: 640px; max-height: 92vh; overflow: hidden; display: flex; flex-direction: column; }
+  .outfit-title { background: linear-gradient(90deg,#3fd67a,#2ec46d); color: #fff; font-size: 17px; font-weight: 700; text-align: center; padding: 12px; position: relative; }
+  .outfit-close { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,.3); color: #fff; border: none; font-size: 18px; cursor: pointer; }
+  .outfit-body { display: flex; gap: 10px; padding: 12px; overflow: hidden; flex: 1; min-height: 0; }
+  .outfit-preview { flex: none; width: 46%; background: #fff; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px; }
+  .outfit-preview img { max-width: 100%; max-height: 60vh; object-fit: contain; }
+  .outfit-preview .name { font-size: 14px; font-weight: 700; color: #234; margin-top: 8px; }
+  .outfit-grid { flex: 1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; overflow-y: auto; align-content: start; }
+  .outfit-grid .cell { background: #fff; border-radius: 8px; padding: 6px; text-align: center; cursor: pointer; border: 2px solid transparent; }
+  .outfit-grid .cell.sel { border-color: #2ec46d; }
+  .outfit-grid .cell img { width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 6px; display: block; }
+  .outfit-grid .cell .n { font-size: 10px; color: #456; margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .outfit-foot { display: flex; gap: 12px; padding: 12px; justify-content: center; background: #fff; }
+  .outfit-foot button { min-height: 44px; min-width: 120px; border-radius: 22px; border: none; font-size: 15px; font-weight: 700; cursor: pointer; }
+  .outfit-cancel { background: linear-gradient(90deg,#3fd67a,#2ec46d); color: #fff; }
+  .outfit-ok { background: linear-gradient(90deg,#ffb340,#ff9500); color: #fff; }
   </style>
   <script>
 // 心情钟 · 强制暗色反制开关（仅 Electron 运行时生效）
@@ -3315,21 +3333,9 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
           </div>`;
         }
         html += `<div class="enc-sec">MV 服装（${outfits.length}）${st5 ? `<span class="star5"> ★5×${st5}</span>` : ""}${st4 ? `<span class="star4"> ★4×${st4}</span>` : ""}${st3 ? `<span class="star3"> ★3×${st3}</span>` : ""}</div>`;
-        html += `<div class="acc-preview-wrap">`;
-        if (cur && cur.img) {
-          html += `<div class="acc-preview"><img class="acc-preview-img" src="${escAttr(cur.img)}" alt="" data-zoom="${escAttr(cur.img)}" />
-            <div class="acc-preview-name">${esc(cur.name || "未命名")}${cur.star ? `<span class="star${cur.star}"> ★${cur.star}</span>` : ""}</div></div>`;
-        }
-        html += `<div class="acc-mv-grid">`;
-        outfits.forEach((o, oi) => {
-          html += `<div class="acc-item${oi === selIdx ? " sel" : ""}" data-acc-outfit-pick="${escAttr(a.id)}::${escAttr(r.id)}::${oi}">
-            ${o.img ? `<img class="acc-item-img" src="${escAttr(o.img)}" alt="" />` : `<div class="acc-empty">无图</div>`}
-            <div class="acc-item-name">${esc(o.name || "未命名")}${o.star ? `<span class="star${o.star}">★${o.star}</span>` : ""}</div>
-            ${help ? `<button type="button" class="acc-btn" data-acc-outfit-del="${escAttr(a.id)}::${escAttr(r.id)}::${oi}">删除</button>` : ""}
-          </div>`;
-        });
-        html += `</div>`;
-        html += `</div>`;
+        html += `<div class="acc-换衣入口">
+          <button type="button" class="acc-btn primary" data-acc-outfit-open="${escAttr(a.id)}::${escAttr(r.id)}">更换服装（${outfits.length}）</button>
+        </div>`;
         if (help) {
           const nk = accOutfitNew[a.id + "::" + r.id];
           const nv = nk || {};
@@ -3432,6 +3438,52 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
       r.outfits.splice(Number(oi), 1);
       accSave(list2);
       renderAcc();
+    });
+    // —— 更换服装弹窗：打开 / 点小图切换 / 关闭 ——
+    box.querySelectorAll("[data-acc-outfit-open]").forEach((b) => b.onclick = () => {
+      const [ai, ri] = b.dataset.accOutfitOpen.split("::");
+      const list2 = accLoad();
+      const a = list2.find((x) => x.id === ai);
+      const r = a && a.roles.find((y) => y.id === ri);
+      if (!r || !r.outfits || !r.outfits.length) return;
+      const outfits = r.outfits;
+      const selKey = ai + "::" + ri;
+      let selIdx = accSel[selKey] || 0;
+      const mask = document.createElement("div");
+      mask.className = "outfit-mask";
+      const renderDlg = () => {
+        const cur = outfits[selIdx] || {};
+        let cells = "";
+        outfits.forEach((o, oi) => {
+          cells += `<div class="cell${oi === selIdx ? " sel" : ""}" data-cell="${oi}">
+            ${o.img ? `<img src="${escAttr(o.img)}" alt="" />` : `<div style="aspect-ratio:3/4;background:#eef;">无图</div>`}
+            <div class="n">${esc(o.name || "未命名")}${o.star ? "★" + o.star : ""}</div>
+          </div>`;
+        });
+        mask.innerHTML = `<div class="outfit-dialog">
+          <div class="outfit-title">更换服装<button type="button" class="outfit-close" data-close>×</button></div>
+          <div class="outfit-body">
+            <div class="outfit-preview">
+              ${cur.img ? `<img src="${escAttr(cur.img)}" alt="" />` : `<div style="color:#999;">无图</div>`}
+              <div class="name">${esc(cur.name || "未命名")}${cur.star ? " ★" + cur.star : ""}</div>
+            </div>
+            <div class="outfit-grid">${cells}</div>
+          </div>
+          <div class="outfit-foot">
+            <button type="button" class="outfit-cancel" data-close>取消</button>
+            <button type="button" class="outfit-ok" data-close>确定</button>
+          </div>
+        </div>`;
+        mask.querySelectorAll("[data-cell]").forEach((c) => c.onclick = () => {
+          selIdx = Number(c.dataset.cell);
+          accSel[selKey] = selIdx;
+          renderDlg();
+        });
+        mask.querySelectorAll("[data-close]").forEach((c) => c.onclick = () => mask.remove());
+      };
+      renderDlg();
+      document.body.appendChild(mask);
+      mask.onclick = (e) => { if (e.target === mask) mask.remove(); };
     });
     box.querySelectorAll("[data-acc-outfit-save]").forEach((b) => b.onclick = () => {
       const grp = b.closest(".acc-group");
