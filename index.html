@@ -271,6 +271,33 @@ body {
 .song-idol.active { background: rgba(240,0,160,.16); border-color: rgba(240,0,160,.5); color: #fff; font-weight: 700; }
 .song-toolbar { display: flex; align-items: center; gap: 12px; margin-top: 2px; }
 .song-count { font-size: 12.5px; color: #5b6478; }
+.song-rel-btn {
+  flex: none; padding: 5px 14px; border-radius: 999px;
+  border: 1px solid rgba(139,92,246,.5); background: rgba(139,92,246,.08);
+  color: #7c3aed; font-size: 12.5px; font-weight: 700; cursor: pointer; line-height: 1.5;
+}
+.song-rel-btn:hover { background: rgba(139,92,246,.16); }
+/* 关系网弹窗 */
+.rel-mask {
+  position: fixed; inset: 0; z-index: 10000;
+  background: rgba(8,10,20,.78); display: flex; align-items: center; justify-content: center;
+  padding: 3vh 4vw;
+}
+.rel-box {
+  background: #fff; color: #1b2030; border-radius: 16px;
+  width: min(460px, 92vw); max-height: 86vh; overflow: auto;
+  box-shadow: 0 20px 70px rgba(0,0,0,.5); padding: 18px 20px 20px; position: relative;
+  font-size: 14px; text-align: left;
+}
+.rel-close { position: absolute; top: 8px; right: 10px; background: none; border: none; font-size: 19px; color: #7a8198; cursor: pointer; padding: 4px 6px; line-height: 1; border-radius: 8px; }
+.rel-close:hover { color: #1b2030; background: #eef2f7; }
+.rel-title { font-size: 17px; font-weight: 800; margin-bottom: 4px; }
+.rel-sub { font-size: 12.5px; color: #5b6478; margin-bottom: 10px; }
+.rel-unit { margin: 12px 0 4px; font-size: 13.5px; font-weight: 800; color: #2563c9; }
+.rel-unit .rel-cnt { font-weight: 400; font-size: 12px; color: #8a91a6; margin-left: 6px; }
+.rel-mem { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+.rel-mem span { background: #eef2f7; padding: 2px 10px; border-radius: 999px; font-size: 12.5px; color: #232a3d; }
+.rel-mem span.me { background: rgba(240,0,160,.14); border: 1px solid rgba(240,0,160,.45); color: #232a3d; font-weight: 700; }
 .song-list { display: flex; flex-direction: column; gap: 10px; }
 .song-card { background: #fff; border: 1px solid rgba(23,26,48,.12); border-radius: 12px; padding: 12px 14px; display: flex; gap: 12px; align-items: flex-start; }
 .song-card-body { min-width: 0; flex: 1; }
@@ -758,7 +785,7 @@ html.es-darkfix canvas {
     <header class="top">
       <div class="top-title">
         <span>偶像梦幻祭 · 资料库</span>
-        <span class="ver" id="libVer">v2.9.21</span>
+        <span class="ver" id="libVer">v2.9.22</span>
       </div>
       <input type="text" class="search" id="libSearch" placeholder="搜索卡名 / 角色 / 卡池…" />
       <span class="top-btns">
@@ -820,7 +847,7 @@ html.es-darkfix canvas {
               <button type="button" class="sm-btn" data-sm="list">列表选人</button>
             </span>
           </div>
-          <div class="song-hint">输入偶像名或点选（可多选，多选=共同出演），选完点「确定搜索」。数据来源官网 Discography，未编造。</div>
+          <div class="song-hint">输入偶像名或点选（可多选，多选=共同出演；选 3 人及以上进入「多人选择模式」，非组合曲优先显示），选完点「确定搜索」。数据来源官网 Discography，未编造。</div>
           <div class="song-search-box">
             <input type="text" id="libSongSearch" placeholder="输入偶像名或组合名，回车直接选中" autocomplete="off">
             <button type="button" class="song-search-clear" id="libSongSearchClear" title="清空输入" hidden>✕</button>
@@ -843,6 +870,7 @@ html.es-darkfix canvas {
               <button type="button" class="sf-btn mv-btn" data-mv="nomv">2D/其他</button>
             </span>
             <span class="song-count" id="songCount"></span>
+            <button type="button" class="song-rel-btn" id="songRelBtn" hidden>关系网</button>
           </div>
           <div class="song-list" id="songList"></div>
         </section>
@@ -3127,7 +3155,9 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
     else if (libSongMV === "nomv") list = list.filter((s) => s.mv !== "game");
     $("songCount").textContent = libSongFilter === "allstars"
       ? `全员曲 · 共 ${list.length} 首`
-      : (songSel.size ? `已选 ${songSel.size} 位偶像 · 共 ${list.length} 首` : `全部曲目 · 共 ${list.length} 首`);
+      : (songSel.size ? (songSel.size >= 3 ? `已选 ${songSel.size} 位偶像 · 多人选择模式（非组合优先） · 共 ${list.length} 首` : `已选 ${songSel.size} 位偶像 · 共 ${list.length} 首`) : `全部曲目 · 共 ${list.length} 首`);
+    const relBtn = $("songRelBtn");
+    if (relBtn) relBtn.hidden = songSel.size < 3;
     if (!list.length) {
       listEl.innerHTML = `<div class="empty2">没有符合条件（非全员曲）的曲目</div>`;
       return;
@@ -3147,8 +3177,15 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
     const gameFirst = (arr) => arr.slice().sort((a, b) => (a.mv === "game" ? -1 : 0) - (b.mv === "game" ? -1 : 0));
     const inUnit = unit;
     const inOther = multi.concat(other);
+    const multiMode = songSel.size >= 3;
     let html = "";
-    if (libSongFilter === "unit") {
+    if (multiMode && libSongFilter === "all") {
+      // 多人选择模式（3人及以上）：非组合曲（多组合曲+非正式组合曲，含2D）最前 → 组合曲 → solo
+      const noUnit = multi.concat(other);
+      html += `<div class="song-sec">非组合曲 · ${noUnit.length}</div>` + gameFirst(noUnit).map(songCardHtml).join("");
+      html += `<div class="song-sec">组合曲 · ${inUnit.length}</div>` + gameFirst(inUnit).map(songCardHtml).join("");
+      html += `<div class="song-sec">solo 曲 · ${solo.length}</div>` + solo.map(songCardHtml).join("");
+    } else if (libSongFilter === "unit") {
       html += `<div class="song-sec">组合曲 · ${inUnit.length}</div>` + gameFirst(inUnit).map(songCardHtml).join("");
     } else if (libSongFilter === "solo") {
       html += `<div class="song-sec">solo 曲 · ${solo.length}</div>` + solo.map(songCardHtml).join("");
@@ -3177,6 +3214,42 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
     document.querySelectorAll(".lib-sf .mv-btn").forEach((b) => {
       b.onclick = () => setLibSongMV(b.dataset.mv);
     });
+    const relBtn = $("songRelBtn");
+    if (relBtn) relBtn.onclick = showRelNet;
+  }
+  // 关系网弹窗：显示已选偶像按组合聚合的成员关系（选中成员高亮，同组其他成员一并展示）
+  function showRelNet() {
+    const sel = Array.from(songSel);
+    const old = document.getElementById("relNetBox");
+    if (old) old.remove();
+    if (!sel.length) return;
+    const groups = window.PetShared ? PetShared.buildIdolGroups() : [];
+    const byUnit = [];
+    groups.forEach((g) => {
+      const inSel = g.idols.filter((id) => sel.indexOf(id) >= 0);
+      if (!inSel.length) return;
+      byUnit.push({ name: g.name, members: g.idols, selSet: new Set(inSel) });
+    });
+    const mapped = new Set();
+    byUnit.forEach((u) => u.selSet.forEach((m) => mapped.add(m)));
+    const unmapped = sel.filter((m) => !mapped.has(m));
+    let html = `<div class="rel-title">关系网 · 已选 ${sel.length} 位偶像</div>
+      <div class="rel-sub">粉色高亮为已选成员，其余为该组合的其他成员</div>`;
+    byUnit.forEach((u) => {
+      html += `<div class="rel-unit">${esc(u.name)}<span class="rel-cnt">${u.members.length} 人</span></div>
+        <div class="rel-mem">${u.members.map((m) => `<span${u.selSet.has(m) ? ' class="me"' : ""}>${esc(m)}</span>`).join("")}</div>`;
+    });
+    if (unmapped.length) {
+      html += `<div class="rel-unit">未归入常规组合</div><div class="rel-mem">${unmapped.map((m) => `<span class="me">${esc(m)}</span>`).join("")}</div>`;
+    }
+    const mask = document.createElement("div");
+    mask.id = "relNetBox";
+    mask.className = "rel-mask";
+    mask.innerHTML = `<div class="rel-box" onclick="event.stopPropagation()">
+      <button type="button" class="rel-close" title="关闭">✕</button>${html}</div>`;
+    mask.onclick = () => mask.remove();
+    mask.querySelector(".rel-close").onclick = () => mask.remove();
+    document.body.appendChild(mask);
   }
   function songCardHtml(s) {
     const idols = s.i.map((id) => esc(normIdol(id))).join(" · ");
@@ -4005,7 +4078,7 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
 
   // —— 初始化 ——
   function init() {
-    $("libVer").textContent = "v2.9.21";
+    $("libVer").textContent = "v2.9.22";
     buildMobileNav();
     // 手机端「确定搜索」初始位置：右侧列表区域悬浮（用户指定），可拖动
     if (IS_MOBILE) {
