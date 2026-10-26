@@ -735,7 +735,7 @@ html.es-darkfix canvas {
     <header class="top">
       <div class="top-title">
         <span>偶像梦幻祭 · 资料库</span>
-        <span class="ver" id="libVer">v2.9.15</span>
+        <span class="ver" id="libVer">v2.9.16</span>
       </div>
       <input type="text" class="search" id="libSearch" placeholder="搜索卡名 / 角色 / 卡池…" />
       <span class="top-btns">
@@ -2957,6 +2957,15 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
     if (m === "simple" && libSongFilter !== "all") setLibSongFilter("all");
     else renderSongList();
   }
+  // 手机端双击确认：记录上次双击搜索的偶像（第三次点击同一偶像 = 取消选中）
+  let songDblIdol = null;
+  // 跳转到歌曲结果区（确定搜索 / 双击名字后自动滚到结果）
+  function goSongResult() {
+    const listEl = $("songList");
+    if (!listEl) return;
+    if (IS_MOBILE) listEl.scrollIntoView({ behavior: "smooth", block: "start" });
+    else listEl.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
   function renderLibIdolList() {
     const box = $("libSongIdolsList");
     if (!box) return;
@@ -2984,13 +2993,16 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
     box.querySelectorAll(".il-row").forEach((row) => {
       row.onclick = () => {
         const idol = row.dataset.idol;
-        if (songSel.has(idol)) {
-          // 手机端：已选中的偶像再点一次 = 直接确认搜索
-          if (IS_MOBILE) { renderSongList(); return; }
-          songSel.delete(idol);
-        } else {
-          songSel.add(idol);
+        if (IS_MOBILE) {
+          if (!songSel.has(idol)) { songSel.add(idol); songDblIdol = null; }
+          else if (songDblIdol === idol) { songSel.delete(idol); songDblIdol = null; }
+          else { songDblIdol = idol; renderSongList(); goSongResult(); return; }
+          row.classList.toggle("on", songSel.has(idol));
+          renderIdolGroups();
+          return;
         }
+        if (songSel.has(idol)) songSel.delete(idol);
+        else songSel.add(idol);
         row.classList.toggle("on", songSel.has(idol));
         renderIdolGroups();
       };
@@ -3037,13 +3049,15 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
     idolBox.querySelectorAll(".song-idol").forEach((b) => {
       b.onclick = () => {
         const idol = b.dataset.idol;
-        if (songSel.has(idol)) {
-          // 手机端：已选中的偶像再点一次 = 直接确认搜索（防误触+少一步）
-          if (IS_MOBILE) { renderSongList(); return; }
-          songSel.delete(idol);
-        } else {
-          songSel.add(idol);
+        if (IS_MOBILE) {
+          if (!songSel.has(idol)) { songSel.add(idol); songDblIdol = null; }
+          else if (songDblIdol === idol) { songSel.delete(idol); songDblIdol = null; }
+          else { songDblIdol = idol; renderSongList(); goSongResult(); return; }
+          renderIdolGroups();
+          return;
         }
+        if (songSel.has(idol)) songSel.delete(idol);
+        else songSel.add(idol);
         renderIdolGroups();
       };
     });
@@ -3947,7 +3961,7 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
 
   // —— 初始化 ——
   function init() {
-    $("libVer").textContent = "v2.9.15";
+    $("libVer").textContent = "v2.9.16";
     buildMobileNav();
     // 手机端「确定搜索」初始位置：右侧列表区域悬浮（用户指定），可拖动
     if (IS_MOBILE) {
@@ -4019,6 +4033,7 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
             songGo.classList.remove("confirming");
             songGo.textContent = "确定搜索";
             renderSongList();
+            goSongResult();
           } else {
             songGo.classList.add("confirming");
             songGo.textContent = "再点一次确认";
