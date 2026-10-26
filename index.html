@@ -530,6 +530,8 @@ html.es-darkfix canvas {
   .ofz-name { font-size: 15px; font-weight: 700; color: #234; margin-top: 8px; }
   .ofz-close { position: absolute; right: 6px; top: 6px; width: 34px; height: 34px; border-radius: 50%; background: rgba(0,0,0,.35); color: #fff; border: none; font-size: 18px; line-height: 1; cursor: pointer; }
   .acc-preview-none { width: 100%; aspect-ratio: 3/4; display: flex; align-items: center; justify-content: center; color: #999; background: #f2f2f2; border-radius: 10px; font-size: 13px; }
+  .acc-toolbar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+  .acc-empty-tip { background: #f2f6fb; border: 1px dashed #9db8d8; color: #456; border-radius: 10px; padding: 14px; font-size: 14px; margin-bottom: 12px; line-height: 1.6; }
   </style>
   <script>
 // 心情钟 · 强制暗色反制开关（仅 Electron 运行时生效）
@@ -3219,6 +3221,43 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
     });
     accSave(list2);
   }
+  // —— 整体导入数据包：按「账号」行切分，一个文件导入多个账号 ——
+  function accMergePack(text) {
+    const list2 = accLoad();
+    let cur = null;
+    text.split(/\r?\n/).forEach((ln) => {
+      ln = ln.trim();
+      if (!ln || ln.charAt(0) === "#" || ln.charAt(0) === "/") return;
+      const p = ln.split("|");
+      const k = (p[0] || "").trim();
+      if (k === "账号") {
+        const label = (p[1] || "").trim();
+        cur = list2.find((x) => x.label === label) || null;
+        if (!cur) {
+          cur = { id: "a" + Date.now() + Math.random().toString(16).slice(2, 6), label: label || "新账号", server: "", user: "", pass: "", note: "", stars: [], roles: [] };
+          list2.push(cur);
+        }
+        if (p[2] !== undefined) cur.server = p[2].trim();
+        if (p[3] !== undefined) cur.user = p[3].trim();
+        if (p[4] !== undefined) cur.pass = p[4].trim();
+        if (p[5] !== undefined) cur.note = p[5].trim();
+      } else if (k === "五星" && cur) {
+        const char = (p[2] || "").trim(), name = (p[3] || "").trim(), img = (p[4] || "").trim();
+        if (!name) return;
+        if (!Array.isArray(cur.stars)) cur.stars = [];
+        if (!cur.stars.some((s) => s.char === char && s.name === name)) cur.stars.push({ char, name, img });
+      } else if (k === "服装" && cur) {
+        const rname = (p[2] || "").trim(), oname = (p[3] || "").trim(), img = (p[4] || "").trim(), star = parseInt(p[5], 10) || 0;
+        if (!oname) return;
+        if (!Array.isArray(cur.roles)) cur.roles = [];
+        let r = cur.roles.find((y) => y.name === rname);
+        if (!r) { r = { id: "r" + Date.now() + Math.random().toString(16).slice(2, 7), name: rname || "未命名角色", outfits: [] }; cur.roles.push(r); }
+        if (!Array.isArray(r.outfits)) r.outfits = [];
+        if (!r.outfits.some((o) => o.name === oname)) r.outfits.push({ name: oname, img, star });
+      }
+    });
+    accSave(list2);
+  }
   function accMergeJson(p, aid) {
     const pk = (p && p.accounts && p.accounts[0]) || p;
     const list2 = accLoad();
@@ -3300,6 +3339,14 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
     const box = $("accList");
     if (!box) return;
     box.innerHTML = "";
+    // —— 账号页顶部工具栏：无论有没有账号都显示 ——
+    box.innerHTML += `<div class="acc-toolbar">
+      <button type="button" class="acc-btn primary" data-acc-add>＋ 添加账号</button>
+      <label class="acc-btn">导入数据包<input type="file" class="of-pack" accept=".txt,.json,text/plain,application/json" hidden data-acc-pack-import="__all__" /></label>
+    </div>`;
+    if (!list.length) {
+      box.innerHTML += `<div class="acc-empty-tip">还没有账号：点「导入数据包」选择 .txt 数据包（含账号、五星卡、MV 服装），或点「添加账号」手动录入。</div>`;
+    }
     list.forEach((a, ai) => {
       const g = document.createElement("div");
       g.className = "acc-group";
@@ -3577,6 +3624,14 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
       accOutfitZoom(p[0] || "", p[1] || "", parseInt(p[2], 10) || 0);
     });
     // —— 数据包：导出 / 导入（txt 文本格式，账号密码仅存本机）——
+    box.querySelectorAll("[data-acc-add]").forEach((b) => b.onclick = () => {
+      const list2 = accLoad();
+      const na = { id: "a" + Date.now() + Math.random().toString(16).slice(2, 6), label: "新账号", server: "", user: "", pass: "", note: "", stars: [], roles: [] };
+      list2.push(na);
+      accSave(list2);
+      accEditId = na.id;
+      renderAcc();
+    });
     box.querySelectorAll("[data-acc-pack-export]").forEach((b) => b.onclick = () => {
       const list2 = accLoad();
       const a = list2.find((x) => x.id === b.dataset.accPackExport);
@@ -3598,15 +3653,32 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
       rd.onload = () => {
         try {
           const text = rd.result;
-          if (text.charAt(0) === "{") {
-            // 兼容旧 JSON 数据包
-            const p = JSON.parse(text);
-            accMergeJson(p, aid);
+          if (aid === "__all__") {
+            // 整体导入：一个数据包可含多个账号（按「账号」行切分）
+            if (text.charAt(0) === "{") {
+              const p = JSON.parse(text);
+              const accs = (p && p.accounts) || [p];
+              const txt = accs.map((x) => {
+                const ls = [["账号", x.label || "", x.server || "", x.user || "", x.pass || "", x.note || ""].join("|")];
+                (x.stars || []).forEach((s) => ls.push(["五星", x.label || "", s.char || "", s.name || "", s.img || ""].join("|")));
+                (x.roles || []).forEach((r) => (r.outfits || []).forEach((o) => ls.push(["服装", x.label || "", r.name || "", o.name || "", o.img || "", o.star || 0].join("|"))));
+                return ls.join("\n");
+              }).join("\n");
+              accMergePack(txt);
+            } else {
+              accMergePack(text);
+            }
+            renderAcc();
           } else {
-            accMergeTxt(text, aid);
+            if (text.charAt(0) === "{") {
+              const p = JSON.parse(text);
+              accMergeJson(p, aid);
+            } else {
+              accMergeTxt(text, aid);
+            }
+            accEditId = "";
+            renderAcc();
           }
-          accEditId = "";
-          renderAcc();
         } catch (e) { if (window.alert) window.alert("数据包解析失败：" + e.message); }
       };
       rd.readAsText(f);
