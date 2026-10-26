@@ -433,6 +433,8 @@ html.es-darkfix canvas {
   /* ===== 手机版专用 UI（与电脑版区分）：底部导航 + 大热区 + 服装卡片网格 ===== */
   .m-nav { display: none; }
   @media (max-width: 1100px) {
+    /* 关键：解除 body 滚动锁定（全局样式 body{overflow:hidden} 会卡死整页），恢复正常下滑 */
+    body { overflow: auto; }
     .app { height: auto; min-height: 100vh; padding-bottom: 76px; box-sizing: border-box; }
     .top { position: sticky; top: 0; z-index: 300; flex-direction: row; align-items: center; gap: 8px; padding: 8px 10px; }
     .top-title { font-size: 15px; white-space: nowrap; }
@@ -441,7 +443,7 @@ html.es-darkfix canvas {
     .search { flex: 1; min-width: 0; font-size: 16px; min-height: 40px; padding: 0 10px; }
     .body { display: block; }
     .nav { display: none; }
-    .content { padding: 10px 10px 24px; }
+    .content { padding: 10px 10px 24px; overflow: visible; }
     /* 底部导航 */
     .m-nav {
       display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 900;
@@ -756,7 +758,7 @@ html.es-darkfix canvas {
     <header class="top">
       <div class="top-title">
         <span>偶像梦幻祭 · 资料库</span>
-        <span class="ver" id="libVer">v2.9.19</span>
+        <span class="ver" id="libVer">v2.9.20</span>
       </div>
       <input type="text" class="search" id="libSearch" placeholder="搜索卡名 / 角色 / 卡池…" />
       <span class="top-btns">
@@ -4007,7 +4009,7 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
 
   // —— 初始化 ——
   function init() {
-    $("libVer").textContent = "v2.9.19";
+    $("libVer").textContent = "v2.9.20";
     buildMobileNav();
     // 手机端「确定搜索」初始位置：右侧列表区域悬浮（用户指定），可拖动
     if (IS_MOBILE) {
