@@ -913,7 +913,7 @@ html.es-darkfix canvas {
               <button type="button" class="sm-btn" data-sm="list">列表选人</button>
             </span>
           </div>
-          <div class="song-hint">输入偶像名或点选（可多选，多选=共同出演；选 3 人及以上进入「多人选择模式」，非组合曲优先显示），选完点「确定搜索」。数据来源官网 Discography，未编造。</div>
+          <div class="song-hint">输入偶像名或点选（可多选，多选=显示 ≥2 位所选偶像同台的曲目；没有 2 人同台曲时优先显示所选偶像的非组合曲），选完点「确定搜索」。数据来源官网 Discography，未编造。</div>
           <div class="song-search-box">
             <input type="text" id="libSongSearch" placeholder="输入偶像名或组合名，回车直接选中" autocomplete="off">
             <button type="button" class="song-search-clear" id="libSongSearchClear" title="清空输入" hidden>✕</button>
@@ -2885,6 +2885,7 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
       "新增「编辑站位」：每首歌卡片底部显示横排 5 格站位（C 位★），点击可编辑拖拽排列成员，导出后固化进曲库",
       "屏蔽名单删除「洗牌 / 企划」行（VS 对战名义非正式组合），仅保留正式组合与其他；chip 悬停显示日文名 / 成员",
       "选歌默认改为新歌在前（仅「三人红月模式」开启时才老歌优先）",
+      "多选偶像：优先显示 ≥2 位所选偶像同台的曲目；完全没有 2 人同台曲时优先显示所选偶像的非组合曲，不再出现 0 首",
     ] },
     { ver: "2.9.26", date: "2026-10-26", items: [
       "选人界面删除 Project SEKAI 联动角色（天马司 / 神代类 / 东云彰人 / 青柳冬弥）与联动翻唱曲中的其他角色（如月レン、ガスト・アドラー 等），三语表与歌曲成员一并清理",
@@ -3389,8 +3390,20 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
       list = S.filter((s) => s.t !== "all");
       if (songSel.size) {
         const sel = Array.from(songSel).map(normIdol);
-        // 多选=共同出演：只显示所有选中偶像一起出现的曲目（交集）
-        list = list.filter((s) => sel.every((idol) => s.i.some((id) => normIdol(id) === idol)));
+        // 多选：优先显示 ≥2 位所选偶像同台的曲目（2 人=共同出演）
+        const co2 = list.filter((s) => {
+          let cnt = 0;
+          for (const id of s.i) if (sel.includes(normIdol(id)) && ++cnt >= 2) return true;
+          return false;
+        });
+        if (co2.length) {
+          list = co2;
+        } else {
+          // 完全没有 2 人同台的曲目：优先显示所选偶像出演的非组合曲（兜底，避免 0 首）
+          const mine = list.filter((s) => s.i.some((id) => sel.includes(normIdol(id))));
+          const noUnit = mine.filter((s) => songKind(s) !== "unit" && songKind(s) !== "all");
+          list = noUnit.length ? noUnit : mine;
+        }
       }
       // 「组合曲」含跨组合多组合曲（排最前）；「非组合曲」不含纯组合曲
       if (libSongFilter === "unit") list = list.filter((s) => songKind(s) === "unit");
