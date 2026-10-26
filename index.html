@@ -291,6 +291,58 @@ body {
 }
 .rel-close { position: absolute; top: 8px; right: 10px; background: none; border: none; font-size: 19px; color: #7a8198; cursor: pointer; padding: 4px 6px; line-height: 1; border-radius: 8px; }
 .rel-close:hover { color: #1b2030; background: #eef2f7; }
+/* 歌曲站位（横排 5 格 · C 位★） */
+.song-stance { margin-top: 8px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.song-stance-hd { font-size: 11.5px; font-weight: 800; color: #9aa1b4; letter-spacing: .3px; }
+.st-row { display: inline-flex; gap: 4px; }
+.st-slot {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 34px; height: 26px; padding: 0 6px; border-radius: 8px;
+  background: #eef2f7; border: 1px solid #dde2ec; color: #232a3d;
+  font-size: 11.5px; font-weight: 700; line-height: 1; cursor: pointer; user-select: none;
+}
+.st-slot.c { background: rgba(240,0,160,.12); border-color: rgba(240,0,160,.5); color: #a1006a; }
+.st-slot.empty { background: #f7f8fb; border-style: dashed; color: #b3bac9; font-weight: 400; cursor: pointer; }
+.st-slot.drag { opacity: .35; }
+.st-slot.over { outline: 2px solid #7c3aed; outline-offset: 1px; }
+.st-edit-btn { font-size: 11.5px; padding: 2px 9px; border-radius: 999px; border: 1px solid rgba(139,92,246,.5); background: rgba(139,92,246,.08); color: #7c3aed; font-weight: 700; cursor: pointer; line-height: 1.6; }
+.st-edit-btn:hover { background: rgba(139,92,246,.16); }
+/* 站位编辑器弹窗 */
+.st-mask {
+  position: fixed; inset: 0; z-index: 10010;
+  background: rgba(8,10,20,.78); display: flex; align-items: center; justify-content: center;
+  padding: 3vh 4vw;
+}
+.st-box {
+  background: #fff; color: #1b2030; border-radius: 16px;
+  width: min(460px, 94vw); max-height: 88vh; overflow: auto;
+  box-shadow: 0 20px 70px rgba(0,0,0,.5); padding: 18px 20px 20px; position: relative;
+  font-size: 14px; text-align: left;
+}
+.st-title { font-size: 16px; font-weight: 800; margin-bottom: 2px; padding-right: 30px; }
+.st-sub { font-size: 12px; color: #5b6478; margin-bottom: 10px; }
+.st-editor-row { display: flex; gap: 6px; justify-content: center; margin: 12px 0 14px; }
+.st-editor-row .st-slot { min-width: 52px; height: 40px; font-size: 13px; border-radius: 10px; }
+.st-cnote { font-size: 11.5px; color: #a1006a; text-align: center; margin-top: -8px; margin-bottom: 8px; font-weight: 700; }
+.st-pool-hd { font-size: 12.5px; font-weight: 800; color: #2563c9; margin: 8px 0 6px; }
+.st-pool { display: flex; flex-wrap: wrap; gap: 6px; }
+.st-pool button {
+  background: #eef2f7; border: 1px solid #dde2ec; color: #232a3d;
+  padding: 4px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 700; cursor: pointer; line-height: 1.5;
+}
+.st-pool button.used { opacity: .38; pointer-events: none; }
+.st-foot { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+.st-foot button {
+  flex: 1; padding: 9px 0; border-radius: 999px; border: none; cursor: pointer;
+  font-size: 13.5px; font-weight: 800; line-height: 1.4;
+}
+.st-save { background: #7c3aed; color: #fff; }
+.st-save:hover { background: #6d28d9; }
+.st-clear { background: #f0f2f6; color: #4b5468; }
+.st-clear:hover { background: #e5e8ee; }
+.st-done { background: #eef2f7; color: #4b5468; }
+.st-done:hover { background: #e3e7ee; }
+.st-export-note { font-size: 11.5px; color: #8a91a6; margin-top: 10px; line-height: 1.5; }
 .rel-title { font-size: 17px; font-weight: 800; margin-bottom: 4px; }
 .rel-sub { font-size: 12.5px; color: #5b6478; margin-bottom: 10px; }
 .rel-unit { margin: 12px 0 4px; font-size: 13.5px; font-weight: 800; color: #2563c9; }
@@ -799,7 +851,7 @@ html.es-darkfix canvas {
     <header class="top">
       <div class="top-title">
         <span>偶像梦幻祭 · 资料库</span>
-        <span class="ver" id="libVer">v2.9.26</span>
+        <span class="ver" id="libVer">v2.9.27</span>
       </div>
       <input type="text" class="search" id="libSearch" placeholder="搜索卡名 / 角色 / 卡池…" />
       <span class="top-btns">
@@ -2829,6 +2881,11 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
 
   // —— 版本日志（与 pet.js / CHANGELOG.md 同步）——
   const CHANGELOG = [
+    { ver: "2.9.27", date: "2026-10-27", items: [
+      "新增「编辑站位」：每首歌卡片底部显示横排 5 格站位（C 位★），点击可编辑拖拽排列成员，导出后固化进曲库",
+      "屏蔽名单删除「洗牌 / 企划」行（VS 对战名义非正式组合），仅保留正式组合与其他；chip 悬停显示日文名 / 成员",
+      "选歌默认改为新歌在前（仅「三人红月模式」开启时才老歌优先）",
+    ] },
     { ver: "2.9.26", date: "2026-10-26", items: [
       "选人界面删除 Project SEKAI 联动角色（天马司 / 神代类 / 东云彰人 / 青柳冬弥）与联动翻唱曲中的其他角色（如月レン、ガスト・アドラー 等），三语表与歌曲成员一并清理",
       "设置新增「三人红月模式」：开启后滝维吹移出紅月组（归入其他角色），选歌优先显示 2024-12 以前（天翔KAGETSU 之前）的老歌",
@@ -3351,7 +3408,7 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
         !x.i.some((m) => bl.includes(normIdol(m)))
       );
     }
-    // 三人红月模式：优先显示 2024-12-29（天翔KAGETSU）以前的老歌
+    // 三人红月模式：优先显示 2024-12-29（天翔KAGETSU）以前的老歌；其余默认新歌在前
     if (st.kohaku3) {
       const kagetsu = "2024-12-29";
       list = list.slice().sort((a, b) => {
@@ -3360,6 +3417,8 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
         if (ao !== bo) return ao - bo;
         return (a.rel || "").localeCompare(b.rel || "");
       });
+    } else {
+      list = list.slice().sort((a, b) => (b.rel || "").localeCompare(a.rel || ""));
     }
     $("songCount").textContent = libSongFilter === "allstars"
       ? `全员曲 · 共 ${list.length} 首`
@@ -3424,6 +3483,10 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
     });
     const relBtn = $("songRelBtn");
     if (relBtn) relBtn.onclick = showRelNet;
+    // 站位：点击卡片上的站位格 / 编辑按钮打开编辑器
+    document.querySelectorAll(".st-edit-btn, .st-slot[data-song]").forEach((el) => {
+      el.onclick = () => openStanceEdit(el.dataset.song);
+    });
   }
   // 关系网弹窗：显示已选偶像的五类关系（组合 / 历史正式组合 / 兴趣圈子 / 星奏馆寝室 / 元班级），选中成员高亮，同组/同圈/同房/同班成员一并展示
   function showRelNet() {
@@ -3507,8 +3570,156 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
         <div class="song-unit2">${s.u && s.u !== s.n ? esc(s.u) : ""}</div>
         <div class="song-tags">${idols}</div>
         <div class="song-src">来源：<a href="${escAttr(s.src)}" target="_blank" rel="noopener">查看</a> ${yyy} · 点卡片看详情</div>
+        ${stanceStripHtml(s)}
       </div>
     </div>`;
+  }
+
+  // —— 编辑站位：每首歌卡片底部的横排 5 格站位（第 3 格 C 位 ★），成员可点击放入 / 拖拽换位 ——
+  const ES_STANCE_SUR = ["鬼龙", "莲巳", "朔间", "大神", "天祥院", "冰鹰", "月永", "濑名", "乙狩", "姬宫", "伏见", "影片", "明星", "游木", "衣更", "鸣上", "朱樱", "斋宫", "乱", "巴", "七种", "涟", "深海", "守泽", "南云", "高峯", "仙石", "天城", "白鸟", "礼濑", "风早", "樱河", "椎名", "葵", "仁兔", "紫之", "真白", "天满", "三毛", "逆先", "青叶", "春川", "滝", "佐賀", "椚", "円果", "久遠", "甘楽", "小鹿"];
+  function stanceShortName(cn) {
+    const s = String(cn || "");
+    for (const su of ES_STANCE_SUR) if (s.startsWith(su)) return s.slice(su.length);
+    return s;
+  }
+  function unitMembers(n) {
+    if (window.PetShared) {
+      const g = (PetShared.buildIdolGroups() || []).find((x) => x.name === n);
+      if (g && g.idols && g.idols.length) return g.idols;
+    }
+    const S = window.ES_SONGS || [];
+    const mem = [];
+    S.forEach((s) => {
+      if (s.t === "all") return;
+      if (window.PetShared ? PetShared.unitDisp(s.u) === n : s.u === n) {
+        s.i.forEach((id) => {
+          const m = normIdol(id);
+          if (!mem.includes(m)) mem.push(m);
+        });
+      }
+    });
+    return mem;
+  }
+  const STANCE_KEY = "ball-pet-v2-stances";
+  function loadStanceSong(name) {
+    const ed = {};
+    try { Object.assign(ed, JSON.parse(localStorage.getItem(STANCE_KEY) || "{}")); } catch (e) {}
+    if (Array.isArray(ed[name])) return ed[name].slice(0, 5);
+    const fixed = (window.ES_STANCES || {})[name];
+    return Array.isArray(fixed) ? fixed.slice(0, 5) : Array(5).fill(null);
+  }
+  function saveStanceSong(name, arr) {
+    const ed = {};
+    try { Object.assign(ed, JSON.parse(localStorage.getItem(STANCE_KEY) || "{}")); } catch (e) {}
+    ed[name] = arr.slice(0, 5);
+    try { localStorage.setItem(STANCE_KEY, JSON.stringify(ed)); } catch (e) {}
+  }
+  function stanceStripHtml(s) {
+    const arr = loadStanceSong(s.n);
+    const slots = arr.map((v, i) =>
+      v ? `<span class="st-slot${i === 2 ? " c" : ""}" data-song="${escAttr(s.n)}" title="${esc(v)}">${esc(stanceShortName(v))}${i === 2 ? "★" : ""}</span>`
+         : `<span class="st-slot empty" data-song="${escAttr(s.n)}">＋</span>`).join("");
+    return `<div class="song-stance"><span class="song-stance-hd">站位</span><span class="st-row">${slots}</span>
+      <button type="button" class="st-edit-btn" data-song="${escAttr(s.n)}">编辑</button></div>`;
+  }
+  function openStanceEdit(name) {
+    const old = document.getElementById("stanceBox");
+    if (old) old.remove();
+    const S = window.ES_SONGS || [];
+    const s = S.find((x) => x.n === name);
+    if (!s) return;
+    const members = s.i.map((m) => normIdol(m));
+    const cur = loadStanceSong(name);
+    const mask = document.createElement("div");
+    mask.id = "stanceBox";
+    mask.className = "st-mask";
+    mask.innerHTML = `<div class="st-box" onclick="event.stopPropagation()">
+      <button type="button" class="rel-close" title="关闭">✕</button>
+      <div class="st-title">${esc(s.n)}</div>
+      <div class="st-sub">横排 5 个站位（第 3 格为 C 位 ★）· 点击空格放入成员 · 点名字移出 · 桌面可拖拽换位</div>
+      <div class="st-editor-row" id="stRow"></div>
+      <div class="st-cnote">★ = C 位</div>
+      <div class="st-pool-hd">成员（点击放入空格）</div>
+      <div class="st-pool" id="stPool"></div>
+      <div class="st-foot">
+        <button type="button" class="st-clear" id="stClear">清空</button>
+        <button type="button" class="st-save" id="stSave">保存站位</button>
+        <button type="button" class="st-done" id="stDone">完成</button>
+      </div>
+      <div class="st-export-note">保存后本歌曲卡片即显示站位；全部编辑完成后可在「设置」页点「导出站位」复制数据发回固化。</div>
+    </div>`;
+    mask.onclick = () => mask.remove();
+    mask.querySelector(".rel-close").onclick = () => mask.remove();
+    document.body.appendChild(mask);
+    const row = mask.querySelector("#stRow");
+    const pool = mask.querySelector("#stPool");
+    function render() {
+      row.innerHTML = cur.map((v, i) =>
+        v ? `<span class="st-slot${i === 2 ? " c" : ""}" draggable="true" data-idx="${i}" title="${esc(v)}">${esc(stanceShortName(v))}${i === 2 ? "★" : ""}</span>`
+           : `<span class="st-slot empty" data-idx="${i}">＋</span>`).join("");
+      const used = cur.filter(Boolean);
+      pool.innerHTML = members.map((m) =>
+        `<button type="button" class="${used.includes(m) ? "used" : ""}" data-m="${escAttr(m)}">${esc(m)}</button>`).join("");
+      row.querySelectorAll(".st-slot").forEach((el) => {
+        const i = +el.dataset.idx;
+        el.onclick = () => {
+          if (cur[i]) { cur[i] = null; render(); }
+          else {
+            const first = members.find((m) => !cur.includes(m));
+            if (first !== undefined) { cur[i] = first; render(); }
+          }
+        };
+        el.addEventListener("dragstart", (ev) => {
+          ev.dataTransfer.setData("text/plain", String(i));
+          el.classList.add("drag");
+        });
+        el.addEventListener("dragend", () => el.classList.remove("drag"));
+        el.addEventListener("dragover", (ev) => { ev.preventDefault(); el.classList.add("over"); });
+        el.addEventListener("dragleave", () => el.classList.remove("over"));
+        el.addEventListener("drop", (ev) => {
+          ev.preventDefault();
+          el.classList.remove("over");
+          const from = +ev.dataTransfer.getData("text/plain");
+          if (isNaN(from) || from === i || !cur[from]) return;
+          const t = cur[i]; cur[i] = cur[from]; cur[from] = t;
+          render();
+        });
+      });
+      pool.querySelectorAll("button").forEach((b) => {
+        b.onclick = () => {
+          const m = b.dataset.m;
+          const idx = cur.indexOf(m);
+          if (idx >= 0) cur[idx] = null;
+          else { const i = cur.indexOf(null); if (i >= 0) cur[i] = m; }
+          render();
+        };
+      });
+    }
+    render();
+    mask.querySelector("#stClear").onclick = () => { cur.fill(null); render(); };
+    mask.querySelector("#stSave").onclick = () => { saveStanceSong(name, cur); renderSongList(); };
+    mask.querySelector("#stDone").onclick = () => { saveStanceSong(name, cur); renderSongList(); mask.remove(); };
+  }
+  function copyText(t) {
+    const ta = document.createElement("textarea");
+    ta.value = t; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    let ok = false;
+    try { ok = document.execCommand("copy"); } catch (e) {}
+    ta.remove();
+    return ok;
+  }
+  function exportStances() {
+    const ed = {};
+    try { Object.assign(ed, JSON.parse(localStorage.getItem(STANCE_KEY) || "{}")); } catch (e) {}
+    const json = JSON.stringify(ed);
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(json).then(() => { alert("已复制站位数据（JSON），可直接粘贴发回固化"); })
+        .catch(() => { if (copyText(json)) alert("已复制站位数据（JSON）"); else prompt("请手动复制站位数据：", json); });
+    } else {
+      if (copyText(json)) alert("已复制站位数据（JSON）");
+      else prompt("请手动复制站位数据：", json);
+    }
   }
 
   // ============ 歌曲详情弹层（上架时间 / 成员CV / 作詞作曲編曲） ============
@@ -4271,6 +4482,10 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
         <div class="block-sec" id="blockIdols"></div>
         <div class="block-sec" id="blockUnits"></div>
       </details>
+      <div class="set-row">
+        <span>编辑站位（歌曲卡片底部编辑 · 导出后发回固化）</span>
+        <button type="button" id="stanceExport" class="st-edit-btn">导出站位</button>
+      </div>
       <ul class="log-items">
         <li>开启后，偶像梦幻祭页签将显示「账号」，记录各账号与所持卡（仅保存在本机浏览器）。</li>
         <li>开启「关系网」后，选歌页选 3 人及以上会出现「关系网」按钮，弹窗展示组合 / 历史正式组合 / 兴趣圈子 / 星奏馆寝室 / 元班级关系。</li>
@@ -4311,6 +4526,8 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
       renderSongList();
     };
     renderBlockPanel();
+    const se = $("stanceExport");
+    if (se) se.onclick = () => exportStances();
     applyAccTab();
   }
 
@@ -4332,15 +4549,23 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
         if (!names.includes(n)) names.push(n);
       }));
       idolBox.innerHTML = `<div class="block-label">偶像</div><div class="block-chips">` +
-        names.map((n) => `<button type="button" class="b-chip${bl.has(n) ? " on" : ""}" data-v="${escAttr(n)}">${esc(n)}</button>`).join("") + `</div>`;
+        names.map((n) => {
+          const ja = (window.ES_ROLE_NAMES || {})[n] ? (window.ES_ROLE_NAMES[n].ja || "") : "";
+          return `<button type="button" class="b-chip${bl.has(n) ? " on" : ""}" data-v="${escAttr(n)}" title="${escAttr(ja)}">${esc(n)}</button>`;
+        }).join("") + `</div>`;
     }
     const unitBox = $("blockUnits");
     if (unitBox && window.PetShared) {
       const groups = PetShared.buildBlockUnits();
-      const secs = [["正式组合", groups.formal], ["洗牌 / 企划", groups.shuffle], ["其他", groups.other]];
+      // 仅保留正式组合与其他（洗牌/企划 VS 名义非正式组合，不列入屏蔽名单）
+      const secs = [["正式组合", groups.formal], ["其他", groups.other]];
       unitBox.innerHTML = secs.map(([label, arr]) =>
         `<div class="block-label">${label}</div><div class="block-chips">` +
-        (arr.length ? arr.map((n) => `<button type="button" class="b-chip${bl.has(n) ? " on" : ""}" data-v="${escAttr(n)}">${esc(n)}</button>`).join("") : `<span class="block-none">—</span>`) +
+        (arr.length ? arr.map((n) => {
+          const mem = unitMembers(n);
+          const tip = mem.length ? ("成员：" + mem.map(stanceShortName).join(" / ")) : "企划名义（非正式组合）";
+          return `<button type="button" class="b-chip${bl.has(n) ? " on" : ""}" data-v="${escAttr(n)}" title="${escAttr(tip)}">${esc(n)}</button>`;
+        }).join("") : `<span class="block-none">—</span>`) +
         `</div>`).join("");
     }
     box.querySelectorAll(".b-chip").forEach((c) => {
@@ -4410,7 +4635,7 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
 
   // —— 初始化 ——
   function init() {
-    $("libVer").textContent = "v2.9.26";
+    $("libVer").textContent = "v2.9.27";
     buildMobileNav();
     // 手机端「确定搜索」初始位置：右侧列表区域悬浮（用户指定），可拖动
     if (IS_MOBILE) {
