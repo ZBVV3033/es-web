@@ -381,7 +381,7 @@ html.es-darkfix canvas {
   }
   .top-btns button:hover { background: var(--bg3); }
   @media (max-width: 860px) {
-    .app { height: 100vh; }
+    .app { height: auto; min-height: 100vh; }
     .top { flex-direction: column; align-items: stretch; gap: 8px; padding: 10px 12px 40px; }
     .top-title { font-size: 14px; }
     .top-btns { position: absolute; top: 8px; right: 8px; }
@@ -493,6 +493,27 @@ html.es-darkfix canvas {
       touch-action: none; cursor: grab; white-space: normal; text-align: center;
     }
     #songGo.confirming { background: linear-gradient(90deg,#e8a33d,#d9822b); border-color: #e8a33d; }
+    /* 手机端 MV 服装页：全屏放大底图（图按屏高铺满，可横向滑动看全部格子） */
+    .mv-full-btn {
+      position: absolute; right: 10px; top: 10px; z-index: 30;
+      min-height: 42px; padding: 6px 16px; border-radius: 18px;
+      background: rgba(0,0,0,.55); color: #fff; font-size: 14px;
+      border: 1px solid rgba(255,255,255,.45); box-shadow: 0 2px 8px rgba(0,0,0,.3);
+    }
+    .mv-full-exit {
+      position: fixed; right: 12px; top: 12px; z-index: 960;
+      min-height: 42px; padding: 6px 16px; border-radius: 18px;
+      background: rgba(0,0,0,.7); color: #fff; font-size: 14px;
+      border: 1px solid rgba(255,255,255,.45); box-shadow: 0 2px 8px rgba(0,0,0,.3);
+    }
+    .mv-page-wrap.mv-full {
+      position: fixed; inset: 0; z-index: 940; background: #000;
+      overflow: auto; -webkit-overflow-scrolling: touch; border-radius: 0; border: none;
+    }
+    .mv-page-wrap.mv-full .mv-page-img {
+      display: block; width: auto; height: 100vh; max-width: none;
+    }
+    .mv-page-wrap.mv-full .mv-layer { cursor: pointer; }
     .song-toolbar { justify-content: center; gap: 10px; }
     .sm-wrap { justify-content: center; }
     .sm-btn { min-height: 44px; font-size: 14px; padding: 8px 16px; }
@@ -735,7 +756,7 @@ html.es-darkfix canvas {
     <header class="top">
       <div class="top-title">
         <span>偶像梦幻祭 · 资料库</span>
-        <span class="ver" id="libVer">v2.9.18</span>
+        <span class="ver" id="libVer">v2.9.19</span>
       </div>
       <input type="text" class="search" id="libSearch" placeholder="搜索卡名 / 角色 / 卡池…" />
       <span class="top-btns">
@@ -3609,6 +3630,8 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
         const o = c.outfits[i] || null;
         return `<div class="mv-layer" data-mv-open="${i}" style="left:${L[0]}%;top:${L[1]}%;width:${L[2]}%;height:${L[3]}%" title="${o && o.name ? escAttr(o.name) : "暂无预览图"}"></div>`;
       }).join("")}
+      ${IS_MOBILE ? `<button type="button" class="mv-full-btn" data-mv-full>全屏放大</button>
+      <button type="button" class="mv-full-exit" data-mv-exit hidden>退出全屏</button>` : ""}
     </div>`;
     body.querySelectorAll("[data-mv-open]").forEach((b) => b.onclick = () => {
       const i = Number(b.dataset.mvOpen);
@@ -3616,6 +3639,26 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
       try { localStorage.setItem(MV_SEL_KEY, JSON.stringify({ id: c.id, si: i })); } catch (e) {}
       mvShowDetail(o);
     });
+    // 手机端：全屏放大底图（图按屏幕高度铺满、可横向滑动查看全部格子），再点退出
+    if (IS_MOBILE) {
+      const wrap = body.querySelector(".mv-page-wrap");
+      const fullBtn = body.querySelector("[data-mv-full]");
+      const exitBtn = body.querySelector("[data-mv-exit]");
+      if (wrap && fullBtn) {
+        fullBtn.onclick = () => {
+          wrap.classList.add("mv-full");
+          fullBtn.hidden = true;
+          if (exitBtn) exitBtn.hidden = false;
+        };
+      }
+      if (exitBtn) {
+        exitBtn.onclick = () => {
+          wrap.classList.remove("mv-full");
+          exitBtn.hidden = true;
+          if (fullBtn) fullBtn.hidden = false;
+        };
+      }
+    }
   }
   // 自绘模式（无底图的偶像回退）：绿标题栏 + 左大预览 + 右缩略网格 + 取消/确定
   function renderMvDialog(body, c, si) {
@@ -3964,7 +4007,7 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
 
   // —— 初始化 ——
   function init() {
-    $("libVer").textContent = "v2.9.18";
+    $("libVer").textContent = "v2.9.19";
     buildMobileNav();
     // 手机端「确定搜索」初始位置：右侧列表区域悬浮（用户指定），可拖动
     if (IS_MOBILE) {
