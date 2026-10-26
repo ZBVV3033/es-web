@@ -791,7 +791,7 @@ html.es-darkfix canvas {
     <header class="top">
       <div class="top-title">
         <span>偶像梦幻祭 · 资料库</span>
-        <span class="ver" id="libVer">v2.9.24</span>
+        <span class="ver" id="libVer">v2.9.25</span>
       </div>
       <input type="text" class="search" id="libSearch" placeholder="搜索卡名 / 角色 / 卡池…" />
       <span class="top-btns">
@@ -931,6 +931,7 @@ html.es-darkfix canvas {
     warn1min: true, // 结束前1分钟提醒
     autostart: false, // 开机启动
     telemetry: false, // 崩溃/诊断日志（默认关）
+    relnet: false, // 关系网弹窗（默认关，设置里开启后显示）
   };
 
   function uuidLite() {
@@ -2781,6 +2782,10 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
 
   // —— 版本日志（与 pet.js / CHANGELOG.md 同步）——
   const CHANGELOG = [
+    { ver: "2.9.25", date: "2026-10-26", items: [
+      "关系网改为设置项：在设置里开启「关系网」后，选歌页选 3 人及以上才显示「关系网」按钮（默认关）",
+      "关系网弹窗包含五区：组合 / 历史正式组合（元fine、五奇人、旧Valkyrie、Deadman's）/ 兴趣圈子 / 星奏馆寝室 / 元班级",
+    ] },
     { ver: "2.9.1", date: "2026-10-24", items: [
       "账号卡新增「总五星」：记录每张五星卡的偶像/卡名/卡面图，自动按偶像统计数量",
       "五星卡以网格展示，点卡面图可放大预览",
@@ -3277,7 +3282,7 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
       ? `全员曲 · 共 ${list.length} 首`
       : (songSel.size ? (songSel.size >= 3 ? `已选 ${songSel.size} 位偶像 · 多人选择模式（非组合优先） · 共 ${list.length} 首` : `已选 ${songSel.size} 位偶像 · 共 ${list.length} 首`) : `全部曲目 · 共 ${list.length} 首`);
     const relBtn = $("songRelBtn");
-    if (relBtn) relBtn.hidden = songSel.size < 3;
+    if (relBtn) relBtn.hidden = songSel.size < 3 || !loadSettings().relnet;
     if (!list.length) {
       listEl.innerHTML = `<div class="empty2">没有符合条件（非全员曲）的曲目</div>`;
       return;
@@ -4166,8 +4171,13 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
         <span>账号帮助（账号所持卡一览）</span>
         <input type="checkbox" id="accHelpToggle" ${accHelpOn() ? "checked" : ""} />
       </div>
+      <div class="set-row">
+        <span>关系网（多人关系弹窗）</span>
+        <input type="checkbox" id="relnetToggle" ${loadSettings().relnet ? "checked" : ""} />
+      </div>
       <ul class="log-items">
         <li>开启后，偶像梦幻祭页签将显示「账号」，记录各账号与所持卡（仅保存在本机浏览器）。</li>
+        <li>开启「关系网」后，选歌页选 3 人及以上会出现「关系网」按钮，弹窗展示组合 / 历史正式组合 / 兴趣圈子 / 星奏馆寝室 / 元班级关系。</li>
         <li>本资料库所有数据（曲目、卡池、卡面、服装、时间线）均来自官网 ensemble-stars.jp 与官方公告。</li>
       </ul>`;
     CHANGELOG.forEach((v) => {
@@ -4177,6 +4187,14 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
     body.innerHTML = html;
     const tg = $("accHelpToggle");
     if (tg) tg.onchange = () => { accSetHelp(tg.checked); applyAccTab(); };
+    const rt = $("relnetToggle");
+    if (rt) rt.onchange = () => {
+      const s = loadSettings();
+      s.relnet = rt.checked;
+      saveSettings(s);
+      const btn = $("songRelBtn");
+      if (btn) btn.hidden = songSel.size < 3 || !s.relnet;
+    };
     applyAccTab();
   }
 
@@ -4231,7 +4249,7 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
 
   // —— 初始化 ——
   function init() {
-    $("libVer").textContent = "v2.9.24";
+    $("libVer").textContent = "v2.9.25";
     buildMobileNav();
     // 手机端「确定搜索」初始位置：右侧列表区域悬浮（用户指定），可拖动
     if (IS_MOBILE) {
