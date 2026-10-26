@@ -300,6 +300,8 @@ body {
 .rel-mem span.me { background: rgba(240,0,160,.14); border: 1px solid rgba(240,0,160,.45); color: #232a3d; font-weight: 700; }
 .rel-unit.circle { color: #8b3fbf; }
 .rel-unit.dorm { color: #0e8a5f; }
+.rel-unit.hist { color: #c2410c; }
+.rel-unit.cls { color: #1d4ed8; }
 .rel-sec-hd { margin: 14px 0 2px; font-size: 12.5px; font-weight: 800; letter-spacing: .5px; color: #9aa1b4; border-bottom: 1px solid #edf0f5; padding-bottom: 4px; }
 .rel-desc { font-size: 12px; color: #8a91a6; margin: 2px 0 4px; }
 .song-list { display: flex; flex-direction: column; gap: 10px; }
@@ -789,7 +791,7 @@ html.es-darkfix canvas {
     <header class="top">
       <div class="top-title">
         <span>偶像梦幻祭 · 资料库</span>
-        <span class="ver" id="libVer">v2.9.23</span>
+        <span class="ver" id="libVer">v2.9.24</span>
       </div>
       <input type="text" class="search" id="libSearch" placeholder="搜索卡名 / 角色 / 卡池…" />
       <span class="top-btns">
@@ -1708,15 +1710,38 @@ html.es-darkfix canvas {
       { no: "3F-304", mem: ["朱樱司", "神崎飒马", "仙石忍"] }
     ] }
   ];
-  // 关系网聚合：三类关系（组合 / 圈子 / 寝室），只返回与已选成员相关的部分
+  // —— 元班级（梦之咲学院 ES1 时期班级分配，官方图鉴）—— 班名 = 元+年级+班 → 成员（规范中文名）
+  const ES_CLASSES = [
+    { name: "元1-A", mem: ["南云铁虎", "紫之创", "真白友也", "葵日向", "高峯翠"] },
+    { name: "元1-B", mem: ["姬宫桃李", "仙石忍", "葵裕太", "天满光", "朱樱司", "春川宙"] },
+    { name: "元2-A", mem: ["明星昴流", "冰鹰北斗", "游木真", "神崎飒马", "乙狩阿多尼斯", "逆先夏目"] },
+    { name: "元2-B", mem: ["大神晃牙", "朔间凛月", "衣更真绪", "伏见弓弦", "鸣上岚", "影片美伽"] },
+    { name: "元3-A", mem: ["莲巳敬人", "天祥院英智", "羽风薰", "濑名泉", "守泽千秋", "斋宫宗", "三毛缟斑"] },
+    { name: "元3-B", mem: ["鬼龙红郎", "日日树涉", "深海奏汰", "朔间零", "仁兔成鸣", "月永雷欧", "青叶纺"] }
+  ];
+  // —— 历史正式组合（梦之咲时代正式成立过的组合，非洗牌/企划临时名义）——
+  //    所属组合只写过去和现在的正式组合；洗牌等临时组合搜歌时会出现，不写入关系
+  const ES_HIST_UNITS = [
+    { name: "元fine", mem: ["天祥院英智", "日日树涉", "姬宫桃李", "伏见弓弦"] },
+    { name: "五奇人", mem: ["朔间零", "日日树涉", "深海奏汰", "斋宫宗", "逆先夏目"] },
+    { name: "旧Valkyrie", mem: ["斋宫宗", "影片美伽", "仁兔成鸣"] },
+    { name: "Deadman's", mem: ["朔间零", "羽风薰", "大神晃牙", "乙狩阿多尼斯"] }
+  ];
+  // 关系网聚合：四类关系（组合 / 历史正式组合 / 圈子 / 寝室 / 元班级），只返回与已选成员相关的部分
   function buildRelationGroups(selArr) {
     const sel = new Set(selArr || []);
-    const out = { units: [], circles: [], dorms: [] };
-    // 组合（沿用 buildIdolGroups 的分组结果）
+    const out = { units: [], hist: [], circles: [], dorms: [], classes: [] };
+    // 组合（沿用 buildIdolGroups 的分组结果：当前正式组合）
     (buildIdolGroups() || []).forEach((g) => {
       const inSel = g.idols.filter((id) => sel.has(id));
       if (!inSel.length) return;
       out.units.push({ name: g.name, members: g.idols, hit: new Set(inSel) });
+    });
+    // 历史正式组合
+    ES_HIST_UNITS.forEach((h) => {
+      const hit = h.mem.filter((m) => sel.has(m));
+      if (!hit.length) return;
+      out.hist.push({ name: h.name, members: h.mem, hit: new Set(hit) });
     });
     // 圈子
     ES_CIRCLES.forEach((c) => {
@@ -1731,6 +1756,12 @@ html.es-darkfix canvas {
         if (!hit.length) return;
         out.dorms.push({ name: r.no, floor: f.name, members: r.mem, hit: new Set(hit) });
       });
+    });
+    // 元班级（同班成员全部展示）
+    ES_CLASSES.forEach((c) => {
+      const hit = c.mem.filter((m) => sel.has(m));
+      if (!hit.length) return;
+      out.classes.push({ name: c.name, members: c.mem, hit: new Set(hit) });
     });
     return out;
   }
@@ -1782,6 +1813,8 @@ html.es-darkfix canvas {
     buildRelationGroups,
     ES_CIRCLES,
     ES_DORMS,
+    ES_CLASSES,
+    ES_HIST_UNITS,
     CATS,
     CAT_ORDER,
     autoCat,
@@ -3304,26 +3337,35 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
     const relBtn = $("songRelBtn");
     if (relBtn) relBtn.onclick = showRelNet;
   }
-  // 关系网弹窗：显示已选偶像的三类关系（组合 / 兴趣圈子 / 星奏馆寝室），选中成员高亮，同组/同圈/同房成员一并展示
+  // 关系网弹窗：显示已选偶像的五类关系（组合 / 历史正式组合 / 兴趣圈子 / 星奏馆寝室 / 元班级），选中成员高亮，同组/同圈/同房/同班成员一并展示
   function showRelNet() {
     const sel = Array.from(songSel);
     const old = document.getElementById("relNetBox");
     if (old) old.remove();
     if (!sel.length) return;
-    const rel = window.PetShared ? PetShared.buildRelationGroups(sel) : { units: [], circles: [], dorms: [] };
+    const rel = window.PetShared ? PetShared.buildRelationGroups(sel) : { units: [], hist: [], circles: [], dorms: [], classes: [] };
     const mapped = new Set();
     rel.units.forEach((u) => u.hit.forEach((m) => mapped.add(m)));
+    rel.hist.forEach((h) => h.hit.forEach((m) => mapped.add(m)));
     rel.circles.forEach((c) => c.hit.forEach((m) => mapped.add(m)));
     rel.dorms.forEach((d) => d.hit.forEach((m) => mapped.add(m)));
+    rel.classes.forEach((c) => c.hit.forEach((m) => mapped.add(m)));
     const unmapped = sel.filter((m) => !mapped.has(m));
     const chip = (mem, hit) => mem.map((m) => `<span${hit.has(m) ? ' class="me"' : ""}>${esc(m)}</span>`).join("");
     let html = `<div class="rel-title">关系网 · 已选 ${sel.length} 位偶像</div>
-      <div class="rel-sub">粉色高亮为已选成员，同组合 / 同圈子 / 同寝室成员一并展示</div>`;
+      <div class="rel-sub">粉色高亮为已选成员，同组合 / 同圈子 / 同寝室 / 同班成员一并展示</div>`;
     if (rel.units.length) {
       html += `<div class="rel-sec-hd">组合（UNIT）</div>`;
       rel.units.forEach((u) => {
         html += `<div class="rel-unit">${esc(u.name)}<span class="rel-cnt">${u.members.length} 人</span></div>
           <div class="rel-mem">${chip(u.members, u.hit)}</div>`;
+      });
+    }
+    if (rel.hist.length) {
+      html += `<div class="rel-sec-hd">历史正式组合</div>`;
+      rel.hist.forEach((h) => {
+        html += `<div class="rel-unit hist">${esc(h.name)}<span class="rel-cnt">${h.members.length} 人</span></div>
+          <div class="rel-mem">${chip(h.members, h.hit)}</div>`;
       });
     }
     if (rel.circles.length) {
@@ -3340,11 +3382,18 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
           <div class="rel-mem">${chip(d.members, d.hit)}</div>`;
       });
     }
+    if (rel.classes.length) {
+      html += `<div class="rel-sec-hd">元班级（梦之咲）</div>`;
+      rel.classes.forEach((c) => {
+        html += `<div class="rel-unit cls">${esc(c.name)}<span class="rel-cnt">${c.members.length} 人</span></div>
+          <div class="rel-mem">${chip(c.members, c.hit)}</div>`;
+      });
+    }
     if (unmapped.length) {
       html += `<div class="rel-sec-hd">未归入常规组合</div><div class="rel-mem">${unmapped.map((m) => `<span class="me">${esc(m)}</span>`).join("")}</div>`;
     }
-    if (!rel.units.length && !rel.circles.length && !rel.dorms.length) {
-      html += `<div class="rel-sub">暂未匹配到组合 / 圈子 / 寝室关系</div>`;
+    if (!rel.units.length && !rel.hist.length && !rel.circles.length && !rel.dorms.length && !rel.classes.length) {
+      html += `<div class="rel-sub">暂未匹配到组合 / 圈子 / 寝室 / 班级关系</div>`;
     }
     const mask = document.createElement("div");
     mask.id = "relNetBox";
@@ -4182,7 +4231,7 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
 
   // —— 初始化 ——
   function init() {
-    $("libVer").textContent = "v2.9.23";
+    $("libVer").textContent = "v2.9.24";
     buildMobileNav();
     // 手机端「确定搜索」初始位置：右侧列表区域悬浮（用户指定），可拖动
     if (IS_MOBILE) {
