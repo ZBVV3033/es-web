@@ -851,7 +851,7 @@ html.es-darkfix canvas {
     <header class="top">
       <div class="top-title">
         <span>偶像梦幻祭 · 资料库</span>
-        <span class="ver" id="libVer">v2.9.29</span>
+        <span class="ver" id="libVer">v2.9.30</span>
       </div>
       <input type="text" class="search" id="libSearch" placeholder="搜索卡名 / 角色 / 卡池…" />
       <span class="top-btns">
@@ -944,6 +944,12 @@ html.es-darkfix canvas {
         <!-- 版本日志 -->
         <section class="page" id="page-log" hidden>
           <div class="log-wrap" id="logBody"></div>
+        </section>
+        <section class="page" id="page-wz" hidden>
+          <div class="log-wrap" id="wzBody"></div>
+        </section>
+        <section class="page" id="page-term" hidden>
+          <div class="log-wrap" id="termGroups"></div>
         </section>
       </main>
     </div>
@@ -1758,7 +1764,8 @@ html.es-darkfix canvas {
     { name: "生物俱乐部（陆地生物）", desc: "宠物情报交换，去牧场动物园", mem: ["仁兔成鸣", "日日树涉", "明星昴流", "大神晃牙", "真白友也"] },
     { name: "ES讲座（茨塾）", desc: "七种茨主办，游戏式补习", mem: ["HiMERU", "七种茨", "逆先夏目", "南云铁虎", "春川宙"] },
     { name: "ES讲座（敬人塾）", desc: "莲巳敬人主办，杂学补习带茶点", mem: ["莲巳敬人", "伏见弓弦", "影片美伽", "天城一彩", "白鸟蓝良"] },
-    { name: "「浪漫戏剧」剧团", desc: "日日树涉主导，自制服装道具演剧", mem: ["月永雷欧", "莲巳敬人", "乱凪砂", "斋宫宗", "日日树涉", "冰鹰北斗", "逆先夏目", "鸣上岚", "真白友也"] }
+    { name: "「浪漫戏剧」剧团", desc: "日日树涉主导，自制服装道具演剧", mem: ["月永雷欧", "莲巳敬人", "乱凪砂", "斋宫宗", "日日树涉", "冰鹰北斗", "逆先夏目", "鸣上岚", "真白友也"] },
+    { name: "梦之咲学生会（现任）", desc: "现任学生会，会长姬宫桃李，成员紫之创、白鸟蓝良、仙石忍、朱樱司", mem: ["姬宫桃李", "紫之创", "白鸟蓝良", "仙石忍", "朱樱司"] }
   ];
   // —— 星奏馆寝室分配（官方宿舍图）—— 楼层 → 房间 → 成员（规范中文名）
   const ES_DORMS = [
@@ -1798,7 +1805,7 @@ html.es-darkfix canvas {
   // —— 历史正式组合（梦之咲时代正式成立过的组合，非洗牌/企划临时名义）——
   //    所属组合只写过去和现在的正式组合；洗牌等临时组合搜歌时会出现，不写入关系
   const ES_HIST_UNITS = [
-    { name: "元fine", mem: ["天祥院英智", "日日树涉", "姬宫桃李", "伏见弓弦"] },
+    { name: "元fine", mem: ["巴日和", "天祥院英智", "乱凪砂", "青叶纺"] },
     { name: "五奇人", mem: ["朔间零", "日日树涉", "深海奏汰", "斋宫宗", "逆先夏目"] },
     { name: "旧Valkyrie", mem: ["斋宫宗", "影片美伽", "仁兔成鸣"] },
     { name: "Deadman's", mem: ["朔间零", "羽风薰", "大神晃牙", "乙狩阿多尼斯"] }
@@ -3109,7 +3116,7 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
       img.onclick = () => openZoom(img.dataset.zoom || img.src);
     });
     det.querySelectorAll("a[data-link]").forEach((a) => {
-      a.onclick = (e) => { e.stopPropagation(); if (window.app) window.app.openLink(a.dataset.link); };
+      a.onclick = (e) => { e.stopPropagation(); if (window.app && window.app.openLink) window.app.openLink(a.dataset.link); else window.open(a.dataset.link, "_blank", "noopener"); };
     });
   }
 
@@ -4654,7 +4661,7 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
 
   // —— 初始化 ——
   function init() {
-    $("libVer").textContent = "v2.9.29";
+    $("libVer").textContent = "v2.9.30";
     buildMobileNav();
     // 手机端「确定搜索」初始位置：右侧列表区域悬浮（用户指定），可拖动
     if (IS_MOBILE) {
