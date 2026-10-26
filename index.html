@@ -735,7 +735,7 @@ html.es-darkfix canvas {
     <header class="top">
       <div class="top-title">
         <span>偶像梦幻祭 · 资料库</span>
-        <span class="ver" id="libVer">v2.9.17</span>
+        <span class="ver" id="libVer">v2.9.18</span>
       </div>
       <input type="text" class="search" id="libSearch" placeholder="搜索卡名 / 角色 / 卡池…" />
       <span class="top-btns">
@@ -3575,8 +3575,7 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
     if (cnt) cnt.textContent = c.name + " · " + (c.unit || "") + " · 服装 " + c.outfits.length + " 件";
     const body = $("mvBody");
     if (body) {
-      if (IS_MOBILE) renderMvMobile(body, c, si);
-      else if (c.page) renderMvPage(body, c, si);
+      if (c.page) renderMvPage(body, c, si);
       else renderMvDialog(body, c, si);
     }
     chars.querySelectorAll("[data-mv-char]").forEach((b) => b.onclick = () => {
@@ -3965,7 +3964,7 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
 
   // —— 初始化 ——
   function init() {
-    $("libVer").textContent = "v2.9.17";
+    $("libVer").textContent = "v2.9.18";
     buildMobileNav();
     // 手机端「确定搜索」初始位置：右侧列表区域悬浮（用户指定），可拖动
     if (IS_MOBILE) {
