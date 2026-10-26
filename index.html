@@ -432,7 +432,7 @@ html.es-darkfix canvas {
   }
   /* ===== 手机版专用 UI（与电脑版区分）：底部导航 + 大热区 + 服装卡片网格 ===== */
   .m-nav { display: none; }
-  @media (max-width: 768px) {
+  @media (max-width: 1100px) {
     .app { height: auto; min-height: 100vh; padding-bottom: 76px; box-sizing: border-box; }
     .top { position: sticky; top: 0; z-index: 300; flex-direction: row; align-items: center; gap: 8px; padding: 8px 10px; }
     .top-title { font-size: 15px; white-space: nowrap; }
@@ -735,7 +735,7 @@ html.es-darkfix canvas {
     <header class="top">
       <div class="top-title">
         <span>偶像梦幻祭 · 资料库</span>
-        <span class="ver" id="libVer">v2.9.16</span>
+        <span class="ver" id="libVer">v2.9.17</span>
       </div>
       <input type="text" class="search" id="libSearch" placeholder="搜索卡名 / 角色 / 卡池…" />
       <span class="top-btns">
@@ -2594,7 +2594,10 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
   const $ = (id) => document.getElementById(id);
 
   // 移动端检测：窄屏（≤768px）视为手机，启用手机版 UI（底部导航 + 服装卡片网格）
-  const IS_MOBILE = !!(window.matchMedia && window.matchMedia("(max-width: 768px)").matches);
+  const IS_MOBILE = !!(
+    (window.matchMedia && window.matchMedia("(max-width: 1100px)").matches) ||
+    (("ontouchstart" in window) || (navigator.maxTouchPoints || 0) > 0)
+  );
 
   function esc(s) {
     return String(s == null ? "" : s)
@@ -2959,12 +2962,13 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
   }
   // 手机端双击确认：记录上次双击搜索的偶像（第三次点击同一偶像 = 取消选中）
   let songDblIdol = null;
-  // 跳转到歌曲结果区（确定搜索 / 双击名字后自动滚到结果）
+  // 跳转到歌曲结果区（不用 smooth scrollIntoView——部分手机浏览器会卡死整页滚动）
   function goSongResult() {
     const listEl = $("songList");
     if (!listEl) return;
-    if (IS_MOBILE) listEl.scrollIntoView({ behavior: "smooth", block: "start" });
-    else listEl.scrollIntoView({ behavior: "smooth", block: "start" });
+    const y = listEl.getBoundingClientRect().top +
+      (window.pageYOffset || document.documentElement.scrollTop || 0) - 10;
+    try { window.scrollTo(0, Math.max(0, y)); } catch (e) {}
   }
   function renderLibIdolList() {
     const box = $("libSongIdolsList");
@@ -3961,7 +3965,7 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
 
   // —— 初始化 ——
   function init() {
-    $("libVer").textContent = "v2.9.16";
+    $("libVer").textContent = "v2.9.17";
     buildMobileNav();
     // 手机端「确定搜索」初始位置：右侧列表区域悬浮（用户指定），可拖动
     if (IS_MOBILE) {
