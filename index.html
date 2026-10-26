@@ -482,15 +482,17 @@ html.es-darkfix canvas {
     .song-hint { font-size: 13px; line-height: 1.5; }
     .song-idol { min-height: 44px; font-size: 14px; padding: 8px 12px; }
     .tl-filter { min-height: 44px; font-size: 14px; }
-    /* 选歌页手机端简化：隐藏筛选行，确定搜索放大 + 双击确认态 */
-    .lib-sf, .lib-sf2 { display: none !important; }
+    /* 选歌页手机端：「确定搜索」右侧浮动圆形大按钮（置顶，可拖动）+ 双击确认态 */
     #songGo {
-      position: fixed; right: 12px; top: 40%; z-index: 120;
-      min-height: 56px; font-size: 16px; font-weight: 700; padding: 10px 28px;
-      border-radius: 28px; box-shadow: 0 4px 16px rgba(0,0,0,.3);
-      touch-action: none; cursor: grab; white-space: nowrap;
+      position: fixed; z-index: 950;
+      width: 68px; height: 68px; border-radius: 50%;
+      font-size: 14px; font-weight: 700; line-height: 1.15;
+      padding: 0; display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(90deg,#2ec46d,#1f9e57); color: #fff;
+      box-shadow: 0 4px 18px rgba(0,0,0,.38);
+      touch-action: none; cursor: grab; white-space: normal; text-align: center;
     }
-    #songGo.confirming { background: #e8a33d; border-color: #e8a33d; }
+    #songGo.confirming { background: linear-gradient(90deg,#e8a33d,#d9822b); border-color: #e8a33d; }
     .song-toolbar { justify-content: center; gap: 10px; }
     .sm-wrap { justify-content: center; }
     .sm-btn { min-height: 44px; font-size: 14px; padding: 8px 16px; }
@@ -733,7 +735,7 @@ html.es-darkfix canvas {
     <header class="top">
       <div class="top-title">
         <span>偶像梦幻祭 · 资料库</span>
-        <span class="ver" id="libVer">v2.9.14</span>
+        <span class="ver" id="libVer">v2.9.15</span>
       </div>
       <input type="text" class="search" id="libSearch" placeholder="搜索卡名 / 角色 / 卡池…" />
       <span class="top-btns">
@@ -2982,8 +2984,13 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
     box.querySelectorAll(".il-row").forEach((row) => {
       row.onclick = () => {
         const idol = row.dataset.idol;
-        if (songSel.has(idol)) songSel.delete(idol);
-        else songSel.add(idol);
+        if (songSel.has(idol)) {
+          // 手机端：已选中的偶像再点一次 = 直接确认搜索
+          if (IS_MOBILE) { renderSongList(); return; }
+          songSel.delete(idol);
+        } else {
+          songSel.add(idol);
+        }
         row.classList.toggle("on", songSel.has(idol));
         renderIdolGroups();
       };
@@ -3030,9 +3037,13 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
     idolBox.querySelectorAll(".song-idol").forEach((b) => {
       b.onclick = () => {
         const idol = b.dataset.idol;
-        if (songSel.has(idol)) songSel.delete(idol);
-        else songSel.add(idol);
-        // 只更新选中高亮，不立即搜索；点「确定搜索」再出结果
+        if (songSel.has(idol)) {
+          // 手机端：已选中的偶像再点一次 = 直接确认搜索（防误触+少一步）
+          if (IS_MOBILE) { renderSongList(); return; }
+          songSel.delete(idol);
+        } else {
+          songSel.add(idol);
+        }
         renderIdolGroups();
       };
     });
@@ -3936,11 +3947,17 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
 
   // —— 初始化 ——
   function init() {
-    $("libVer").textContent = "v2.9.14";
+    $("libVer").textContent = "v2.9.15";
     buildMobileNav();
+    // 手机端「确定搜索」初始位置：右侧列表区域悬浮（用户指定），可拖动
     if (IS_MOBILE) {
-      // 手机端简化选歌：隐藏「高级模式」入口（筛选行在手机端一律不显示）
-      document.querySelectorAll('.sm-btn[data-sm="advanced"]').forEach((b) => { b.style.display = "none"; });
+      const go = $("songGo");
+      if (go) {
+        go.style.right = "14px";
+        go.style.left = "auto";
+        go.style.top = "55%";
+        go.style.bottom = "auto";
+      }
     }
     document.querySelectorAll(".nav-item").forEach((b) => {
       b.onclick = () => switchPage(b.dataset.page);
