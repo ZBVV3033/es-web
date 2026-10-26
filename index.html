@@ -430,6 +430,59 @@ html.es-darkfix canvas {
     .song-toolbar .lib-sf { flex-wrap: wrap; }
     .top-title .ver { font-size: 11px; }
   }
+  /* ===== 手机版专用 UI（与电脑版区分）：底部导航 + 大热区 + 服装卡片网格 ===== */
+  .m-nav { display: none; }
+  @media (max-width: 768px) {
+    .app { height: auto; min-height: 100vh; padding-bottom: 76px; box-sizing: border-box; }
+    .top { position: sticky; top: 0; z-index: 300; flex-direction: row; align-items: center; gap: 8px; padding: 8px 10px; }
+    .top-title { font-size: 15px; white-space: nowrap; }
+    .top-title .ver { font-size: 10px; }
+    .top-btns { display: none !important; }
+    .search { flex: 1; min-width: 0; font-size: 16px; min-height: 40px; padding: 0 10px; }
+    .body { display: block; }
+    .nav { display: none; }
+    .content { padding: 10px 10px 24px; }
+    /* 底部导航 */
+    .m-nav {
+      display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 900;
+      background: #fff; border-top: 1px solid var(--line);
+      padding: 5px 4px calc(5px + env(safe-area-inset-bottom));
+      justify-content: space-around; box-shadow: 0 -2px 12px rgba(0,0,0,.08);
+    }
+    .m-nav button {
+      flex: 1; min-height: 52px; font-size: 11px; border: none; background: transparent;
+      color: var(--txt2); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+      border-radius: 12px; cursor: pointer;
+    }
+    .m-nav button svg { width: 22px; height: 22px; }
+    .m-nav button.active { color: var(--acc); font-weight: 700; background: rgba(240,0,160,.08); }
+    /* 偶像梦幻祭页签：两列大按钮 */
+    .es-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+    .es-tab { width: 100%; min-height: 48px; font-size: 15px; border-radius: 12px; }
+    /* 服装页：手机端用大卡片网格替代底图透明层 */
+    .mv-top { flex-wrap: wrap; gap: 6px; }
+    .mv-chars button { min-height: 42px; font-size: 14px; padding: 6px 14px; }
+    .mv-count { font-size: 13px; }
+    .mv-grid-m { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .mv-grid-m .mv-card { background: #fff; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+    .mv-grid-m .mv-card img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; display: block; background: var(--bg); }
+    .mv-grid-m .mv-card .mv-card-name { font-size: 13px; color: var(--txt); padding: 6px 4px; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .mv-grid-m .mv-card:active { transform: scale(.97); }
+    /* 详情窗口手机端：大窗口居中偏上，可拖动/缩放/关闭 */
+    .mv-win { width: 88vw !important; min-width: 0 !important; }
+    /* 账号页输入与卡片 */
+    .acc-title { font-size: 16px; }
+    .acc-info { font-size: 14px; }
+    .acc-card .t { font-size: 14px; }
+    .acc-item-name { font-size: 13px; }
+    input, textarea, select { font-size: 16px !important; }
+    /* 通用字号放大 */
+    .song-card, .idol-list .il-row, .term-groups, .log-wrap, .tl-list, .sched-list, .jp-list, .enc-name, .enc-info { font-size: 14px; }
+    .sf-btn, .mv-btn, .sm-btn { min-height: 44px; font-size: 14px; padding: 8px 12px; }
+    .song-hint { font-size: 13px; line-height: 1.5; }
+    .song-idol { min-height: 44px; font-size: 14px; padding: 8px 12px; }
+    .tl-filter { min-height: 44px; font-size: 14px; }
+  }
   /* ===== 图鉴页 ===== */
   .enc-wrap { display: flex; flex-direction: column; gap: 10px; }
   .enc-side { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -666,7 +719,7 @@ html.es-darkfix canvas {
     <header class="top">
       <div class="top-title">
         <span>偶像梦幻祭 · 资料库</span>
-        <span class="ver" id="libVer">v2.9.12</span>
+        <span class="ver" id="libVer">v2.9.13</span>
       </div>
       <input type="text" class="search" id="libSearch" placeholder="搜索卡名 / 角色 / 卡池…" />
       <span class="top-btns">
@@ -768,6 +821,9 @@ html.es-darkfix canvas {
       <div class="zoom-close" id="zoomClose">✕</div>
     </div>
   </div>
+
+  <!-- 手机版底部导航（仅移动端显示） -->
+  <nav class="m-nav" id="mNav" hidden></nav>
 
   <script>
 /* 球窗 / 记事本共用：时间、存储、备忘 */
@@ -2521,6 +2577,9 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
 (function () {
   const $ = (id) => document.getElementById(id);
 
+  // 移动端检测：窄屏（≤768px）视为手机，启用手机版 UI（底部导航 + 服装卡片网格）
+  const IS_MOBILE = !!(window.matchMedia && window.matchMedia("(max-width: 768px)").matches);
+
   function esc(s) {
     return String(s == null ? "" : s)
       .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
@@ -2612,6 +2671,47 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
 
   // —— 页面与视图切换 ——
   function renderEs() { /* es 页内容由页签（图鉴/时间线/日服/排期）切换渲染 */ }
+  function updateMobileNav(page, view) {
+    const nav = $("mNav");
+    if (!nav || nav.hidden) return;
+    let key = "es";
+    if (page === "songs") key = "songs";
+    else if (page === "log" || page === "wz" || page === "term") key = "log";
+    else if (page === "es") {
+      if (view === "mv") key = "mv";
+      else if (view === "sched") key = "sched";
+      else key = "es";
+    }
+    nav.querySelectorAll("[data-mnav]").forEach((b) => b.classList.toggle("active", b.dataset.mnav === key));
+  }
+  // 手机版底部导航：首页 / 服装 / 选歌 / 排期 / 设置
+  function buildMobileNav() {
+    const nav = $("mNav");
+    if (!nav) return;
+    const ICONS = {
+      es: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>',
+      mv: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16v10H4z"/><path d="M9 7v10M15 7v10"/></svg>',
+      songs: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V6l10-2v11"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="15" r="2.5"/></svg>',
+      sched: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>',
+      log: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>'
+    };
+    const items = [
+      { id: "es", label: "首页", act: () => { switchPage("es"); } },
+      { id: "mv", label: "服装", act: () => { switchPage("es"); switchEsView("mv"); } },
+      { id: "songs", label: "选歌", act: () => { switchPage("songs"); setLibSongMode("list"); } },
+      { id: "sched", label: "排期", act: () => { switchPage("es"); switchEsView("sched"); } },
+      { id: "log", label: "设置", act: () => switchPage("log") }
+    ];
+    nav.innerHTML = items.map((it) =>
+      `<button type="button" data-mnav="${it.id}"><span class="mi">${ICONS[it.id]}</span>${it.label}</button>`).join("");
+    nav.querySelectorAll("[data-mnav]").forEach((b) => {
+      b.onclick = () => {
+        const it = items.find((x) => x.id === b.dataset.mnav);
+        if (it) it.act();
+      };
+    });
+    nav.hidden = !IS_MOBILE;
+  }
   function switchPage(page) {
     document.querySelectorAll(".nav-item").forEach((b) => b.classList.toggle("active", b.dataset.page === page));
     ["es", "songs", "wz", "term", "log"].forEach((p) => {
@@ -2623,6 +2723,7 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
     if (page === "wz") renderWz();
     if (page === "term") renderTerms();
     if (page === "log") renderLog();
+    updateMobileNav(page);
   }
 
   function switchEsView(view) {
@@ -2637,6 +2738,7 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
     if (view === "timeline") renderTimeline();
     if (view === "jp") renderJp();
     if (view === "sched") renderSched();
+    updateMobileNav("es", view);
   }
 
   // —— 角色图鉴 ——
@@ -3430,7 +3532,8 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
     if (cnt) cnt.textContent = c.name + " · " + (c.unit || "") + " · 服装 " + c.outfits.length + " 件";
     const body = $("mvBody");
     if (body) {
-      if (c.page) renderMvPage(body, c, si);
+      if (IS_MOBILE) renderMvMobile(body, c, si);
+      else if (c.page) renderMvPage(body, c, si);
       else renderMvDialog(body, c, si);
     }
     chars.querySelectorAll("[data-mv-char]").forEach((b) => b.onclick = () => {
@@ -3438,6 +3541,22 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
       if (!ch) return;
       try { localStorage.setItem(MV_SEL_KEY, JSON.stringify({ id: ch.id, si: 0 })); } catch (e) {}
       renderMv();
+    });
+  }
+  // 手机版：服装卡片网格（大图大字，替代电脑版的原图底图+透明层，方便拇指点击）
+  function renderMvMobile(body, c, si) {
+    body.innerHTML = `<div class="mv-grid-m">
+      ${c.outfits.map((o, i) =>
+        `<div class="mv-card" data-mv-open="${i}" role="button" tabindex="0">
+          ${o && o.img ? `<img src="${escAttr(o.img)}" alt="" loading="lazy" />` : `<img src="" alt="暂无预览图" />`}
+          <div class="mv-card-name">${o && o.name ? esc(o.name) : "暂无预览图"}</div>
+        </div>`).join("")}
+    </div>`;
+    body.querySelectorAll("[data-mv-open]").forEach((b) => b.onclick = () => {
+      const i = Number(b.dataset.mvOpen);
+      const o = c.outfits[i] || null;
+      try { localStorage.setItem(MV_SEL_KEY, JSON.stringify({ id: c.id, si: i })); } catch (e) {}
+      mvShowDetail(o);
     });
   }
   // 原图模式：全屏只显示更换服装界面原图 + 网格透明点击层 → 可拖动/缩放的详情窗口（可多开）
@@ -3493,14 +3612,21 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
     const win = document.createElement("div");
     win.className = "mv-win";
     win.style.zIndex = String(mvWinZ++);
-    // 初始位置：页面左侧（用户 4.png 划定的橙色显示区），多开时逐窗微偏移
-    const baseL = 16;
-    const baseT = Math.max(12, window.innerHeight * 0.08);
+    // 初始位置：手机端大窗口居中偏上；电脑端在页面左侧（用户 4.png 划定的橙色显示区），多开逐窗微偏移
     const n = document.querySelectorAll(".mv-win").length;
-    win.style.left = (baseL + n * 22) + "px";
-    win.style.top = (baseT + n * 22) + "px";
-    win.style.width = Math.min(320, window.innerWidth * 0.42) + "px";
-    win.style.height = "auto";
+    if (IS_MOBILE) {
+      win.style.left = "6vw";
+      win.style.top = (Math.max(12, window.innerHeight * 0.12) + n * 20) + "px";
+      win.style.width = "88vw";
+      win.style.height = "auto";
+    } else {
+      const baseL = 16;
+      const baseT = Math.max(12, window.innerHeight * 0.08);
+      win.style.left = (baseL + n * 22) + "px";
+      win.style.top = (baseT + n * 22) + "px";
+      win.style.width = Math.min(320, window.innerWidth * 0.42) + "px";
+      win.style.height = "auto";
+    }
     win.innerHTML = `<div class="mv-win-bar">
       <span class="mv-win-title">${o && o.name ? esc(o.name) : "服装预览"}</span>
       <button type="button" class="mv-win-close" aria-label="关闭">✕</button>
@@ -3796,7 +3922,8 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
 
   // —— 初始化 ——
   function init() {
-    $("libVer").textContent = "v2.9.12";
+    $("libVer").textContent = "v2.9.13";
+    buildMobileNav();
     document.querySelectorAll(".nav-item").forEach((b) => {
       b.onclick = () => switchPage(b.dataset.page);
     });
