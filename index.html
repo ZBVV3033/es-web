@@ -666,7 +666,7 @@ html.es-darkfix canvas {
     <header class="top">
       <div class="top-title">
         <span>偶像梦幻祭 · 资料库</span>
-        <span class="ver" id="libVer">v2.9.11</span>
+        <span class="ver" id="libVer">v2.9.12</span>
       </div>
       <input type="text" class="search" id="libSearch" placeholder="搜索卡名 / 角色 / 卡池…" />
       <span class="top-btns">
@@ -3379,11 +3379,24 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
       id: "hiyori", name: "巴日和", unit: "Eden",
       // 第一级底图：游戏「更换服装」界面原图（右侧 4×4 网格 = 服装列表，格子叠透明点击层）
       page: "assets/acc/hiyori-page1.jpg",
-      // 网格顺序：第1格红框=巴01，第2格橙/黄框=巴02，第3格绿框=巴03，其余暂无图
+      // 网格顺序：第1格=巴01（统一偶像服装），第2格=巴02，第3格=巴03，第4-16格=巴04-巴16
       outfits: [
         { name: "巴01（统一偶像服装）", img: "assets/acc/hiyori-ba01.jpg", star: 5, isNew: false },
         { name: "巴02", img: "assets/acc/hiyori-ba02.jpg", star: 5, isNew: true },
-        { name: "巴03", img: "assets/acc/hiyori-ba03.jpg", star: 5, isNew: true }
+        { name: "巴03", img: "assets/acc/hiyori-ba03.jpg", star: 5, isNew: true },
+        { name: "巴04", img: "assets/acc/hiyori-ba04.jpg", star: 5, isNew: true },
+        { name: "巴05", img: "assets/acc/hiyori-ba05.jpg", star: 5, isNew: true },
+        { name: "巴06", img: "assets/acc/hiyori-ba06.jpg", star: 5, isNew: true },
+        { name: "巴07", img: "assets/acc/hiyori-ba07.jpg", star: 5, isNew: true },
+        { name: "巴08", img: "assets/acc/hiyori-ba08.jpg", star: 5, isNew: true },
+        { name: "巴09", img: "assets/acc/hiyori-ba09.jpg", star: 5, isNew: true },
+        { name: "巴10", img: "assets/acc/hiyori-ba10.jpg", star: 5, isNew: true },
+        { name: "巴11", img: "assets/acc/hiyori-ba11.jpg", star: 5, isNew: true },
+        { name: "巴12", img: "assets/acc/hiyori-ba12.jpg", star: 5, isNew: true },
+        { name: "巴13", img: "assets/acc/hiyori-ba13.jpg", star: 5, isNew: true },
+        { name: "巴14", img: "assets/acc/hiyori-ba14.jpg", star: 5, isNew: true },
+        { name: "巴15", img: "assets/acc/hiyori-ba15.jpg", star: 5, isNew: true },
+        { name: "巴16", img: "assets/acc/hiyori-ba16.jpg", star: 5, isNew: true }
       ]
     },
     {
@@ -3783,7 +3796,7 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
 
   // —— 初始化 ——
   function init() {
-    $("libVer").textContent = "v2.9.11";
+    $("libVer").textContent = "v2.9.12";
     document.querySelectorAll(".nav-item").forEach((b) => {
       b.onclick = () => switchPage(b.dataset.page);
     });
