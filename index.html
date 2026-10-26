@@ -482,6 +482,20 @@ html.es-darkfix canvas {
     .song-hint { font-size: 13px; line-height: 1.5; }
     .song-idol { min-height: 44px; font-size: 14px; padding: 8px 12px; }
     .tl-filter { min-height: 44px; font-size: 14px; }
+    /* 选歌页手机端简化：隐藏筛选行，确定搜索放大 + 双击确认态 */
+    .lib-sf, .lib-sf2 { display: none !important; }
+    #songGo {
+      position: fixed; right: 12px; top: 40%; z-index: 120;
+      min-height: 56px; font-size: 16px; font-weight: 700; padding: 10px 28px;
+      border-radius: 28px; box-shadow: 0 4px 16px rgba(0,0,0,.3);
+      touch-action: none; cursor: grab; white-space: nowrap;
+    }
+    #songGo.confirming { background: #e8a33d; border-color: #e8a33d; }
+    .song-toolbar { justify-content: center; gap: 10px; }
+    .sm-wrap { justify-content: center; }
+    .sm-btn { min-height: 44px; font-size: 14px; padding: 8px 16px; }
+    .song-hint { font-size: 13px; }
+    .song-group-chips { gap: 6px; }
   }
   /* ===== 图鉴页 ===== */
   .enc-wrap { display: flex; flex-direction: column; gap: 10px; }
@@ -719,7 +733,7 @@ html.es-darkfix canvas {
     <header class="top">
       <div class="top-title">
         <span>偶像梦幻祭 · 资料库</span>
-        <span class="ver" id="libVer">v2.9.13</span>
+        <span class="ver" id="libVer">v2.9.14</span>
       </div>
       <input type="text" class="search" id="libSearch" placeholder="搜索卡名 / 角色 / 卡池…" />
       <span class="top-btns">
@@ -3922,8 +3936,12 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
 
   // —— 初始化 ——
   function init() {
-    $("libVer").textContent = "v2.9.13";
+    $("libVer").textContent = "v2.9.14";
     buildMobileNav();
+    if (IS_MOBILE) {
+      // 手机端简化选歌：隐藏「高级模式」入口（筛选行在手机端一律不显示）
+      document.querySelectorAll('.sm-btn[data-sm="advanced"]').forEach((b) => { b.style.display = "none"; });
+    }
     document.querySelectorAll(".nav-item").forEach((b) => {
       b.onclick = () => switchPage(b.dataset.page);
     });
@@ -3973,9 +3991,31 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
       });
     }
     if (libClear) libClear.onclick = () => { libSearch.value = ""; libClear.hidden = true; renderSongs(); };
-    // 「确定搜索」：按已选偶像 + 当前筛选一起出结果
+    // 「确定搜索」：按已选偶像 + 当前筛选一起出结果；手机端防误触→双击确认
     const songGo = $("songGo");
-    if (songGo) songGo.onclick = () => renderSongList();
+    if (songGo) {
+      let songGoConfirmTimer = null;
+      songGo.onclick = () => {
+        if (IS_MOBILE) {
+          if (songGo.classList.contains("confirming")) {
+            clearTimeout(songGoConfirmTimer);
+            songGo.classList.remove("confirming");
+            songGo.textContent = "确定搜索";
+            renderSongList();
+          } else {
+            songGo.classList.add("confirming");
+            songGo.textContent = "再点一次确认";
+            clearTimeout(songGoConfirmTimer);
+            songGoConfirmTimer = setTimeout(() => {
+              songGo.classList.remove("confirming");
+              songGo.textContent = "确定搜索";
+            }, 2500);
+          }
+        } else {
+          renderSongList();
+        }
+      };
+    }
     $("libSearch").addEventListener("keydown", (e) => { if (e.key === "Enter") doSearch(); });
     $("zoomClose").onclick = closeZoom;
     $("zoomLayer").onclick = (e) => { if (e.target === $("zoomLayer")) closeZoom(); };
