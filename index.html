@@ -851,7 +851,7 @@ html.es-darkfix canvas {
     <header class="top">
       <div class="top-title">
         <span>偶像梦幻祭 · 资料库</span>
-        <span class="ver" id="libVer">v2.9.28</span>
+        <span class="ver" id="libVer">v2.9.29</span>
       </div>
       <input type="text" class="search" id="libSearch" placeholder="搜索卡名 / 角色 / 卡池…" />
       <span class="top-btns">
@@ -2881,6 +2881,9 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
 
   // —— 版本日志（与 pet.js / CHANGELOG.md 同步）——
   const CHANGELOG = [
+    { ver: "2.9.29", date: "2026-10-27", items: [
+      "关系网按钮改为 2 人及以上即可显示（原 3 人以上），设置开关开启后生效",
+    ] },
     { ver: "2.9.28", date: "2026-10-27", items: [
       "修复选人输入框回车无效：偶像名匹配改用内置三语名单兜底，输入中文名 / 日文名 / 英文名后回车即可直接选中",
     ] },
@@ -3440,7 +3443,7 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
       ? `全员曲 · 共 ${list.length} 首`
       : (songSel.size ? (songSel.size >= 3 ? `已选 ${songSel.size} 位偶像 · 多人选择模式（非组合优先） · 共 ${list.length} 首` : `已选 ${songSel.size} 位偶像 · 共 ${list.length} 首`) : `全部曲目 · 共 ${list.length} 首`);
     const relBtn = $("songRelBtn");
-    if (relBtn) relBtn.hidden = songSel.size < 3 || !loadSettings().relnet;
+    if (relBtn) relBtn.hidden = songSel.size < 2 || !loadSettings().relnet;
     if (!list.length) {
       listEl.innerHTML = `<div class="empty2">没有符合条件（非全员曲）的曲目</div>`;
       return;
@@ -4522,7 +4525,7 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
       s.relnet = rt.checked;
       saveSettings(s);
       const btn = $("songRelBtn");
-      if (btn) btn.hidden = songSel.size < 3 || !s.relnet;
+      if (btn) btn.hidden = songSel.size < 2 || !s.relnet;
     };
     const kh = $("kohaku3Toggle");
     if (kh) kh.onchange = () => {
@@ -4651,7 +4654,7 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
 
   // —— 初始化 ——
   function init() {
-    $("libVer").textContent = "v2.9.28";
+    $("libVer").textContent = "v2.9.29";
     buildMobileNav();
     // 手机端「确定搜索」初始位置：右侧列表区域悬浮（用户指定），可拖动
     if (IS_MOBILE) {
