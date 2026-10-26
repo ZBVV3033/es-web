@@ -851,7 +851,7 @@ html.es-darkfix canvas {
     <header class="top">
       <div class="top-title">
         <span>偶像梦幻祭 · 资料库</span>
-        <span class="ver" id="libVer">v2.9.27</span>
+        <span class="ver" id="libVer">v2.9.28</span>
       </div>
       <input type="text" class="search" id="libSearch" placeholder="搜索卡名 / 角色 / 卡池…" />
       <span class="top-btns">
@@ -2881,6 +2881,9 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
 
   // —— 版本日志（与 pet.js / CHANGELOG.md 同步）——
   const CHANGELOG = [
+    { ver: "2.9.28", date: "2026-10-27", items: [
+      "修复选人输入框回车无效：偶像名匹配改用内置三语名单兜底，输入中文名 / 日文名 / 英文名后回车即可直接选中",
+    ] },
     { ver: "2.9.27", date: "2026-10-27", items: [
       "新增「编辑站位」：每首歌卡片底部显示横排 5 格站位（C 位★），点击可编辑拖拽排列成员，导出后固化进曲库",
       "屏蔽名单删除「洗牌 / 企划」行（VS 对战名义非正式组合），仅保留正式组合与其他；chip 悬停显示日文名 / 成员",
@@ -4648,7 +4651,7 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
 
   // —— 初始化 ——
   function init() {
-    $("libVer").textContent = "v2.9.27";
+    $("libVer").textContent = "v2.9.28";
     buildMobileNav();
     // 手机端「确定搜索」初始位置：右侧列表区域悬浮（用户指定），可拖动
     if (IS_MOBILE) {
@@ -4685,7 +4688,9 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
         const q = libSearch.value.trim();
         if (!q) return;
         const qn = idolNorm(q);
-        const matched = (window.ES_SONG_IDOLS || []).find((id) => {
+        const matched = (window.ES_SONG_IDOLS && window.ES_SONG_IDOLS.length
+          ? window.ES_SONG_IDOLS
+          : Object.keys(window.ES_ROLE_NAMES || {})).find((id) => {
           const nm = (window.ES_ROLE_NAMES && window.ES_ROLE_NAMES[id]) || {};
           return idolNorm(id) === qn || idolNorm(nm.ja) === qn || idolNorm(nm.en) === qn;
         });
