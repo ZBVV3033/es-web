@@ -522,6 +522,14 @@ html.es-darkfix canvas {
   .outfit-foot button { min-height: 44px; min-width: 120px; border-radius: 22px; border: none; font-size: 15px; font-weight: 700; cursor: pointer; }
   .outfit-cancel { background: linear-gradient(90deg,#3fd67a,#2ec46d); color: #fff; }
   .outfit-ok { background: linear-gradient(90deg,#ffb340,#ff9500); color: #fff; }
+  /* MV 服装 3D 详细预览弹窗 */
+  .ofz-mask { position: fixed; inset: 0; background: rgba(0,0,0,.62); z-index: 210; display: flex; align-items: center; justify-content: center; padding: 18px; }
+  .ofz-box { position: relative; background: #fff; border-radius: 14px; padding: 10px; max-width: 92vw; text-align: center; }
+  .ofz-box img { max-width: 84vw; max-height: 78vh; object-fit: contain; border-radius: 10px; display: block; margin: 0 auto; }
+  .ofz-none { width: 260px; height: 340px; display: flex; align-items: center; justify-content: center; color: #999; background: #f2f2f2; border-radius: 10px; font-size: 14px; }
+  .ofz-name { font-size: 15px; font-weight: 700; color: #234; margin-top: 8px; }
+  .ofz-close { position: absolute; right: 6px; top: 6px; width: 34px; height: 34px; border-radius: 50%; background: rgba(0,0,0,.35); color: #fff; border: none; font-size: 18px; line-height: 1; cursor: pointer; }
+  .acc-preview-none { width: 100%; aspect-ratio: 3/4; display: flex; align-items: center; justify-content: center; color: #999; background: #f2f2f2; border-radius: 10px; font-size: 13px; }
   </style>
   <script>
 // 心情钟 · 强制暗色反制开关（仅 Electron 运行时生效）
@@ -3373,14 +3381,14 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
         }
         html += `<div class="enc-sec">MV 服装（${outfits.length}）${st5 ? `<span class="star5"> ★5×${st5}</span>` : ""}${st4 ? `<span class="star4"> ★4×${st4}</span>` : ""}${st3 ? `<span class="star3"> ★3×${st3}</span>` : ""}</div>`;
         html += `<div class="acc-preview-wrap">`;
-        if (cur && cur.img) {
-          html += `<div class="acc-preview"><img class="acc-preview-img" src="${escAttr(cur.img)}" alt="" />
+        if (cur) {
+          html += `<div class="acc-preview">${cur.img ? `<img class="acc-preview-img" src="${escAttr(cur.img)}" alt="" />` : `<div class="acc-preview-none">无预览图</div>`}
             <div class="acc-preview-name">${cur.name ? esc(cur.name) : " "}${cur.star ? `<span class="star${cur.star}"> ★${cur.star}</span>` : ""}</div></div>`;
         }
         html += `<div class="acc-mv-grid">`;
         outfits.forEach((o, oi) => {
           html += `<div class="acc-item${oi === selIdx ? " sel" : ""}" data-acc-outfit-pick="${escAttr(a.id)}::${escAttr(r.id)}::${oi}">
-            ${o.img ? `<img class="acc-item-img" src="${escAttr(o.img)}" alt="" data-zoom="${escAttr(o.img)}" />` : `<div class="acc-empty">无图</div>`}
+            ${o.img ? `<img class="acc-item-img" src="${escAttr(o.img)}" alt="" data-acc-outfit-zoom="${escAttr(o.img)}|${escAttr(o.name || "")}|${o.star || 0}" />` : `<div class="acc-empty">无图</div>`}
             <div class="acc-item-name">${o.name ? esc(o.name) : " "}${o.star ? `<span class="star${o.star}">★${o.star}</span>` : ""}</div>
             ${help ? `<button type="button" class="acc-btn" data-acc-outfit-del="${escAttr(a.id)}::${escAttr(r.id)}::${oi}">删除</button>` : ""}
           </div>`;
@@ -3563,6 +3571,11 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
       accSel[ai + "::" + ri] = Number(oi);
       renderAcc();
     });
+    // —— 点缩略图 → 弹出 3D MV 服装详细预览（原界面不消失，左侧同时切换）——
+    box.querySelectorAll("[data-acc-outfit-zoom]").forEach((b) => b.onclick = () => {
+      const p = b.dataset.accOutfitZoom.split("|");
+      accOutfitZoom(p[0] || "", p[1] || "", parseInt(p[2], 10) || 0);
+    });
     // —— 数据包：导出 / 导入（txt 文本格式，账号密码仅存本机）——
     box.querySelectorAll("[data-acc-pack-export]").forEach((b) => b.onclick = () => {
       const list2 = accLoad();
@@ -3629,6 +3642,19 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
   function openZoom(src) {
     $("zoomImg").src = src;
     $("zoomLayer").hidden = false;
+  }
+  // —— MV 服装 3D 详细预览弹窗（点缩略图弹出，原界面保留）——
+  function accOutfitZoom(src, name, star) {
+    const m = document.createElement("div");
+    m.className = "ofz-mask";
+    m.innerHTML = `<div class="ofz-box">
+      <button type="button" class="ofz-close" aria-label="关闭">✕</button>
+      ${src ? `<img src="${escAttr(src)}" alt="" />` : `<div class="ofz-none">暂无预览图</div>`}
+      <div class="ofz-name">${name ? esc(name) : " "}${star ? `<span class="star${star}"> ★${star}</span>` : ""}</div>
+    </div>`;
+    m.querySelector(".ofz-close").onclick = () => m.remove();
+    m.onclick = (e) => { if (e.target === m) m.remove(); };
+    document.body.appendChild(m);
   }
   function closeZoom() {
     $("zoomLayer").hidden = true;
