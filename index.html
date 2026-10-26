@@ -522,17 +522,22 @@ html.es-darkfix canvas {
   .outfit-foot button { min-height: 44px; min-width: 120px; border-radius: 22px; border: none; font-size: 15px; font-weight: 700; cursor: pointer; }
   .outfit-cancel { background: linear-gradient(90deg,#3fd67a,#2ec46d); color: #fff; }
   .outfit-ok { background: linear-gradient(90deg,#ffb340,#ff9500); color: #fff; }
-  /* MV 服装 3D 详细预览弹窗（可多开：不遮全屏，多个可同时存在） */
+  /* MV 服装 3D 详细预览窗口（可拖动/缩放/关闭，可多开） */
   .ofz-mask { position: fixed; inset: 0; background: rgba(0,0,0,.62); z-index: 210; display: flex; align-items: center; justify-content: center; padding: 18px; }
   .ofz-box { position: relative; background: #fff; border-radius: 14px; padding: 10px; max-width: 92vw; text-align: center; }
   .ofz-box img { max-width: 84vw; max-height: 78vh; object-fit: contain; border-radius: 10px; display: block; margin: 0 auto; }
   .ofz-none { width: 260px; height: 340px; display: flex; align-items: center; justify-content: center; color: #999; background: #f2f2f2; border-radius: 10px; font-size: 14px; }
   .ofz-name { font-size: 15px; font-weight: 700; color: #234; margin-top: 8px; }
   .ofz-close { position: absolute; right: 6px; top: 6px; width: 34px; height: 34px; border-radius: 50%; background: rgba(0,0,0,.35); color: #fff; border: none; font-size: 18px; line-height: 1; cursor: pointer; }
-  .ofz-pop { position: fixed; right: 16px; bottom: 16px; background: #fff; border-radius: 14px; padding: 10px; width: 250px; box-shadow: 0 10px 30px rgba(0,0,0,.28); border: 1px solid #e4e9df; text-align: center; }
-  .ofz-pop img { width: 100%; aspect-ratio: 3/4; object-fit: contain; border-radius: 10px; display: block; background: #f6f8f3; }
-  .ofz-pop:nth-of-type(2) { transform: translate(-10px, -10px); }
-  .ofz-pop:nth-of-type(3) { transform: translate(-20px, -20px); }
+  .mv-win { position: fixed; background: #fff; border-radius: 12px; box-shadow: 0 12px 34px rgba(0,0,0,.32); border: 1px solid #dfe6d8; overflow: hidden; min-width: 150px; min-height: 130px; display: flex; flex-direction: column; }
+  .mv-win-bar { background: linear-gradient(90deg,#3fd67a,#2ec46d); color: #fff; font-size: 13px; font-weight: 700; padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: move; user-select: none; touch-action: none; flex: none; }
+  .mv-win-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .mv-win-close { width: 26px; height: 26px; border-radius: 50%; background: rgba(255,255,255,.28); color: #fff; border: none; font-size: 14px; line-height: 1; cursor: pointer; flex: none; }
+  .mv-win-body { flex: 1; overflow: auto; display: flex; align-items: center; justify-content: center; background: #f6f8f3; }
+  .mv-win-body img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .mv-win-none { color: #999; font-size: 13px; padding: 20px; }
+  .mv-win-resize { position: absolute; right: 0; bottom: 0; width: 22px; height: 22px; cursor: nwse-resize; touch-action: none; }
+  .mv-win-resize::after { content: ""; position: absolute; right: 4px; bottom: 4px; width: 9px; height: 9px; border-right: 2px solid rgba(0,0,0,.38); border-bottom: 2px solid rgba(0,0,0,.38); border-radius: 0 0 3px 0; }
   .acc-preview-none { width: 100%; aspect-ratio: 3/4; display: flex; align-items: center; justify-content: center; color: #999; background: #f2f2f2; border-radius: 10px; font-size: 13px; }
   .acc-toolbar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
   .acc-empty-tip { background: #f2f6fb; border: 1px dashed #9db8d8; color: #456; border-radius: 10px; padding: 14px; font-size: 14px; margin-bottom: 12px; line-height: 1.6; }
@@ -544,20 +549,13 @@ html.es-darkfix canvas {
   .mv-chars button.active { background: #fff; color: #2ec46d; font-weight: 700; }
   .mv-count { font-size: 12.5px; color: rgba(255,255,255,.92); }
   .mv-body { margin-top: 10px; }
-  /* 原图模式：左侧显示区域（当前服装立绘，随点击切换）+ 右侧更换服装界面原图 + 透明点击层 */
-  .mv-stage { display: flex; gap: 14px; align-items: stretch; }
-  .mv-show { flex: none; width: 36%; background: #eef4ea; border-radius: 12px; overflow: hidden; position: relative; }
-  .mv-show img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .mv-show-name { position: absolute; left: 0; right: 0; bottom: 0; background: linear-gradient(transparent, rgba(0,0,0,.55)); color: #fff; font-size: 13.5px; font-weight: 700; padding: 18px 10px 8px; text-align: center; }
-  .mv-show-none { width: 100%; aspect-ratio: 3/4; display: flex; align-items: center; justify-content: center; color: #999; background: #f2f2f2; font-size: 13px; }
-  .mv-page-wrap { flex: 1; position: relative; width: 100%; overflow: hidden; border-radius: 12px; }
+  /* 原图模式：全屏更换服装界面原图 + 网格透明点击层 */
+  .mv-page-wrap { position: relative; width: 100%; overflow: hidden; border-radius: 12px; }
   .mv-page-img { width: 100%; display: block; }
   .mv-layer { position: absolute; cursor: pointer; border-radius: 6px; }
   .mv-layer:hover { background: rgba(46,196,109,.22); }
   @media (max-width: 640px) {
-    .mv-stage { flex-direction: column; }
-    .mv-show { width: 100%; }
-    .ofz-pop { width: 180px; right: 8px; bottom: 8px; }
+    .mv-win { width: 62vw !important; }
   }
   /* 自绘模式（无底图的偶像回退） */
   .mv-dialog { background: #f4f9ee; border-radius: 12px; overflow: hidden; border: 1px solid #dfe9d4; }
@@ -668,7 +666,7 @@ html.es-darkfix canvas {
     <header class="top">
       <div class="top-title">
         <span>偶像梦幻祭 · 资料库</span>
-        <span class="ver" id="libVer">v2.9.10</span>
+        <span class="ver" id="libVer">v2.9.11</span>
       </div>
       <input type="text" class="search" id="libSearch" placeholder="搜索卡名 / 角色 / 卡池…" />
       <span class="top-btns">
@@ -3429,33 +3427,19 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
       renderMv();
     });
   }
-  // 原图模式：左侧「显示区域」（当前服装大图，随点击切换）+ 右侧更换服装界面原图 + 网格透明点击层 → 详情弹窗（可多开）
+  // 原图模式：全屏只显示更换服装界面原图 + 网格透明点击层 → 可拖动/缩放的详情窗口（可多开）
   function renderMvPage(body, c, si) {
-    const cur = c.outfits[si] || null;
-    body.innerHTML = `<div class="mv-stage">
-      <div class="mv-show">
-        ${cur && cur.img ? `<img src="${escAttr(cur.img)}" alt="" />` : `<div class="mv-show-none">暂无预览图</div>`}
-        <div class="mv-show-name">${cur && cur.name ? esc(cur.name) : "暂无预览图"}</div>
-      </div>
-      <div class="mv-page-wrap">
-        <img class="mv-page-img" src="${escAttr(c.page)}" alt="更换服装" />
-        ${MV_LAYERS.map((L, i) => {
-          const o = c.outfits[i] || null;
-          return `<div class="mv-layer" data-mv-open="${i}" style="left:${L[0]}%;top:${L[1]}%;width:${L[2]}%;height:${L[3]}%" title="${o && o.name ? escAttr(o.name) : "暂无预览图"}"></div>`;
-        }).join("")}
-      </div>
+    body.innerHTML = `<div class="mv-page-wrap">
+      <img class="mv-page-img" src="${escAttr(c.page)}" alt="更换服装" />
+      ${MV_LAYERS.map((L, i) => {
+        const o = c.outfits[i] || null;
+        return `<div class="mv-layer" data-mv-open="${i}" style="left:${L[0]}%;top:${L[1]}%;width:${L[2]}%;height:${L[3]}%" title="${o && o.name ? escAttr(o.name) : "暂无预览图"}"></div>`;
+      }).join("")}
     </div>`;
     body.querySelectorAll("[data-mv-open]").forEach((b) => b.onclick = () => {
       const i = Number(b.dataset.mvOpen);
       const o = c.outfits[i] || null;
       try { localStorage.setItem(MV_SEL_KEY, JSON.stringify({ id: c.id, si: i })); } catch (e) {}
-      // 左侧显示区域同步切换
-      const show = body.querySelector(".mv-show");
-      if (show) {
-        show.innerHTML = `${o && o.img ? `<img src="${escAttr(o.img)}" alt="" />` : `<div class="mv-show-none">暂无预览图</div>`}
-          <div class="mv-show-name">${o && o.name ? esc(o.name) : "暂无预览图"}</div>`;
-      }
-      // 详情弹窗：可同时打开多件，原界面不消失
       mvShowDetail(o);
     });
   }
@@ -3490,17 +3474,71 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
     const cancel = body.querySelector("[data-mv-cancel]");
     if (cancel) cancel.onclick = () => { try { localStorage.setItem(MV_SEL_KEY, JSON.stringify({ id: c.id, si: 0 })); } catch (e) {} renderMv(); showMvTip("已恢复为默认服装"); };
   }
-  // 第二级：服装详细预览弹窗（点第一级网格里的服装弹出；可多开，原界面不消失）
-  let mvPopZ = 1000;
+  // 第二级：服装详细预览窗口（点网格弹出；可拖动、可缩放、可关闭，可多开）
+  let mvWinZ = 1100;
   function mvShowDetail(o) {
-    const m = document.createElement("div");
-    m.className = "ofz-pop";
-    m.style.zIndex = String(mvPopZ++);
-    m.innerHTML = `<button type="button" class="ofz-close" aria-label="关闭">✕</button>
-      ${o && o.img ? `<img src="${escAttr(o.img)}" alt="" />` : `<div class="ofz-none">暂无预览图</div>`}
-      <div class="ofz-name">${o && o.name ? esc(o.name) : "暂无预览图"}${o && o.star ? `<span class="star${o.star}"> ★${o.star}</span>` : ""}</div>`;
-    m.querySelector(".ofz-close").onclick = () => m.remove();
-    document.body.appendChild(m);
+    const win = document.createElement("div");
+    win.className = "mv-win";
+    win.style.zIndex = String(mvWinZ++);
+    // 初始位置：视口右侧空位（网格右侧区域），多开时逐窗微偏移
+    const baseL = Math.max(12, window.innerWidth - Math.min(340, window.innerWidth * 0.45));
+    const n = document.querySelectorAll(".mv-win").length;
+    win.style.left = (baseL - n * 16) + "px";
+    win.style.top = (Math.max(12, window.innerHeight - Math.min(520, window.innerHeight * 0.7)) - n * 16) + "px";
+    win.style.width = Math.min(300, window.innerWidth * 0.4) + "px";
+    win.style.height = "auto";
+    win.innerHTML = `<div class="mv-win-bar">
+      <span class="mv-win-title">${o && o.name ? esc(o.name) : "服装预览"}</span>
+      <button type="button" class="mv-win-close" aria-label="关闭">✕</button>
+    </div>
+    <div class="mv-win-body">
+      ${o && o.img ? `<img src="${escAttr(o.img)}" alt="" />` : `<div class="mv-win-none">暂无预览图</div>`}
+    </div>
+    <div class="mv-win-resize" aria-label="缩放"></div>`;
+    document.body.appendChild(win);
+    // 关闭
+    win.querySelector(".mv-win-close").onclick = () => win.remove();
+    // 拖动（标题栏）
+    const bar = win.querySelector(".mv-win-bar");
+    let dragging = false, dx0 = 0, dy0 = 0;
+    bar.addEventListener("pointerdown", (e) => {
+      if (e.target.closest(".mv-win-close")) return;
+      dragging = true;
+      dx0 = e.clientX - win.offsetLeft;
+      dy0 = e.clientY - win.offsetTop;
+      bar.setPointerCapture(e.pointerId);
+      win.style.zIndex = String(mvWinZ++);
+      e.preventDefault();
+    });
+    bar.addEventListener("pointermove", (e) => {
+      if (!dragging) return;
+      win.style.left = Math.max(-80, Math.min(window.innerWidth - 60, e.clientX - dx0)) + "px";
+      win.style.top = Math.max(0, Math.min(window.innerHeight - 30, e.clientY - dy0)) + "px";
+    });
+    const stopDrag = () => { dragging = false; };
+    bar.addEventListener("pointerup", stopDrag);
+    bar.addEventListener("pointercancel", stopDrag);
+    // 缩放（右下角手柄）
+    const rz = win.querySelector(".mv-win-resize");
+    let resizing = false, rw0 = 0, rh0 = 0, rx0 = 0, ry0 = 0;
+    rz.addEventListener("pointerdown", (e) => {
+      resizing = true;
+      rw0 = win.offsetWidth; rh0 = win.offsetHeight;
+      rx0 = e.clientX; ry0 = e.clientY;
+      rz.setPointerCapture(e.pointerId);
+      win.style.zIndex = String(mvWinZ++);
+      e.preventDefault();
+    });
+    rz.addEventListener("pointermove", (e) => {
+      if (!resizing) return;
+      win.style.width = Math.max(150, rw0 + (e.clientX - rx0)) + "px";
+      win.style.height = Math.max(130, rh0 + (e.clientY - ry0)) + "px";
+    });
+    const stopRz = () => { resizing = false; };
+    rz.addEventListener("pointerup", stopRz);
+    rz.addEventListener("pointercancel", stopRz);
+    // 点击窗口任意处置顶
+    win.addEventListener("pointerdown", () => { win.style.zIndex = String(mvWinZ++); });
   }
   function showMvTip(msg) {
     let t = $("mvTip");
@@ -3744,7 +3782,7 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
 
   // —— 初始化 ——
   function init() {
-    $("libVer").textContent = "v2.9.10";
+    $("libVer").textContent = "v2.9.11";
     document.querySelectorAll(".nav-item").forEach((b) => {
       b.onclick = () => switchPage(b.dataset.page);
     });
