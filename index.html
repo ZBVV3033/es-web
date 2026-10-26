@@ -544,12 +544,12 @@ html.es-darkfix canvas {
   .mv-chars button.active { background: #fff; color: #2ec46d; font-weight: 700; }
   .mv-count { font-size: 12.5px; color: rgba(255,255,255,.92); }
   .mv-body { margin-top: 10px; }
-  /* 原图模式：左侧显示区域（当前服装大图）+ 右侧更换服装界面原图 + 透明点击层 */
-  .mv-stage { display: flex; gap: 14px; align-items: flex-start; }
-  .mv-show { flex: none; width: 34%; background: #fff; border-radius: 12px; padding: 8px; text-align: center; border: 1px solid #e2e9dc; }
-  .mv-show img { width: 100%; aspect-ratio: 3/4; object-fit: contain; border-radius: 10px; display: block; background: #f6f8f3; }
-  .mv-show-none { width: 100%; aspect-ratio: 3/4; display: flex; align-items: center; justify-content: center; color: #999; background: #f2f2f2; border-radius: 10px; font-size: 13px; }
-  .mv-show-name { font-size: 13.5px; font-weight: 700; color: #234; margin-top: 6px; }
+  /* 原图模式：左侧显示区域（当前服装立绘，随点击切换）+ 右侧更换服装界面原图 + 透明点击层 */
+  .mv-stage { display: flex; gap: 14px; align-items: stretch; }
+  .mv-show { flex: none; width: 36%; background: #eef4ea; border-radius: 12px; overflow: hidden; position: relative; }
+  .mv-show img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .mv-show-name { position: absolute; left: 0; right: 0; bottom: 0; background: linear-gradient(transparent, rgba(0,0,0,.55)); color: #fff; font-size: 13.5px; font-weight: 700; padding: 18px 10px 8px; text-align: center; }
+  .mv-show-none { width: 100%; aspect-ratio: 3/4; display: flex; align-items: center; justify-content: center; color: #999; background: #f2f2f2; font-size: 13px; }
   .mv-page-wrap { flex: 1; position: relative; width: 100%; overflow: hidden; border-radius: 12px; }
   .mv-page-img { width: 100%; display: block; }
   .mv-layer { position: absolute; cursor: pointer; border-radius: 6px; }
@@ -3396,10 +3396,12 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
     }
   ];
   const MV_SEL_KEY = "es_mv_sel";
-  // 原图右侧 4×4 网格的透明点击层坐标（相对底图的百分比：left,top,width,height；按游戏界面 2736×1264 标定并微扩热区）
+  // 原图右侧 4×4 网格的透明点击层坐标（相对底图的百分比：left,top,width,height）
+  // 按 2.png 底图重标定：MV 角标锚定列中心 x=49.1/56.9/64.7/72.5、行中心 y=18.6/35.4/51.4/68.4
+  // 格子左边界=角标x-1.0%，顶边界=角标y-1.5%，宽=列距7.8%，高=行距16.6%
   const MV_LAYERS = (() => {
     const L = [];
-    for (let r = 0; r < 4; r++) for (let col = 0; col < 4; col++) L.push([45.4 + col * 8, 13.8 + r * 16, 7.2, 13.4]);
+    for (let r = 0; r < 4; r++) for (let col = 0; col < 4; col++) L.push([48.1 + col * 7.8, 17.1 + r * 16.6, 7.8, 16.6]);
     return L;
   })();
   function renderMv() {
