@@ -532,6 +532,38 @@ html.es-darkfix canvas {
   .acc-preview-none { width: 100%; aspect-ratio: 3/4; display: flex; align-items: center; justify-content: center; color: #999; background: #f2f2f2; border-radius: 10px; font-size: 13px; }
   .acc-toolbar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
   .acc-empty-tip { background: #f2f6fb; border: 1px dashed #9db8d8; color: #456; border-radius: 10px; padding: 14px; font-size: 14px; margin-bottom: 12px; line-height: 1.6; }
+  /* —— MV 服装 · 更换服装（第一级主页面：左大预览 + 右缩略网格 + 偶像切换） —— */
+  .mv-dialog { background: #f4f9ee; border-radius: 16px; overflow: hidden; border: 1px solid #dfe9d4; }
+  .mv-title { background: linear-gradient(90deg,#3fd67a,#2ec46d); color: #fff; font-size: 16px; font-weight: 700; padding: 10px 14px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .mv-chars { display: flex; gap: 6px; flex: 1; flex-wrap: wrap; }
+  .mv-chars button { min-height: 36px; font-size: 13px; padding: 4px 12px; border-radius: 999px; border: 1px solid rgba(255,255,255,.6); background: rgba(255,255,255,.15); color: #fff; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
+  .mv-chars button em { font-style: normal; font-size: 10px; opacity: .8; }
+  .mv-chars button.active { background: #fff; color: #2ec46d; font-weight: 700; }
+  .mv-count { font-size: 12.5px; color: rgba(255,255,255,.92); }
+  .mv-body { display: flex; gap: 12px; padding: 12px; }
+  .mv-preview { flex: none; width: 42%; background: #fff; border-radius: 12px; padding: 8px; text-align: center; position: relative; }
+  .mv-preview img { width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 8px; display: block; background: #eef; }
+  .mv-preview .mv-name { font-size: 14px; font-weight: 700; color: #234; margin-top: 6px; }
+  .mv-tag { position: absolute; left: 10px; top: 10px; background: #2ec46d; color: #fff; font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 6px; z-index: 2; }
+  .mv-grid { flex: 1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; align-content: start; overflow-y: auto; max-height: 560px; }
+  .mv-cell { background: #fff; border-radius: 8px; padding: 5px; text-align: center; cursor: pointer; border: 2px solid transparent; position: relative; }
+  .mv-cell.sel { border-color: #2ec46d; }
+  .mv-cell img { width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 6px; display: block; background: #eef; }
+  .mv-cell .n { font-size: 11px; color: #456; margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .mv-cell .sel-tag { position: absolute; left: 6px; top: 6px; background: #2ec46d; color: #fff; font-size: 10px; padding: 1px 5px; border-radius: 5px; }
+  .mv-cell .new-dot { position: absolute; right: 6px; top: 6px; width: 10px; height: 10px; border-radius: 50%; background: #ff5252; }
+  .mv-cell .mv-tag { position: absolute; left: 6px; bottom: 6px; font-size: 9px; padding: 1px 5px; }
+  .mv-foot { display: flex; gap: 12px; padding: 10px 12px; justify-content: center; background: #fff; border-top: 1px solid #eef3e8; }
+  .mv-foot button { min-height: 44px; min-width: 120px; border-radius: 22px; border: none; font-size: 15px; font-weight: 700; cursor: pointer; }
+  .mv-cancel { background: linear-gradient(90deg,#3fd67a,#2ec46d); color: #fff; }
+  .mv-ok { background: linear-gradient(90deg,#ffb340,#ff9500); color: #fff; }
+  .mv-tip { position: fixed; left: 50%; bottom: 40px; transform: translateX(-50%); background: rgba(23,26,48,.85); color: #fff; font-size: 14px; padding: 10px 18px; border-radius: 999px; z-index: 300; opacity: 0; pointer-events: none; transition: opacity .25s; }
+  .mv-tip.on { opacity: 1; }
+  @media (max-width: 640px) {
+    .mv-body { flex-direction: column; }
+    .mv-preview { width: 100%; }
+    .mv-grid { max-height: none; grid-template-columns: repeat(4, 1fr); }
+  }
   </style>
   <script>
 // 心情钟 · 强制暗色反制开关（仅 Electron 运行时生效）
@@ -630,6 +662,7 @@ html.es-darkfix canvas {
         <section class="page" id="page-es" hidden>
           <div class="es-tabs">
             <button type="button" class="es-tab" data-view="acc" id="esTabAcc" hidden>账号</button>
+            <button type="button" class="es-tab" data-view="mv">服装</button>
             <button type="button" class="es-tab" data-view="enc">图鉴</button>
             <button type="button" class="es-tab active" data-view="timeline">五星时间线</button>
             <button type="button" class="es-tab" data-view="jp">日服情报</button>
@@ -637,6 +670,27 @@ html.es-darkfix canvas {
           </div>
           <div class="es-view" id="view-acc" hidden>
             <div class="acc-list" id="accList"></div>
+          </div>
+          <div class="es-view" id="view-mv" hidden>
+            <div class="mv-dialog">
+              <div class="mv-title">
+                <span>更换服装</span>
+                <span class="mv-chars" id="mvChars"></span>
+                <span class="mv-count" id="mvCount"></span>
+              </div>
+              <div class="mv-body">
+                <div class="mv-preview">
+                  <span class="mv-tag">MV</span>
+                  <img id="mvPreviewImg" alt="" />
+                  <div class="mv-name" id="mvPreviewName"></div>
+                </div>
+                <div class="mv-grid" id="mvGrid"></div>
+              </div>
+              <div class="mv-foot">
+                <button type="button" class="mv-cancel" id="mvCancel">取消</button>
+                <button type="button" class="mv-ok" id="mvOk">确定</button>
+              </div>
+            </div>
           </div>
           <div class="es-view" id="view-enc" hidden>
             <div class="enc-wrap">
@@ -2567,11 +2621,12 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
 
   function switchEsView(view) {
     document.querySelectorAll(".es-tab").forEach((b) => b.classList.toggle("active", b.dataset.view === view));
-    ["acc", "enc", "timeline", "jp", "sched"].forEach((v) => {
+    ["acc", "mv", "enc", "timeline", "jp", "sched"].forEach((v) => {
       const el = $("view-" + v);
       if (el) el.hidden = v !== view;
     });
     if (view === "acc") renderAcc();
+    if (view === "mv") renderMv();
     if (view === "enc") renderEnc();
     if (view === "timeline") renderTimeline();
     if (view === "jp") renderJp();
@@ -3310,29 +3365,74 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
     if (!accHelpOn() && $("view-acc") && !$("view-acc").hidden) switchEsView("enc");
   }
   let accEditId = "";
-  let accRoleEdit = {};
-  let accOutfitNew = {};
-  let accSel = {}; // 角色当前选中预览的服装下标
   let accPwShow = {};
-  // 本地图压缩转 dataURL（MV 服装预览，控制 localStorage 体积）
-  function accFileToDataUrl(file, cb) {
-    const reader = new FileReader();
-    reader.onload = () => {
-      const img = new Image();
-      img.onload = () => {
-        const maxW = 600;
-        if (img.width <= maxW && img.height <= maxW) { cb(reader.result); return; }
-        const scale = Math.min(1, maxW / Math.max(img.width, img.height));
-        const c = document.createElement("canvas");
-        c.width = Math.max(1, Math.round(img.width * scale));
-        c.height = Math.max(1, Math.round(img.height * scale));
-        c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
-        cb(c.toDataURL("image/jpeg", 0.82));
-      };
-      img.onerror = () => cb(reader.result);
-      img.src = reader.result;
-    };
-    reader.readAsDataURL(file);
+
+  // —— MV 服装 · 更换服装（第一级主页面：偶像切换 + 左大预览 + 右缩略网格；数据统一格式，内置多偶像） ——
+  const MV_CHARS = [
+    {
+      id: "hiyori", name: "巴日和", unit: "Eden",
+      outfits: [
+        { name: "「SS」红白服装", img: "assets/acc/hiyori-01.jpg", star: 5, isNew: true }
+      ]
+    },
+    {
+      id: "niki", name: "椎名丹希", unit: "Crazy:B",
+      outfits: [
+        { name: "统一偶像服装", img: "assets/acc/niki-01.jpg", star: 5, isNew: false }
+      ]
+    }
+  ];
+  const MV_SEL_KEY = "es_mv_sel";
+  function renderMv() {
+    const box = $("mvGrid"), chars = $("mvChars");
+    if (!box || !chars) return;
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem(MV_SEL_KEY) || "null"); } catch (e) {}
+    let ci = 0;
+    if (saved && saved.id) { const i = MV_CHARS.findIndex((c) => c.id === saved.id); if (i >= 0) ci = i; }
+    const c = MV_CHARS[ci];
+    const si = (saved && saved.id === c.id && saved.si >= 0 && saved.si < c.outfits.length) ? saved.si : 0;
+    chars.innerHTML = MV_CHARS.map((x, i) =>
+      `<button type="button" class="${i === ci ? "active" : ""}" data-mv-char="${escAttr(x.id)}">${esc(x.name)}${x.unit ? `<em>${esc(x.unit)}</em>` : ""}</button>`).join("");
+    const cnt = $("mvCount");
+    if (cnt) cnt.textContent = c.name + " · 服装 " + c.outfits.length + " 件";
+    const cur = c.outfits[si] || null;
+    const img = $("mvPreviewImg"), nm = $("mvPreviewName");
+    if (img) { img.src = cur && cur.img ? cur.img : ""; img.alt = cur ? cur.name : ""; }
+    if (nm) nm.textContent = cur ? cur.name : "无预览图";
+    box.innerHTML = c.outfits.map((o, i) =>
+      `<div class="mv-cell${i === si ? " sel" : ""}" data-mv-pick="${i}">
+        <img src="${escAttr(o.img || "")}" alt="" loading="lazy" />
+        ${o.isNew ? `<span class="new-dot" title="新服装"></span>` : ""}
+        ${i === si ? `<span class="sel-tag">选择中</span>` : ""}
+        <div class="n">${o.name ? esc(o.name) : " "}</div>
+      </div>`).join("");
+    chars.querySelectorAll("[data-mv-char]").forEach((b) => b.onclick = () => {
+      const ch = MV_CHARS.find((x) => x.id === b.dataset.mvChar);
+      if (!ch) return;
+      try { localStorage.setItem(MV_SEL_KEY, JSON.stringify({ id: ch.id, si: 0 })); } catch (e) {}
+      renderMv();
+    });
+    box.querySelectorAll("[data-mv-pick]").forEach((b) => b.onclick = () => {
+      try { localStorage.setItem(MV_SEL_KEY, JSON.stringify({ id: c.id, si: Number(b.dataset.mvPick) })); } catch (e) {}
+      renderMv();
+    });
+    const ok = $("mvOk"), cancel = $("mvCancel");
+    if (ok) ok.onclick = () => { try { localStorage.setItem(MV_SEL_KEY, JSON.stringify({ id: c.id, si })); } catch (e) {} showMvTip("已保存当前选择"); };
+    if (cancel) cancel.onclick = () => { try { localStorage.setItem(MV_SEL_KEY, JSON.stringify({ id: c.id, si: 0 })); } catch (e) {} renderMv(); showMvTip("已恢复为默认服装"); };
+  }
+  function showMvTip(msg) {
+    let t = $("mvTip");
+    if (!t) {
+      t = document.createElement("div");
+      t.id = "mvTip";
+      t.className = "mv-tip";
+      document.body.appendChild(t);
+    }
+    t.textContent = msg;
+    t.classList.add("on");
+    clearTimeout(t._tm);
+    t._tm = setTimeout(() => t.classList.remove("on"), 1500);
   }
   function renderAcc() {
     const list = accLoad();
@@ -3400,70 +3500,6 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
         });
         html += `</div>`;
       }
-      // 角色区（MV 服装写真集：大预览 + 缩略图网格，点击缩略图切换）
-      (a.roles || []).forEach((r) => {
-        const roleEditing = accRoleEdit[a.id] === r.id;
-        const outfits = r.outfits || [];
-        const st5 = outfits.filter((o) => o.star == 5).length;
-        const st4 = outfits.filter((o) => o.star == 4).length;
-        const st3 = outfits.filter((o) => o.star == 3).length;
-        const selKey = a.id + "::" + r.id;
-        const selIdx = accSel[selKey] || 0;
-        const cur = outfits[selIdx] || null;
-        html += `<div class="acc-role">
-          <div class="acc-role-head">
-            <span class="acc-role-name">${esc(r.name || "未命名角色")}</span>
-            <span class="acc-row">
-              ${help ? `<button type="button" class="acc-btn" data-acc-role-edit="${escAttr(a.id)}::${escAttr(r.id)}">${roleEditing ? "收起" : "改名"}</button>
-              <button type="button" class="acc-btn" data-acc-role-del="${escAttr(a.id)}::${escAttr(r.id)}">删除</button>` : ""}
-            </span>
-          </div>`;
-        if (help && roleEditing) {
-          html += `<div class="acc-edit">
-            <label>角色名</label><input id="ed-role-name" value="${escAttr(r.name || "")}" />
-            <div class="ed-actions">
-              <button type="button" class="acc-btn primary" data-acc-role-save="${escAttr(a.id)}::${escAttr(r.id)}">保存</button>
-            </div>
-          </div>`;
-        }
-        html += `<div class="enc-sec">MV 服装（${outfits.length}）${st5 ? `<span class="star5"> ★5×${st5}</span>` : ""}${st4 ? `<span class="star4"> ★4×${st4}</span>` : ""}${st3 ? `<span class="star3"> ★3×${st3}</span>` : ""}</div>`;
-        html += `<div class="acc-preview-wrap">`;
-        if (cur) {
-          html += `<div class="acc-preview">${cur.img ? `<img class="acc-preview-img" src="${escAttr(cur.img)}" alt="" />` : `<div class="acc-preview-none">无预览图</div>`}
-            <div class="acc-preview-name">${cur.name ? esc(cur.name) : " "}${cur.star ? `<span class="star${cur.star}"> ★${cur.star}</span>` : ""}</div></div>`;
-        }
-        html += `<div class="acc-mv-grid">`;
-        outfits.forEach((o, oi) => {
-          html += `<div class="acc-item${oi === selIdx ? " sel" : ""}" data-acc-outfit-pick="${escAttr(a.id)}::${escAttr(r.id)}::${oi}">
-            ${o.img ? `<img class="acc-item-img" src="${escAttr(o.img)}" alt="" data-acc-outfit-zoom="${escAttr(o.img)}|${escAttr(o.name || "")}|${o.star || 0}" />` : `<div class="acc-empty">无图</div>`}
-            <div class="acc-item-name">${o.name ? esc(o.name) : " "}${o.star ? `<span class="star${o.star}">★${o.star}</span>` : ""}</div>
-            ${help ? `<button type="button" class="acc-btn" data-acc-outfit-del="${escAttr(a.id)}::${escAttr(r.id)}::${oi}">删除</button>` : ""}
-          </div>`;
-        });
-        html += `</div>`;
-        html += `</div>`;
-        if (help) {
-          const nk = accOutfitNew[a.id + "::" + r.id];
-          const nv = nk || {};
-          html += `<div class="acc-add">
-          <button type="button" class="acc-btn" data-acc-outfit-new="${escAttr(a.id)}::${escAttr(r.id)}">${nk ? "收起" : "+ 添加 MV 服装"}</button>
-          ${nk ? `<div class="acc-edit">
-            <label>服装名</label><input class="of-name" value="${escAttr(nv.name || "")}" placeholder="如：XXX MV衣装" />
-            <label>星级</label>
-            <select class="of-star"><option value="">未知</option><option value="5" ${nv.star == 5 ? "selected" : ""}>★5</option><option value="4" ${nv.star == 4 ? "selected" : ""}>★4</option><option value="3" ${nv.star == 3 ? "selected" : ""}>★3</option></select>
-            <label>上传本地图片（自动压缩，选图即用）</label>
-            <input type="file" class="of-file" accept="image/*" />
-            <label>或填图片链接</label>
-            <input class="of-url" value="${escAttr(nv.url || "")}" placeholder="https://… 或 图鉴 assets/cards/…" />
-            <div class="ed-actions">
-              <button type="button" class="acc-btn primary" data-acc-outfit-save="${escAttr(a.id)}::${escAttr(r.id)}">保存服装</button>
-            </div>
-          </div>` : ""}
-        </div>`;
-        }
-        html += `</div>`;
-      });
-      html += help ? `<div class="acc-add"><button type="button" class="acc-btn" data-acc-role-add="${escAttr(a.id)}">+ 添加角色</button></div>` : "";
       g.innerHTML = html;
       box.appendChild(g);
     });
@@ -3488,140 +3524,6 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
       accSave(list2);
       accEditId = "";
       renderAcc();
-    });
-    // —— 角色：添加 / 改名 / 删除 ——
-    box.querySelectorAll("[data-acc-role-add]").forEach((b) => b.onclick = () => {
-      const list2 = accLoad();
-      const a = list2.find((x) => x.id === b.dataset.accRoleAdd);
-      if (!a) return;
-      const name = window.prompt ? window.prompt("新角色名：") : "";
-      if (name && name.trim()) {
-        a.roles.push({ id: "r" + Date.now(), name: name.trim(), outfits: [] });
-        accSave(list2);
-      }
-      renderAcc();
-    });
-    box.querySelectorAll("[data-acc-role-edit]").forEach((b) => b.onclick = () => {
-      const [ai, ri] = b.dataset.accRoleEdit.split("::");
-      accRoleEdit[ai] = accRoleEdit[ai] === ri ? "" : ri;
-      renderAcc();
-    });
-    box.querySelectorAll("[data-acc-role-save]").forEach((b) => {
-      const [ai, ri] = b.dataset.accRoleSave.split("::");
-      b.onclick = () => {
-        const grp = b.closest(".acc-group");
-        const list2 = accLoad();
-        const a = list2.find((x) => x.id === ai);
-        const r = a && a.roles.find((y) => y.id === ri);
-        if (!r) return;
-        r.name = (grp.querySelector("#ed-role-name") || {}).value || r.name;
-        accSave(list2);
-        accRoleEdit[ai] = "";
-        renderAcc();
-      };
-    });
-    box.querySelectorAll("[data-acc-role-del]").forEach((b) => b.onclick = () => {
-      const [ai, ri] = b.dataset.accRoleDel.split("::");
-      const list2 = accLoad();
-      const a = list2.find((x) => x.id === ai);
-      if (!a) return;
-      a.roles = (a.roles || []).filter((y) => y.id !== ri);
-      accSave(list2);
-      renderAcc();
-    });
-    // —— 服装：添加表单 / 删除 / 保存（含本地图上传压缩）——
-    box.querySelectorAll("[data-acc-outfit-new]").forEach((b) => b.onclick = () => {
-      const k = b.dataset.accOutfitNew;
-      if (accOutfitNew[k]) { accOutfitNew[k] = null; } else { accOutfitNew[k] = {}; }
-      renderAcc();
-    });
-    box.querySelectorAll("[data-acc-outfit-del]").forEach((b) => b.onclick = () => {
-      const [ai, ri, oi] = b.dataset.accOutfitDel.split("::");
-      const list2 = accLoad();
-      const a = list2.find((x) => x.id === ai);
-      const r = a && a.roles.find((y) => y.id === ri);
-      if (!r) return;
-      r.outfits.splice(Number(oi), 1);
-      accSave(list2);
-      renderAcc();
-    });
-    // —— 更换服装弹窗：打开 / 点小图切换 / 关闭 ——
-    box.querySelectorAll("[data-acc-outfit-open]").forEach((b) => b.onclick = () => {
-      const [ai, ri] = b.dataset.accOutfitOpen.split("::");
-      const list2 = accLoad();
-      const a = list2.find((x) => x.id === ai);
-      const r = a && a.roles.find((y) => y.id === ri);
-      if (!r || !r.outfits || !r.outfits.length) return;
-      const outfits = r.outfits;
-      const selKey = ai + "::" + ri;
-      let selIdx = accSel[selKey] || 0;
-      const mask = document.createElement("div");
-      mask.className = "outfit-mask";
-      const renderDlg = () => {
-        const cur = outfits[selIdx] || {};
-        let cells = "";
-        outfits.forEach((o, oi) => {
-          cells += `<div class="cell${oi === selIdx ? " sel" : ""}" data-cell="${oi}">
-            ${o.img ? `<img src="${escAttr(o.img)}" alt="" />` : `<div style="aspect-ratio:3/4;background:#eef;">无图</div>`}
-            <div class="n">${esc(o.name || "未命名")}${o.star ? "★" + o.star : ""}</div>
-          </div>`;
-        });
-        mask.innerHTML = `<div class="outfit-dialog">
-          <div class="outfit-title">更换服装<button type="button" class="outfit-close" data-close>×</button></div>
-          <div class="outfit-body">
-            <div class="outfit-preview">
-              ${cur.img ? `<img src="${escAttr(cur.img)}" alt="" />` : `<div style="color:#999;">无图</div>`}
-              <div class="name">${esc(cur.name || "未命名")}${cur.star ? " ★" + cur.star : ""}</div>
-            </div>
-            <div class="outfit-grid">${cells}</div>
-          </div>
-          <div class="outfit-foot">
-            <button type="button" class="outfit-cancel" data-close>取消</button>
-            <button type="button" class="outfit-ok" data-close>确定</button>
-          </div>
-        </div>`;
-        mask.querySelectorAll("[data-cell]").forEach((c) => c.onclick = () => {
-          selIdx = Number(c.dataset.cell);
-          accSel[selKey] = selIdx;
-          renderDlg();
-        });
-        mask.querySelectorAll("[data-close]").forEach((c) => c.onclick = () => mask.remove());
-      };
-      renderDlg();
-      document.body.appendChild(mask);
-      mask.onclick = (e) => { if (e.target === mask) mask.remove(); };
-    });
-    box.querySelectorAll("[data-acc-outfit-save]").forEach((b) => b.onclick = () => {
-      const grp = b.closest(".acc-group");
-      const [ai, ri] = b.dataset.accOutfitSave.split("::");
-      const name = ((grp.querySelector(".of-name") || {}).value || "").trim();
-      const url = ((grp.querySelector(".of-url") || {}).value || "").trim();
-      const star = ((grp.querySelector(".of-star") || {}).value || "").trim();
-      const file = (grp.querySelector(".of-file") || {}).files && grp.querySelector(".of-file").files[0];
-      const done = (img) => {
-        if (!name && !img) return;
-        const list2 = accLoad();
-        const a = list2.find((x) => x.id === ai);
-        const r = a && a.roles.find((y) => y.id === ri);
-        if (!r) return;
-        r.outfits.push({ name: name || "未命名", img: img || url, star: star ? Number(star) : 0 });
-        accSave(list2);
-        accOutfitNew[ai + "::" + ri] = null;
-        renderAcc();
-      };
-      if (file) accFileToDataUrl(file, done);
-      else done(url);
-    });
-    // —— 服装缩略图点击切换大预览 ——
-    box.querySelectorAll("[data-acc-outfit-pick]").forEach((b) => b.onclick = () => {
-      const [ai, ri, oi] = b.dataset.accOutfitPick.split("::");
-      accSel[ai + "::" + ri] = Number(oi);
-      renderAcc();
-    });
-    // —— 点缩略图 → 弹出 3D MV 服装详细预览（原界面不消失，左侧同时切换）——
-    box.querySelectorAll("[data-acc-outfit-zoom]").forEach((b) => b.onclick = () => {
-      const p = b.dataset.accOutfitZoom.split("|");
-      accOutfitZoom(p[0] || "", p[1] || "", parseInt(p[2], 10) || 0);
     });
     // —— 数据包：导出 / 导入（txt 文本格式，账号密码仅存本机）——
     box.querySelectorAll("[data-acc-add]").forEach((b) => b.onclick = () => {
@@ -3714,19 +3616,6 @@ window.ES_ROLE_CV = {"天祥院英智":"緑川 光","日々樹渉":"江口 拓�
   function openZoom(src) {
     $("zoomImg").src = src;
     $("zoomLayer").hidden = false;
-  }
-  // —— MV 服装 3D 详细预览弹窗（点缩略图弹出，原界面保留）——
-  function accOutfitZoom(src, name, star) {
-    const m = document.createElement("div");
-    m.className = "ofz-mask";
-    m.innerHTML = `<div class="ofz-box">
-      <button type="button" class="ofz-close" aria-label="关闭">✕</button>
-      ${src ? `<img src="${escAttr(src)}" alt="" />` : `<div class="ofz-none">暂无预览图</div>`}
-      <div class="ofz-name">${name ? esc(name) : " "}${star ? `<span class="star${star}"> ★${star}</span>` : ""}</div>
-    </div>`;
-    m.querySelector(".ofz-close").onclick = () => m.remove();
-    m.onclick = (e) => { if (e.target === m) m.remove(); };
-    document.body.appendChild(m);
   }
   function closeZoom() {
     $("zoomLayer").hidden = true;
