@@ -291,10 +291,10 @@ body {
 }
 .rel-close { position: absolute; top: 8px; right: 10px; background: none; border: none; font-size: 19px; color: #7a8198; cursor: pointer; padding: 4px 6px; line-height: 1; border-radius: 8px; }
 .rel-close:hover { color: #1b2030; background: #eef2f7; }
-/* 歌曲站位（横排 5 格 · C 位★） */
+/* 歌曲站位（横排最多 5 格一行 · C 位★，超过 5 格自动换行） */
 .song-stance { margin-top: 8px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .song-stance-hd { font-size: 11.5px; font-weight: 800; color: #9aa1b4; letter-spacing: .3px; }
-.st-row { display: inline-flex; gap: 4px; }
+.st-row { display: inline-grid; grid-template-columns: repeat(5, auto); gap: 4px; }
 .st-slot {
   display: inline-flex; align-items: center; justify-content: center;
   min-width: 34px; height: 26px; padding: 0 6px; border-radius: 8px;
@@ -321,8 +321,15 @@ body {
 }
 .st-title { font-size: 16px; font-weight: 800; margin-bottom: 2px; padding-right: 30px; }
 .st-sub { font-size: 12px; color: #5b6478; margin-bottom: 10px; }
-.st-editor-row { display: flex; gap: 6px; justify-content: center; margin: 12px 0 14px; }
-.st-editor-row .st-slot { min-width: 52px; height: 40px; font-size: 13px; border-radius: 10px; }
+.st-editor-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; justify-items: center; margin: 12px 0 14px; }
+.st-editor-row .st-slot { min-width: 0; width: 100%; max-width: 64px; height: 44px; font-size: 13px; border-radius: 10px; flex-direction: column; gap: 2px; padding: 3px 2px; }
+.st-slot .st-ct {
+  font-style: normal; font-size: 9px; font-weight: 800; color: #9aa1b4;
+  border: 1px solid #dde2ec; background: #fff; border-radius: 4px; padding: 0 5px;
+  line-height: 1.5; cursor: pointer; letter-spacing: 0;
+}
+.st-slot .st-ct.on { background: rgba(240,0,160,.14); color: #a1006a; border-color: rgba(240,0,160,.5); }
+.st-slot .st-name { line-height: 1.2; }
 .st-cnote { font-size: 11.5px; color: #a1006a; text-align: center; margin-top: -8px; margin-bottom: 8px; font-weight: 700; }
 .st-pool-hd { font-size: 12.5px; font-weight: 800; color: #2563c9; margin: 8px 0 6px; }
 .st-pool { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -336,6 +343,9 @@ body {
   flex: 1; padding: 9px 0; border-radius: 999px; border: none; cursor: pointer;
   font-size: 13.5px; font-weight: 800; line-height: 1.4;
 }
+.st-foot button:disabled { opacity: .4; cursor: not-allowed; }
+.st-col { background: #eef2f7; color: #4b5468; }
+.st-col:hover { background: #e5e8ee; }
 .st-save { background: #7c3aed; color: #fff; }
 .st-save:hover { background: #6d28d9; }
 .st-clear { background: #f0f2f6; color: #4b5468; }
@@ -854,7 +864,7 @@ html.es-darkfix canvas {
     <header class="top">
       <div class="top-title">
         <span>偶像梦幻祭 · 资料库</span>
-        <span class="ver" id="libVer">v2.9.34</span>
+        <span class="ver" id="libVer">v2.9.35</span>
       </div>
       <input type="text" class="search" id="libSearch" placeholder="搜索卡名 / 角色 / 卡池…" />
       <span class="top-btns">
@@ -3689,24 +3699,31 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
     return mem;
   }
   const STANCE_KEY = "ball-pet-v2-stances";
+  // C 位标记：成员名后追加「★」表示该格为 C 位；无任何 ★ 时默认第 3 格为 C（兼容旧数据）
+  function stClean(v) { return typeof v === "string" ? v.replace(/★$/, "") : v; }
+  function stIsC(v) { return typeof v === "string" && v.endsWith("★"); }
   function loadStanceSong(name) {
     const ed = {};
     try { Object.assign(ed, JSON.parse(localStorage.getItem(STANCE_KEY) || "{}")); } catch (e) {}
-    if (Array.isArray(ed[name])) return ed[name].slice(0, 5);
+    if (Array.isArray(ed[name])) return ed[name];
     const fixed = (window.ES_STANCES || {})[name];
-    return Array.isArray(fixed) ? fixed.slice(0, 5) : Array(5).fill(null);
+    return Array.isArray(fixed) ? fixed : Array(5).fill(null);
   }
   function saveStanceSong(name, arr) {
     const ed = {};
     try { Object.assign(ed, JSON.parse(localStorage.getItem(STANCE_KEY) || "{}")); } catch (e) {}
-    ed[name] = arr.slice(0, 5);
+    ed[name] = arr;
     try { localStorage.setItem(STANCE_KEY, JSON.stringify(ed)); } catch (e) {}
   }
   function stanceStripHtml(s) {
     const arr = loadStanceSong(s.n);
-    const slots = arr.map((v, i) =>
-      v ? `<span class="st-slot${i === 2 ? " c" : ""}" data-song="${escAttr(s.n)}" title="${esc(v)}">${esc(stanceShortName(v))}${i === 2 ? "★" : ""}</span>`
-         : `<span class="st-slot empty" data-song="${escAttr(s.n)}">＋</span>`).join("");
+    const hasStar = arr.some(stIsC);
+    const slots = arr.map((v, i) => {
+      if (!v) return `<span class="st-slot empty" data-song="${escAttr(s.n)}">＋</span>`;
+      const isC = stIsC(v) || (!hasStar && i === 2);
+      const clean = stClean(v);
+      return `<span class="st-slot${isC ? " c" : ""}" data-song="${escAttr(s.n)}" title="${esc(clean)}">${esc(stanceShortName(clean))}${isC ? "★" : ""}</span>`;
+    }).join("");
     return `<div class="song-stance"><span class="song-stance-hd">站位</span><span class="st-row">${slots}</span>
       <button type="button" class="st-edit-btn" data-song="${escAttr(s.n)}">编辑</button></div>`;
   }
@@ -3717,19 +3734,25 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
     const s = S.find((x) => x.n === name);
     if (!s) return;
     const members = s.i.map((m) => normIdol(m));
-    const cur = loadStanceSong(name);
+    let cur = loadStanceSong(name);
+    // 未编辑过（默认 5 空格）且歌曲成员超过 5 人：自动扩列到成员数（上限 12 格）
+    if (cur.length === 5 && cur.every((v) => !v) && members.length > 5) {
+      cur = Array(Math.max(5, Math.min(members.length, 12))).fill(null);
+    }
     const mask = document.createElement("div");
     mask.id = "stanceBox";
     mask.className = "st-mask";
     mask.innerHTML = `<div class="st-box" onclick="event.stopPropagation()">
       <button type="button" class="rel-close" title="关闭">✕</button>
       <div class="st-title">${esc(s.n)}</div>
-      <div class="st-sub">横排 5 个站位（第 3 格为 C 位 ★）· 点击空格放入成员 · 点名字移出 · 桌面可拖拽换位</div>
+      <div class="st-sub">横排站位（默认 5 格，第 3 格 C 位★）· 点格内「C」设为 C 位（支持双 C）· 超过 5 人用「＋1 格」加列 · 点击空格放入成员 · 点名字移出 · 桌面可拖拽换位</div>
       <div class="st-editor-row" id="stRow"></div>
-      <div class="st-cnote">★ = C 位</div>
+      <div class="st-cnote">★ = C 位 · 可设多个 C 位</div>
       <div class="st-pool-hd">成员（点击放入空格）</div>
       <div class="st-pool" id="stPool"></div>
       <div class="st-foot">
+        <button type="button" class="st-col" id="stAddCol">＋1 格</button>
+        <button type="button" class="st-col" id="stSubCol">－1 格</button>
         <button type="button" class="st-clear" id="stClear">清空</button>
         <button type="button" class="st-save" id="stSave">保存站位</button>
         <button type="button" class="st-done" id="stDone">完成</button>
@@ -3742,18 +3765,24 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
     const row = mask.querySelector("#stRow");
     const pool = mask.querySelector("#stPool");
     function render() {
-      row.innerHTML = cur.map((v, i) =>
-        v ? `<span class="st-slot${i === 2 ? " c" : ""}" draggable="true" data-idx="${i}" title="${esc(v)}">${esc(stanceShortName(v))}${i === 2 ? "★" : ""}</span>`
-           : `<span class="st-slot empty" data-idx="${i}">＋</span>`).join("");
+      const hasStar = cur.some(stIsC);
+      row.innerHTML = cur.map((v, i) => {
+        if (!v) return `<span class="st-slot empty" data-idx="${i}">＋</span>`;
+        const isC = stIsC(v) || (!hasStar && i === 2);
+        const clean = stClean(v);
+        return `<span class="st-slot${isC ? " c" : ""}" draggable="true" data-idx="${i}" title="${esc(clean)}">
+          <span class="st-name">${esc(stanceShortName(clean))}${isC ? "★" : ""}</span>
+          <b class="st-ct${isC ? " on" : ""}">C</b></span>`;
+      }).join("");
       const used = cur.filter(Boolean);
       pool.innerHTML = members.map((m) =>
-        `<button type="button" class="${used.includes(m) ? "used" : ""}" data-m="${escAttr(m)}">${esc(m)}</button>`).join("");
+        `<button type="button" class="${used.some((v) => stClean(v) === m) ? "used" : ""}" data-m="${escAttr(m)}">${esc(m)}</button>`).join("");
       row.querySelectorAll(".st-slot").forEach((el) => {
         const i = +el.dataset.idx;
         el.onclick = () => {
           if (cur[i]) { cur[i] = null; render(); }
           else {
-            const first = members.find((m) => !cur.includes(m));
+            const first = members.find((m) => !cur.some((v) => stClean(v) === m));
             if (first !== undefined) { cur[i] = first; render(); }
           }
         };
@@ -3773,17 +3802,33 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
           render();
         });
       });
+      row.querySelectorAll(".st-ct").forEach((b) => {
+        b.onclick = (ev) => {
+          ev.stopPropagation();
+          const i = +b.closest(".st-slot").dataset.idx;
+          const v = cur[i];
+          if (stIsC(v)) cur[i] = stClean(v);
+          else cur[i] = stClean(v) + "★";
+          render();
+        };
+      });
       pool.querySelectorAll("button").forEach((b) => {
         b.onclick = () => {
           const m = b.dataset.m;
-          const idx = cur.indexOf(m);
+          const idx = cur.findIndex((v) => stClean(v) === m);
           if (idx >= 0) cur[idx] = null;
           else { const i = cur.indexOf(null); if (i >= 0) cur[i] = m; }
           render();
         };
       });
+      const last = cur[cur.length - 1];
+      const sub = mask.querySelector("#stSubCol");
+      sub.disabled = cur.length <= 1 || !!last;
+      sub.textContent = cur.length <= 1 ? "－1 格" : (last ? "末格有成员" : "－1 格");
     }
     render();
+    mask.querySelector("#stAddCol").onclick = () => { if (cur.length < 12) { cur.push(null); render(); } };
+    mask.querySelector("#stSubCol").onclick = () => { if (cur.length > 1 && !cur[cur.length - 1]) { cur.pop(); render(); } };
     mask.querySelector("#stClear").onclick = () => { cur.fill(null); render(); };
     mask.querySelector("#stSave").onclick = () => { saveStanceSong(name, cur); renderSongList(); };
     mask.querySelector("#stDone").onclick = () => { saveStanceSong(name, cur); renderSongList(); mask.remove(); };
@@ -4723,7 +4768,7 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
 
   // —— 初始化 ——
   function init() {
-    $("libVer").textContent = "v2.9.34";
+    $("libVer").textContent = "v2.9.35";
     buildMobileNav();
     // 手机端「确定搜索」初始位置：右侧列表区域悬浮（用户指定），可拖动
     if (IS_MOBILE) {
