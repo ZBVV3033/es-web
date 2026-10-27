@@ -864,7 +864,7 @@ html.es-darkfix canvas {
     <header class="top">
       <div class="top-title">
         <span>偶像梦幻祭 · 资料库</span>
-        <span class="ver" id="libVer">v2.9.37</span>
+        <span class="ver" id="libVer">v2.9.38</span>
       </div>
       <input type="text" class="search" id="libSearch" placeholder="搜索卡名 / 角色 / 卡池…" />
       <span class="top-btns">
@@ -947,6 +947,18 @@ html.es-darkfix canvas {
               <button type="button" class="sf-btn mv-btn on" data-mv="all">全部类型</button>
               <button type="button" class="sf-btn mv-btn" data-mv="game">游戏内可选</button>
               <button type="button" class="sf-btn mv-btn" data-mv="nomv">2D/其他</button>
+            </span>
+            <span class="sf-row lib-sf lib-sf2">
+              <span class="sf-label">排序</span>
+              <button type="button" class="sf-btn so-btn on" data-so="auto">自动</button>
+              <button type="button" class="sf-btn so-btn" data-so="new">最新优先</button>
+              <button type="button" class="sf-btn so-btn" data-so="old">最旧优先</button>
+            </span>
+            <span class="sf-row lib-sf lib-sf2">
+              <span class="sf-label">类型优先</span>
+              <button type="button" class="sf-btn tp-btn on" data-tp="none">默认</button>
+              <button type="button" class="sf-btn tp-btn" data-tp="unit">组合</button>
+              <button type="button" class="sf-btn tp-btn" data-tp="other">非组合</button>
             </span>
             <span class="song-count" id="songCount"></span>
             <button type="button" class="song-rel-btn" id="songRelBtn" hidden>关系网</button>
@@ -2949,6 +2961,9 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
 
   // —— 版本日志（与 pet.js / CHANGELOG.md 同步）——
   const CHANGELOG = [
+    { ver: "2.9.38", date: "2026-10-27", items: [
+      "歌曲搜索新增自选排序：可选手动「最新优先 / 最旧优先 / 自动」（自动=三人红月模式老歌优先、其余最新在前），以及「类型优先：默认 / 组合 / 非组合」调整分组显示顺序",
+    ] },
     { ver: "2.9.37", date: "2026-10-27", items: [
       "修复单选偶像选歌的过滤 bug：单选 1 位偶像时也错误地只显示「非组合曲」，导致红月等组合曲（如天翔KAGETSU）被过滤掉；现在单选显示该偶像的全部曲目（组合曲＋非组合曲＋solo），三人红月模式下搜敬人也能看到红月的歌",
     ] },
@@ -3306,6 +3321,8 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
   const songSel = new Set();
   let libSongFilter = "all";
   let libSongMV = "all";
+  let libSongSort = "auto"; // 排序：auto=自动（三人红月模式老歌优先，其余最新优先）；new=最新优先；old=最旧优先
+  let libSongType = "none"; // 类型优先：none=默认（非组合在前）；unit=组合曲优先；other=非组合曲优先
   let libSongMode = "list"; // 默认大列表选人模式
   function setLibSongMode(m) {
     libSongMode = m;
@@ -3385,6 +3402,20 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
     libSongMV = f;
     document.querySelectorAll(".lib-sf .mv-btn").forEach((b) => {
       b.classList.toggle("on", b.dataset.mv === f);
+    });
+    renderSongList();
+  }
+  function setLibSongSort(f) {
+    libSongSort = f;
+    document.querySelectorAll(".lib-sf .so-btn").forEach((b) => {
+      b.classList.toggle("on", b.dataset.so === f);
+    });
+    renderSongList();
+  }
+  function setLibSongType(f) {
+    libSongType = f;
+    document.querySelectorAll(".lib-sf .tp-btn").forEach((b) => {
+      b.classList.toggle("on", b.dataset.tp === f);
     });
     renderSongList();
   }
@@ -3506,17 +3537,26 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
         !x.i.some((m) => bl.includes(normIdol(m)))
       );
     }
-    // 三人红月模式：优先显示 2024-12-29（天翔KAGETSU）以前的老歌；其余默认新歌在前
-    if (st.kohaku3) {
-      const kagetsu = "2024-12-29";
-      list = list.slice().sort((a, b) => {
-        const ao = (a.rel || "") < kagetsu ? 0 : 1;
-        const bo = (b.rel || "") < kagetsu ? 0 : 1;
-        if (ao !== bo) return ao - bo;
-        return (a.rel || "").localeCompare(b.rel || "");
-      });
+    // 排序：auto=跟随模式默认（三人红月模式老歌优先：2024-12-29 天翔KAGETSU 以前优先；其余最新在前）；
+    // new=最新优先；old=最旧优先
+    const kagetsu = "2024-12-29";
+    const byOld = (a, b) => (a.rel || "").localeCompare(b.rel || "");
+    const byNew = (a, b) => (b.rel || "").localeCompare(a.rel || "");
+    if (libSongSort === "auto") {
+      if (st.kohaku3) {
+        list = list.slice().sort((a, b) => {
+          const ao = (a.rel || "") < kagetsu ? 0 : 1;
+          const bo = (b.rel || "") < kagetsu ? 0 : 1;
+          if (ao !== bo) return ao - bo;
+          return byOld(a, b);
+        });
+      } else {
+        list = list.slice().sort(byNew);
+      }
+    } else if (libSongSort === "old") {
+      list = list.slice().sort(byOld);
     } else {
-      list = list.slice().sort((a, b) => (b.rel || "").localeCompare(a.rel || ""));
+      list = list.slice().sort(byNew);
     }
     $("songCount").textContent = libSongFilter === "allstars"
       ? `全员曲 · 共 ${list.length} 首`
@@ -3545,10 +3585,15 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
     const multiMode = songSel.size >= 3;
     let html = "";
     if (multiMode && libSongFilter === "all") {
-      // 多人选择模式（3人及以上）：非组合曲（多组合曲+非正式组合曲，含2D）最前 → 组合曲 → solo
+      // 多人选择模式（3人及以上）：按「类型优先」排列 非组合曲 / 组合曲 → solo
       const noUnit = multi.concat(other);
-      html += `<div class="song-sec">非组合曲 · ${noUnit.length}</div>` + gameFirst(noUnit).map(songCardHtml).join("");
-      html += `<div class="song-sec">组合曲 · ${inUnit.length}</div>` + gameFirst(inUnit).map(songCardHtml).join("");
+      if (libSongType === "unit") {
+        html += `<div class="song-sec">组合曲 · ${inUnit.length}</div>` + gameFirst(inUnit).map(songCardHtml).join("");
+        html += `<div class="song-sec">非组合曲 · ${noUnit.length}</div>` + gameFirst(noUnit).map(songCardHtml).join("");
+      } else {
+        html += `<div class="song-sec">非组合曲 · ${noUnit.length}</div>` + gameFirst(noUnit).map(songCardHtml).join("");
+        html += `<div class="song-sec">组合曲 · ${inUnit.length}</div>` + gameFirst(inUnit).map(songCardHtml).join("");
+      }
       html += `<div class="song-sec">solo 曲 · ${solo.length}</div>` + solo.map(songCardHtml).join("");
     } else if (libSongFilter === "unit") {
       html += `<div class="song-sec">组合曲 · ${inUnit.length}</div>` + gameFirst(inUnit).map(songCardHtml).join("");
@@ -3558,14 +3603,18 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
       if (inOther.length) html += `<div class="song-sec">非组合曲 · ${inOther.length}</div>` + gameFirst(inOther).map(songCardHtml).join("");
       if (solo.length) html += `<div class="song-sec">solo 曲 · ${solo.length}</div>` + solo.map(songCardHtml).join("");
     } else {
-      // 默认「全部」：非组合曲(游戏内) → 组合曲(游戏内) → 2D 曲 → solo 曲（solo 在最末端）
+      // 默认「全部」：按「类型优先」决定分组顺序
+      // none/other：非组合曲(游戏内) → 组合曲(游戏内) → 2D 曲 → solo 曲
+      // unit：组合曲(游戏内) → 非组合曲(游戏内) → 2D 曲 → solo 曲
       const gOther = inOther.filter((s) => s.mv === "game");
       const gUnit = inUnit.filter((s) => s.mv === "game");
       const d2 = list.filter((s) => songKind(s) !== "solo" && songKind(s) !== "all" && s.mv !== "game");
-      if (gOther.length) html += `<div class="song-sec">非组合曲 · ${gOther.length}</div>` + gOther.map(songCardHtml).join("");
-      if (gUnit.length) html += `<div class="song-sec">组合曲 · ${gUnit.length}</div>` + gUnit.map(songCardHtml).join("");
-      if (d2.length) html += `<div class="song-sec">2D 曲 · ${d2.length}</div>` + d2.map(songCardHtml).join("");
-      if (solo.length) html += `<div class="song-sec">solo 曲 · ${solo.length}</div>` + solo.map(songCardHtml).join("");
+      const secs = libSongType === "unit"
+        ? [["组合曲", gUnit], ["非组合曲", gOther], ["2D 曲", d2], ["solo 曲", solo]]
+        : [["非组合曲", gOther], ["组合曲", gUnit], ["2D 曲", d2], ["solo 曲", solo]];
+      secs.forEach(([name, arr]) => {
+        if (arr.length) html += `<div class="song-sec">${name} · ${arr.length}</div>` + arr.map(songCardHtml).join("");
+      });
     }
     listEl.innerHTML = html;
     bindLibSongControls();
@@ -3578,6 +3627,12 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
     });
     document.querySelectorAll(".lib-sf .mv-btn").forEach((b) => {
       b.onclick = () => setLibSongMV(b.dataset.mv);
+    });
+    document.querySelectorAll(".lib-sf .so-btn").forEach((b) => {
+      b.onclick = () => setLibSongSort(b.dataset.so);
+    });
+    document.querySelectorAll(".lib-sf .tp-btn").forEach((b) => {
+      b.onclick = () => setLibSongType(b.dataset.tp);
     });
     const relBtn = $("songRelBtn");
     if (relBtn) relBtn.onclick = showRelNet;
@@ -4790,7 +4845,7 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
 
   // —— 初始化 ——
   function init() {
-    $("libVer").textContent = "v2.9.37";
+    $("libVer").textContent = "v2.9.38";
     buildMobileNav();
     // 手机端「确定搜索」初始位置：右侧列表区域悬浮（用户指定），可拖动
     if (IS_MOBILE) {
