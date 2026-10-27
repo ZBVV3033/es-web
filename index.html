@@ -864,7 +864,7 @@ html.es-darkfix canvas {
     <header class="top">
       <div class="top-title">
         <span>偶像梦幻祭 · 资料库</span>
-        <span class="ver" id="libVer">v2.9.35</span>
+        <span class="ver" id="libVer">v2.9.36</span>
       </div>
       <input type="text" class="search" id="libSearch" placeholder="搜索卡名 / 角色 / 卡池…" />
       <span class="top-btns">
@@ -2324,6 +2324,17 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
   // 日服最新情报（数据源：日服官方情报微博 @EnsembleStars，2026-10-21 整理，与国服排期分开）
   // start/end：MM-DD 格式，end 为 null 表示官方未公布结束时间（不编造）
   const JP_NEWS = [
+    { id: "jp-n1", type: "卡池", title: "朱樱司 个衣3 CG 卡面", chars: ["朱樱司"], start: "10-27", end: null, note: "个衣3 CG 卡面公开（共 10 张）", src: "小红书 @yuou", link: "https://www.xiaohongshu.com/explore/6ae04c120000000003007260" },
+    { id: "jp-n2", type: "预告", title: "活动＆招募预告", chars: [], start: "10-27", end: null, note: "日服活动＆招募预告", src: "小红书 @yuou", link: "https://www.xiaohongshu.com/explore/6ae0400d0000000003004c9f" },
+    { id: "jp-n3", type: "预告", title: "巡演-活动预告", chars: [], start: "10-27", end: null, note: "日服巡演活动预告", src: "小红书 @yuou", link: "https://www.xiaohongshu.com/explore/6ae0407c000000001802bb6d" },
+    { id: "jp-n4", type: "卡池", title: "乱凪砂 个衣3 服装", chars: ["乱凪砂"], start: "10-25", end: null, note: "个衣3 服装卡面", src: "小红书 @yuou", link: "https://www.xiaohongshu.com/explore/6addac060000000033033202" },
+    { id: "jp-n5", type: "卡池", title: "乱凪砂 个衣3 发型变化", chars: ["乱凪砂"], start: "10-25", end: null, note: "个衣3 发型变化（含配饰展示）", src: "小红书 @yuou", link: "https://www.xiaohongshu.com/explore/6addaef4000000002c032bc4" },
+    { id: "jp-n6", type: "卡池", title: "乱凪砂 个衣3 异色", chars: ["乱凪砂"], start: "10-25", end: null, note: "个衣3 异色卡面（共 5 张）", src: "小红书 @yuou", link: "https://www.xiaohongshu.com/explore/6add9f7e00000000310348ab" },
+    { id: "jp-n7", type: "卡池", title: "乱凪砂 个衣3 SPP『Graceful Punishment』", chars: ["乱凪砂"], start: "10-25", end: null, note: "个衣3 原创 SPP 曲目『Graceful Punishment』", src: "小红书 @yuou", link: "https://www.xiaohongshu.com/explore/6adda1510000000033010e2f" },
+    { id: "jp-n8", type: "卡池", title: "乱凪砂 个衣3 抽卡动画", chars: ["乱凪砂"], start: "10-25", end: null, note: "个衣3 抽卡动画展示", src: "小红书 @yuou", link: "https://www.xiaohongshu.com/explore/6add9dbc000000002a02b485" },
+    { id: "jp-n9", type: "卡池", title: "【个衣卡池情报】乱凪砂 个衣3", chars: ["乱凪砂"], start: "10-25", end: null, note: "个衣3 卡池情报（卡面与异色整理）", src: "小红书 @yuou", link: "https://www.xiaohongshu.com/explore/6add9dec000000002a033532" },
+    { id: "jp-n10", type: "卡池", title: "【个衣卡池预告】", chars: [], start: "10-24", end: null, note: "下期个衣卡池预告", src: "小红书 @yuou", link: "https://www.xiaohongshu.com/explore/6adc49f0000000002a0284be" },
+    { id: "jp-n11", type: "卡池", title: "乱凪砂 个衣3 衣服", chars: ["乱凪砂"], start: "10-25", end: null, note: "个衣3 衣服相关整理", src: "小红书 @yuou", link: "https://www.xiaohongshu.com/explore/6add9b860000000033033bbe" },
     { id: "jp-1", type: "活动", title: "噩梦★黑暗与LimeLIEt", chars: ["Raika", "Yume", "Esu", "Kanna"], start: "10-15", end: null, note: "Spri 万圣节活动／活动曲『Nightmare Syndrome♡』（Special for Princess!演唱）／★5 Raika・★4 Yume・★3 Esu・★3 Kanna／MV衣装＋L2D衣装【Sweet Nightmare】／原创SPP（Raika・Yume）／Raika 设施制服" },
     { id: "jp-2", type: "招募", title: "招募！Ambassador／食道乐", chars: ["衣更真绪", "深海奏汰", "葵裕太", "真白友也"], start: "10-14", end: null, note: "★5 真绪（MV衣装＋原创SPP『ワチャガナドゥ？』＋L2D食道乐衣装）／★4 奏汰（SPP『Deep into you』＋L2D＋私服2秋〜冬）／★3 裕太（私服2）・友也" },
     { id: "jp-3", type: "活动", title: "世界巡演篇／AREA06 MaM VS fine", chars: ["斑", "天祥院英智"], start: "09-30", end: null, note: "幻之演唱会对决，斑向『fine』发起挑战，忆起流星队往事；10-14 公布结果「Send Your Cheer!! To Your Idol」" },
@@ -2938,6 +2949,9 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
 
   // —— 版本日志（与 pet.js / CHANGELOG.md 同步）——
   const CHANGELOG = [
+    { ver: "2.9.36", date: "2026-10-27", items: [
+      "日服情报新增「小红书 @yuou」来源条目：乱凪砂 个衣3（服装/发型/异色/SPP『Graceful Punishment』/抽卡动画/卡池情报）、朱樱司 个衣3 CG、活动＆招募预告、巡演预告、个衣卡池预告（2026-10-24~10-27 发布，每条带笔记链接）",
+    ] },
     { ver: "2.9.29", date: "2026-10-27", items: [
       "关系网按钮改为 2 人及以上即可显示（原 3 人以上），设置开关开启后生效",
     ] },
@@ -3258,7 +3272,7 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
         <span class="jp-type">${esc(j.type)} · ${tag}</span>
         <div class="jp-title">${esc(j.title)}${j.chars && j.chars.length ? " · " + esc(j.chars.join("/")) : ""}</div>
         <div class="jp-note">${esc(j.start)} 开启${j.end ? " → " + esc(j.end) + " 结束" : "（结束时间官方未公布）"}<br>${esc(j.note)}</div>
-        <div class="jp-note">来源：日服情报微博 @EnsembleStars</div>
+        <div class="jp-note">来源：${esc(j.src || "日服情报微博 @EnsembleStars")}${j.link ? ` · <a href="${esc(j.link)}" target="_blank" rel="noopener">查看笔记 ↗</a>` : ""}</div>
       </div>`;
     });
     list.innerHTML = html;
@@ -4768,7 +4782,7 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
 
   // —— 初始化 ——
   function init() {
-    $("libVer").textContent = "v2.9.35";
+    $("libVer").textContent = "v2.9.36";
     buildMobileNav();
     // 手机端「确定搜索」初始位置：右侧列表区域悬浮（用户指定），可拖动
     if (IS_MOBILE) {
