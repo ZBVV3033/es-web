@@ -181,6 +181,27 @@ body {
 .sched-img-fig img { width: 100%; border-radius: 8px; border: 1px solid var(--line); background: #f2f3f7; display: block; }
 .sched-img-fig figcaption { font-size: 11.5px; color: var(--txt3); line-height: 1.5; }
 
+/* 活动计时 */
+.act-wrap { display: flex; flex-direction: column; gap: 10px; }
+.act-sv-hd { font-size: 15px; font-weight: 700; color: var(--acc2); margin: 6px 0 2px; }
+.act-card {
+  background: #fff; border: 1px solid var(--line); border-radius: 12px;
+  padding: 13px 16px; display: flex; flex-direction: column; gap: 5px;
+  box-shadow: 0 1px 3px rgba(23,26,48,.05);
+}
+.act-card.on { border-color: rgba(220,140,10,.5); background: rgba(255,180,60,.08); }
+.act-card.up { border-color: rgba(34,160,90,.35); }
+.act-card.off { opacity: .55; }
+.act-name { font-size: 15px; font-weight: 700; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.act-kind { font-size: 11.5px; color: var(--acc2); background: rgba(37,99,201,.1); border-radius: 999px; padding: 2px 10px; font-weight: 400; }
+.act-time { font-size: 13px; color: var(--txt2); }
+.act-cd { font-size: 15px; font-weight: 800; letter-spacing: .3px; }
+.act-cd.on { color: #b45309; }
+.act-cd.up { color: #1f7a45; }
+.act-cd.wait { color: var(--txt3); font-weight: 600; }
+.act-cd.off { color: var(--txt3); font-weight: 600; }
+.act-src { font-size: 11.5px; color: var(--txt3); line-height: 1.5; }
+
 /* 万象棋 */
 .wz-wrap { display: flex; flex-direction: column; gap: 12px; }
 .wz-sec { font-size: 15px; font-weight: 700; color: var(--acc2); margin: 10px 0 4px; }
@@ -872,7 +893,7 @@ html.es-darkfix canvas {
     <header class="top">
       <div class="top-title">
         <span>偶像梦幻祭 · 资料库</span>
-        <span class="ver" id="libVer">v2.9.40</span>
+        <span class="ver" id="libVer">v2.9.41</span>
       </div>
       <input type="text" class="search" id="libSearch" placeholder="搜索卡名 / 角色 / 卡池…" />
       <span class="top-btns">
@@ -893,6 +914,7 @@ html.es-darkfix canvas {
             <button type="button" class="es-tab active" data-view="timeline">五星时间线</button>
             <button type="button" class="es-tab" data-view="jp">日服情报</button>
             <button type="button" class="es-tab" data-view="sched">卡池排期</button>
+            <button type="button" class="es-tab" data-view="act">活动计时</button>
           </div>
           <div class="es-view" id="view-acc" hidden>
             <div class="acc-list" id="accList"></div>
@@ -922,6 +944,9 @@ html.es-darkfix canvas {
           </div>
           <div class="es-view" id="view-sched" hidden>
             <div class="sched-list" id="schedList"></div>
+          </div>
+          <div class="es-view" id="view-act" hidden>
+            <div class="act-wrap" id="actBody"></div>
           </div>
         </section>
 
@@ -2969,6 +2994,9 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
 
   // —— 版本日志（与 pet.js / CHANGELOG.md 同步）——
   const CHANGELOG = [
+    { ver: "2.9.41", date: "2026-10-27", items: [
+      "新增「活动计时」页：国服/日服活动实时倒计时（剩余 X天X小时X分X秒，每秒刷新），国服 3 档进行中活动（夜色狂想→11-04 22:00、WELCOME优雅之旅→11-16 24:00、万圣节特别活动2026→11-19 24:00，官方公告时间）；日服万圣节活动进行中 + 2wink VS 流星队招募/活动预告（待官方精确时间后补全倒计时），每条标来源",
+    ] },
     { ver: "2.9.40", date: "2026-10-27", items: [
       "歌曲中文译名换成网易云正式歌名（24 首）：生硬直译/音译的译名（如「哇恰加纳多？→ワチャガナドゥ？」「愚蠢的外星人→Foolish Alien」「伤疤→SCAB」「=EYE=→Eye」「丝→糸」等）按网易云显示的正式歌名修正",
     ] },
@@ -3138,7 +3166,7 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
 
   function switchEsView(view) {
     document.querySelectorAll(".es-tab").forEach((b) => b.classList.toggle("active", b.dataset.view === view));
-    ["acc", "mv", "enc", "timeline", "jp", "sched"].forEach((v) => {
+    ["acc", "mv", "enc", "timeline", "jp", "sched", "act"].forEach((v) => {
       const el = $("view-" + v);
       if (el) el.hidden = v !== view;
     });
@@ -3148,6 +3176,7 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
     if (view === "timeline") renderTimeline();
     if (view === "jp") renderJp();
     if (view === "sched") renderSched();
+    if (view === "act") renderAct();
     updateMobileNav("es", view);
   }
 
@@ -3343,6 +3372,87 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
     });
     list.innerHTML = html;
   }
+
+  // —— 活动计时（国服/日服当前活动与预告，实时倒计时刷新；时间均为官方公告口径） ——
+  const ES_SCHED = [
+    { sv: "国服", name: "特别通告 · 夜色狂想", kind: "特别通告 ⭐5 巴日和「以爱共饮夜色」", start: "2026-10-24T12:00", end: "2026-11-04T22:00", startTxt: "10-24 12:00", endTxt: "11-04 22:00", note: "参与可得巴日和★5、钻石、上级招募券×5、称号「夜色应援者」", src: "偶像梦幻祭2 官方微博 10-24" },
+    { sv: "国服", name: "WELCOME・优雅之旅", kind: "特别活动", start: "2026-10-24T12:00", end: "2026-11-17T00:00", startTxt: "10-24 12:00", endTxt: "11-16 24:00", note: "主界面【精彩活动】入口，超豪华款待内容", src: "偶像梦幻祭2 官方微博 10-24" },
+    { sv: "国服", name: "万圣节特别活动2026", kind: "特别活动", start: "2026-10-27T12:00", end: "2026-11-20T00:00", startTxt: "10-27 12:00", endTxt: "11-19 24:00", note: "限定工作「万圣节特别节目·天使的工作」，可领衣更真绪/仙石忍/莲巳敬人/天祥院英智/朱樱司 5 人天使服装", src: "TapTap 官方公告 10-25" },
+    { sv: "日服", name: "ハロウィンキャンペーン2026（万圣节活动）", kind: "进行中 · 官网 PICKUP", start: "", end: "", waitTxt: "进行中 · 结束时间待官方公告后更新", note: "", src: "ensemble-stars.jp 官网" },
+    { sv: "日服", name: "招募「2wink VS 流星队」", kind: "招募预告 ⭐5 裕太 / ⭐4 铁虎 / ⭐3 忍", start: "", end: "", waitTxt: "预告 · 10-30 开启（精确时间待官方公告）", note: "", src: "日服情报微博 @EnsembleStars" },
+    { sv: "日服", name: "活动「2wink VS 流星队」", kind: "活动预告 ⭐5 翠 / ⭐4 日向 / ⭐3 千秋·奏汰", start: "", end: "", waitTxt: "预告 · 10-31 开启（精确时间待官方公告）", note: "主线第七章 AREA07 同日公开", src: "日服情报微博 @EnsembleStars" },
+  ];
+  function actPad(n) { return n < 10 ? "0" + n : "" + n; }
+  function actDur(ms) {
+    if (ms <= 0) return "已结束";
+    const d = Math.floor(ms / 86400000);
+    const h = Math.floor((ms % 86400000) / 3600000);
+    const m = Math.floor((ms % 3600000) / 60000);
+    const s = Math.floor((ms % 60000) / 1000);
+    if (d > 0) return d + " 天 " + h + " 小时 " + m + " 分 " + s + " 秒";
+    if (h > 0) return h + " 小时 " + m + " 分 " + s + " 秒";
+    if (m > 0) return m + " 分 " + s + " 秒";
+    return s + " 秒";
+  }
+  function actFmt(t) {
+    const dt = new Date(t);
+    if (isNaN(dt.getTime())) return "";
+    return actPad(dt.getMonth() + 1) + "-" + actPad(dt.getDate()) + " " + actPad(dt.getHours()) + ":" + actPad(dt.getMinutes());
+  }
+  let actTimer = null;
+  function renderAct() {
+    const body = $("actBody");
+    if (!body) return;
+    const now = Date.now();
+    let html = `<div class="empty2" style="margin-bottom:8px">实时显示国服/日服活动剩余时间（每秒自动刷新，已过活动自动标记）。数据均来自官方/情报号公告，见每条来源。</div>`;
+    ["国服", "日服"].forEach((sv) => {
+      const items = ES_SCHED.filter((a) => a.sv === sv);
+      if (!items.length) return;
+      html += `<div class="act-sv-hd">${esc(sv)}</div>`;
+      items.forEach((a) => {
+        const st = a.start ? new Date(a.start).getTime() : null;
+        const ed = a.end ? new Date(a.end).getTime() : null;
+        let bar = "", cls = " wait", timeTxt = a.startTxt || "";
+        if (st !== null && ed !== null) {
+          if (now < st) {
+            bar = `<div class="act-cd up">距开启：${actDur(st - now)}</div>`;
+            cls = " up";
+            timeTxt = `${a.startTxt} → ${a.endTxt}`;
+          } else if (now <= ed) {
+            bar = `<div class="act-cd on">剩余：${actDur(ed - now)}</div>`;
+            cls = " on";
+            timeTxt = `${a.startTxt} → ${a.endTxt}`;
+          } else {
+            bar = `<div class="act-cd off">已结束</div>`;
+            cls = " off";
+            timeTxt = `${a.startTxt} → ${a.endTxt}`;
+          }
+        } else if (ed !== null && now <= ed) {
+          bar = `<div class="act-cd on">剩余：${actDur(ed - now)}</div>`;
+          cls = " on";
+          timeTxt = `${a.startTxt || ""} → ${a.endTxt}`;
+        } else {
+          bar = `<div class="act-cd wait">${a.waitTxt || "时间待官方公告"}</div>`;
+          cls = " wait";
+        }
+        html += `<div class="act-card ${cls}">
+          <div class="act-name">${esc(a.name)} <span class="act-kind">${esc(a.kind)}</span></div>
+          <div class="act-time">${esc(timeTxt)}</div>
+          ${bar}
+          <div class="act-src">${esc(a.note ? a.note + " · " : "")}来源：${esc(a.src)}</div>
+        </div>`;
+      });
+    });
+    body.innerHTML = html;
+  }
+  function actTick() {
+    if (actTimer) return;
+    actTimer = setInterval(() => {
+      const body = $("actBody");
+      if (body && !body.closest("section").hidden) renderAct();
+    }, 1000);
+  }
+  actTick();
 
   // —— 按偶像选歌 ——
   const songSel = new Set();
@@ -4872,7 +4982,7 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
 
   // —— 初始化 ——
   function init() {
-    $("libVer").textContent = "v2.9.40";
+    $("libVer").textContent = "v2.9.41";
     buildMobileNav();
     // 手机端「确定搜索」初始位置：右侧列表区域悬浮（用户指定），可拖动
     if (IS_MOBILE) {
