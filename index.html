@@ -173,6 +173,14 @@ body {
 .jp-title { font-size: 15px; font-weight: 700; }
 .jp-note { font-size: 13px; color: var(--txt2); line-height: 1.6; }
 
+/* 卡池排期：日服参考卡图 */
+.sched-imgs { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; box-shadow: 0 1px 3px rgba(23,26,48,.05); }
+.sched-imgs-hd { font-size: 13px; font-weight: 700; color: var(--acc2); margin-bottom: 8px; }
+.sched-imgs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+.sched-img-fig { margin: 0; display: flex; flex-direction: column; gap: 5px; }
+.sched-img-fig img { width: 100%; border-radius: 8px; border: 1px solid var(--line); background: #f2f3f7; display: block; }
+.sched-img-fig figcaption { font-size: 11.5px; color: var(--txt3); line-height: 1.5; }
+
 /* 万象棋 */
 .wz-wrap { display: flex; flex-direction: column; gap: 12px; }
 .wz-sec { font-size: 15px; font-weight: 700; color: var(--acc2); margin: 10px 0 4px; }
@@ -864,7 +872,7 @@ html.es-darkfix canvas {
     <header class="top">
       <div class="top-title">
         <span>偶像梦幻祭 · 资料库</span>
-        <span class="ver" id="libVer">v2.9.38</span>
+        <span class="ver" id="libVer">v2.9.39</span>
       </div>
       <input type="text" class="search" id="libSearch" placeholder="搜索卡名 / 角色 / 卡池…" />
       <span class="top-btns">
@@ -2961,6 +2969,9 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
 
   // —— 版本日志（与 pet.js / CHANGELOG.md 同步）——
   const CHANGELOG = [
+    { ver: "2.9.39", date: "2026-10-27", items: [
+      "卡池排期页新增「日服最新卡池参考图」：3 张代表性卡面（乱凪砂 Solo 曲 FLOWERY ERA 宣传视觉、⭐5 乱凪砂 卡面、个衣3 立绘），来源：日服情报微博 @EnsembleStars 10-24/10-25 公告",
+    ] },
     { ver: "2.9.38", date: "2026-10-27", items: [
       "歌曲搜索新增自选排序：可选手动「最新优先 / 最旧优先 / 自动」（自动=三人红月模式老歌优先、其余最新在前），以及「类型优先：默认 / 组合 / 非组合」调整分组显示顺序",
     ] },
@@ -3301,7 +3312,20 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
     const G = window.EsGacha;
     if (!G) { $("schedList").innerHTML = `<div class="empty2">数据未加载</div>`; return; }
     const list = $("schedList");
-    let html = `<div class="empty2" style="margin-bottom:10px">国服近期卡池与活动排期（来源：官方公告；未来条目为日服进度推测）</div>`;
+    // 日服最新卡池参考图（代表性卡面，来源：日服情报微博 @EnsembleStars 10-24/10-25 公告；图片每日刷新）
+    const jpImgs = [
+      { src: "/es-web/assets/cards/jp_brightup_solo.jpg", cap: "乱凪砂 个衣3 Solo曲『FLOWERY ERA』宣传视觉（10-25 发布）" },
+      { src: "/es-web/assets/cards/jp_nagisa_card.jpg", cap: "⭐5 乱凪砂 卡面（Bright me up!! 招募 Stage:凪砂，10-25 开启）" },
+      { src: "/es-web/assets/cards/jp_nagisa_sd.jpg", cap: "乱凪砂 个衣3 立绘（日服公告配图，10-24 发布）" },
+    ];
+    let html = `<div class="empty2" style="margin-bottom:10px">国服近期卡池与活动排期（来源：官方公告；未来条目为日服进度推测）</div>
+      <div class="sched-imgs">
+        <div class="sched-imgs-hd">日服最新卡池参考（来源：日服情报微博 @EnsembleStars）</div>
+        <div class="sched-imgs-grid">`;
+    jpImgs.forEach((im) => {
+      html += `<figure class="sched-img-fig"><img src="${im.src}" alt="${esc(im.cap)}" loading="lazy" referrerpolicy="no-referrer"><figcaption>${esc(im.cap)}</figcaption></figure>`;
+    });
+    html += `</div></div>`;
     (G.allSchedule ? G.allSchedule() : []).forEach((s) => {
       const y = s.startDate ? s.startDate.getFullYear() : "";
       const ey = s.endDate ? s.endDate.getFullYear() : y;
@@ -4845,7 +4869,7 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
 
   // —— 初始化 ——
   function init() {
-    $("libVer").textContent = "v2.9.38";
+    $("libVer").textContent = "v2.9.39";
     buildMobileNav();
     // 手机端「确定搜索」初始位置：右侧列表区域悬浮（用户指定），可拖动
     if (IS_MOBILE) {
