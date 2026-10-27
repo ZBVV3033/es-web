@@ -354,6 +354,9 @@ body {
 .rel-unit.dorm { color: #0e8a5f; }
 .rel-unit.hist { color: #c2410c; }
 .rel-unit.cls { color: #1d4ed8; }
+.rel-unit.council { color: #b91c1c; }
+.rel-unit.school { color: #0e7490; }
+.rel-unit.osana { color: #be185d; }
 .rel-sec-hd { margin: 14px 0 2px; font-size: 12.5px; font-weight: 800; letter-spacing: .5px; color: #9aa1b4; border-bottom: 1px solid #edf0f5; padding-bottom: 4px; }
 .rel-desc { font-size: 12px; color: #8a91a6; margin: 2px 0 4px; }
 .song-list { display: flex; flex-direction: column; gap: 10px; }
@@ -851,7 +854,7 @@ html.es-darkfix canvas {
     <header class="top">
       <div class="top-title">
         <span>偶像梦幻祭 · 资料库</span>
-        <span class="ver" id="libVer">v2.9.33</span>
+        <span class="ver" id="libVer">v2.9.34</span>
       </div>
       <input type="text" class="search" id="libSearch" placeholder="搜索卡名 / 角色 / 卡池…" />
       <span class="top-btns">
@@ -1764,8 +1767,25 @@ html.es-darkfix canvas {
     { name: "生物俱乐部（陆地生物）", desc: "宠物情报交换，去牧场动物园", mem: ["仁兔成鸣", "日日树涉", "明星昴流", "大神晃牙", "真白友也"] },
     { name: "ES讲座（茨塾）", desc: "七种茨主办，游戏式补习", mem: ["HiMERU", "七种茨", "逆先夏目", "南云铁虎", "春川宙"] },
     { name: "ES讲座（敬人塾）", desc: "莲巳敬人主办，杂学补习带茶点", mem: ["莲巳敬人", "伏见弓弦", "影片美伽", "天城一彩", "白鸟蓝良"] },
-    { name: "「浪漫戏剧」剧团", desc: "日日树涉主导，自制服装道具演剧", mem: ["月永雷欧", "莲巳敬人", "乱凪砂", "斋宫宗", "日日树涉", "冰鹰北斗", "逆先夏目", "鸣上岚", "真白友也"] },
-    { name: "梦之咲学生会（现任）", desc: "现任学生会，会长姬宫桃李，成员紫之创、白鸟蓝良、仙石忍、朱樱司", mem: ["姬宫桃李", "紫之创", "白鸟蓝良", "仙石忍", "朱樱司"] }
+    { name: "「浪漫戏剧」剧团", desc: "日日树涉主导，自制服装道具演剧", mem: ["月永雷欧", "莲巳敬人", "乱凪砂", "斋宫宗", "日日树涉", "冰鹰北斗", "逆先夏目", "鸣上岚", "真白友也"] }
+  ];
+  // —— 梦之咲学生会（官方设定，历任 + 现任成员，职务按官方档案）——
+  const ES_STUDENT_COUNCIL = { name: "梦之咲学生会", desc: "历任与现任：前前前会长朔间零，前前会长天祥院英智，前会长衣更真绪，副会长莲巳敬人，现任会长姬宫桃李，现任成员紫之创、白鸟蓝良、仙石忍、朱樱司", mem: ["朔间零", "天祥院英智", "衣更真绪", "莲巳敬人", "姬宫桃李", "紫之创", "白鸟蓝良", "仙石忍", "朱樱司"] };
+  // —— 出身学校（官方设定，只写出身学校不写年级）——
+  const ES_SCHOOLS = [
+    { name: "玲明学园", mem: ["巴日和", "涟纯", "风早巽", "HiMERU"] },
+    { name: "秀越学园", mem: ["七种茨", "乱凪砂"] }
+  ];
+  // —— 幼驯染 / 亲属（官方资料明确标注，非社区称呼）——
+  const ES_OSANA_NAJIMI = [
+    { a: "天祥院英智", b: "莲巳敬人", tag: "幼驯染" },
+    { a: "衣更真绪", b: "朔间凛月", tag: "幼驯染" },
+    { a: "三毛缟斑", b: "深海奏汰", tag: "幼驯染" },
+    { a: "鬼龙红郎", b: "斋宫宗", tag: "幼驯染" },
+    { a: "巴日和", b: "乱凪砂", tag: "幼驯染" },
+    { a: "逆先夏目", b: "青叶纺", tag: "幼驯染" },
+    { a: "伏见弓弦", b: "姬宫桃李", tag: "幼驯染" },
+    { a: "樱河琥珀", b: "朱樱司", tag: "亲属" }
   ];
   // —— 星奏馆寝室分配（官方宿舍图）—— 楼层 → 房间 → 成员（规范中文名）
   const ES_DORMS = [
@@ -1832,10 +1852,10 @@ html.es-darkfix canvas {
     return { formal, shuffle, other };
   }
 
-  // 关系网聚合：四类关系（组合 / 历史正式组合 / 圈子 / 寝室 / 元班级），只返回与已选成员相关的部分
+  // 关系网聚合：多类关系（组合 / 历史正式组合 / 圈子 / 寝室 / 元班级 / 学生会 / 出身学校 / 幼驯染），只返回与已选成员相关的部分
   function buildRelationGroups(selArr) {
     const sel = new Set(selArr || []);
-    const out = { units: [], hist: [], circles: [], dorms: [], classes: [] };
+    const out = { units: [], hist: [], circles: [], dorms: [], classes: [], council: null, schools: [], osana: [] };
     // 组合（沿用 buildIdolGroups 的分组结果：当前正式组合）
     (buildIdolGroups() || []).forEach((g) => {
       const inSel = g.idols.filter((id) => sel.has(id));
@@ -1868,8 +1888,23 @@ html.es-darkfix canvas {
       if (!hit.length) return;
       out.classes.push({ name: c.name, members: c.mem, hit: new Set(hit) });
     });
+    // 梦之咲学生会（历任 + 现任）
+    const scHit = ES_STUDENT_COUNCIL.mem.filter((m) => sel.has(m));
+    if (scHit.length) out.council = { name: ES_STUDENT_COUNCIL.name, desc: ES_STUDENT_COUNCIL.desc, members: ES_STUDENT_COUNCIL.mem, hit: new Set(scHit) };
+    // 出身学校
+    ES_SCHOOLS.forEach((s) => {
+      const hit = s.mem.filter((m) => sel.has(m));
+      if (!hit.length) return;
+      out.schools.push({ name: s.name, members: s.mem, hit: new Set(hit) });
+    });
+    // 幼驯染 / 亲属（两人配对）
+    ES_OSANA_NAJIMI.forEach((p) => {
+      const hit = [p.a, p.b].filter((m) => sel.has(m));
+      if (!hit.length) return;
+      out.osana.push({ name: p.a + " × " + p.b, tag: p.tag, members: [p.a, p.b], hit: new Set(hit) });
+    });
     // 优先显示有重合部分的：每个分区内按已选成员命中数降序（多人重合的分组排前面）
-    [out.units, out.hist, out.circles, out.dorms, out.classes].forEach((arr) => arr.sort((a, b) => b.hit.size - a.hit.size));
+    [out.units, out.hist, out.circles, out.dorms, out.classes, out.schools, out.osana].forEach((arr) => arr.sort((a, b) => b.hit.size - a.hit.size));
     return out;
   }
 
@@ -1924,6 +1959,9 @@ html.es-darkfix canvas {
     ES_DORMS,
     ES_CLASSES,
     ES_HIST_UNITS,
+    ES_STUDENT_COUNCIL,
+    ES_SCHOOLS,
+    ES_OSANA_NAJIMI,
     CATS,
     CAT_ORDER,
     autoCat,
@@ -3522,17 +3560,20 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
     const old = document.getElementById("relNetBox");
     if (old) old.remove();
     if (!sel.length) return;
-    const rel = window.PetShared ? PetShared.buildRelationGroups(sel) : { units: [], hist: [], circles: [], dorms: [], classes: [] };
+    const rel = window.PetShared ? PetShared.buildRelationGroups(sel) : { units: [], hist: [], circles: [], dorms: [], classes: [], council: null, schools: [], osana: [] };
     const mapped = new Set();
     rel.units.forEach((u) => u.hit.forEach((m) => mapped.add(m)));
     rel.hist.forEach((h) => h.hit.forEach((m) => mapped.add(m)));
     rel.circles.forEach((c) => c.hit.forEach((m) => mapped.add(m)));
     rel.dorms.forEach((d) => d.hit.forEach((m) => mapped.add(m)));
     rel.classes.forEach((c) => c.hit.forEach((m) => mapped.add(m)));
+    if (rel.council) rel.council.hit.forEach((m) => mapped.add(m));
+    rel.schools.forEach((s) => s.hit.forEach((m) => mapped.add(m)));
+    rel.osana.forEach((o) => o.hit.forEach((m) => mapped.add(m)));
     const unmapped = sel.filter((m) => !mapped.has(m));
     const chip = (mem, hit) => mem.map((m) => `<span${hit.has(m) ? ' class="me"' : ""}>${esc(m)}</span>`).join("");
     let html = `<div class="rel-title">关系网 · 已选 ${sel.length} 位偶像</div>
-      <div class="rel-sub">粉色高亮为已选成员，同组合 / 同圈子 / 同寝室 / 同班成员一并展示</div>`;
+      <div class="rel-sub">粉色高亮为已选成员，同组合 / 同圈子 / 同寝室 / 同班 / 同校 / 学生会成员一并展示</div>`;
     if (rel.units.length) {
       html += `<div class="rel-sec-hd">组合（UNIT）</div>`;
       rel.units.forEach((u) => {
@@ -3546,6 +3587,11 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
         html += `<div class="rel-unit hist">${esc(h.name)}<span class="rel-cnt">${h.members.length} 人</span></div>
           <div class="rel-mem">${chip(h.members, h.hit)}</div>`;
       });
+    }
+    if (rel.council) {
+      html += `<div class="rel-sec-hd">梦之咲学生会</div>`;
+      html += `<div class="rel-unit council">${esc(rel.council.name)}<span class="rel-cnt">${rel.council.members.length} 人</span></div>
+        <div class="rel-desc">${esc(rel.council.desc)}</div><div class="rel-mem">${chip(rel.council.members, rel.council.hit)}</div>`;
     }
     if (rel.circles.length) {
       html += `<div class="rel-sec-hd">兴趣圈子（サークル）</div>`;
@@ -3568,11 +3614,25 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
           <div class="rel-mem">${chip(c.members, c.hit)}</div>`;
       });
     }
+    if (rel.schools.length) {
+      html += `<div class="rel-sec-hd">出身学校</div>`;
+      rel.schools.forEach((s) => {
+        html += `<div class="rel-unit school">${esc(s.name)}<span class="rel-cnt">${s.members.length} 人</span></div>
+          <div class="rel-mem">${chip(s.members, s.hit)}</div>`;
+      });
+    }
+    if (rel.osana.length) {
+      html += `<div class="rel-sec-hd">幼驯染 / 亲属</div>`;
+      rel.osana.forEach((o) => {
+        html += `<div class="rel-unit osana">${esc(o.name)}<span class="rel-cnt">${esc(o.tag)}</span></div>
+          <div class="rel-mem">${chip(o.members, o.hit)}</div>`;
+      });
+    }
     if (unmapped.length) {
       html += `<div class="rel-sec-hd">未归入常规组合</div><div class="rel-mem">${unmapped.map((m) => `<span class="me">${esc(m)}</span>`).join("")}</div>`;
     }
-    if (!rel.units.length && !rel.hist.length && !rel.circles.length && !rel.dorms.length && !rel.classes.length) {
-      html += `<div class="rel-sub">暂未匹配到组合 / 圈子 / 寝室 / 班级关系</div>`;
+    if (!rel.units.length && !rel.hist.length && !rel.circles.length && !rel.dorms.length && !rel.classes.length && !rel.council && !rel.schools.length && !rel.osana.length) {
+      html += `<div class="rel-sub">暂未匹配到组合 / 圈子 / 寝室 / 班级 / 学生会 / 学校 / 幼驯染关系</div>`;
     }
     const mask = document.createElement("div");
     mask.id = "relNetBox";
@@ -4663,7 +4723,7 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
 
   // —— 初始化 ——
   function init() {
-    $("libVer").textContent = "v2.9.33";
+    $("libVer").textContent = "v2.9.34";
     buildMobileNav();
     // 手机端「确定搜索」初始位置：右侧列表区域悬浮（用户指定），可拖动
     if (IS_MOBILE) {
