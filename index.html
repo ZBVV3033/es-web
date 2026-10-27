@@ -722,6 +722,38 @@ html.es-darkfix canvas {
   .acc-preview { flex: none; width: 38%; text-align: center; }
   .acc-preview-img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,.15); display: block; }
   .acc-preview-name { font-size: 12px; color: var(--txt2); margin-top: 4px; }
+  /* —— 账号页（v2.9.43 重构：账号→偶像两级）—— */
+  .acc-topbar { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+  .acc-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .acc-chip { min-height: 32px; font-size: 12.5px; padding: 4px 12px; border: 1px solid var(--line2); border-radius: 999px; background: #fff; color: var(--txt); cursor: pointer; }
+  .acc-chip em { font-style: normal; font-size: 11px; color: var(--txt3); margin-left: 4px; }
+  .acc-chip.active { background: var(--acc); color: #fff; border-color: var(--acc); }
+  .acc-chip.active em { color: rgba(255,255,255,.8); }
+  .acc-chip.add { border-style: dashed; }
+  .acc-chip.import { position: relative; }
+  .acc-chargrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .acc-char { display: flex; flex-direction: column; gap: 4px; background: #fff; border: 1px solid var(--line2); border-radius: 12px; padding: 8px; cursor: pointer; text-align: left; }
+  .acc-char-img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 8px; background: var(--bg); }
+  .acc-char-noimg { width: 100%; aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center; background: var(--bg); border-radius: 8px; color: var(--txt3); font-size: 12px; }
+  .acc-char-name { font-size: 14px; font-weight: 700; }
+  .acc-char-num { font-size: 11.5px; color: var(--txt3); }
+  .acc-back { font-size: 13px; color: var(--acc2); cursor: pointer; padding: 4px 0 8px; font-weight: 700; }
+  .acc-char-title { font-size: 17px; font-weight: 800; margin-bottom: 4px; }
+  .acc-char-title em { font-style: normal; font-size: 12px; color: var(--txt3); font-weight: 400; margin-left: 8px; }
+  .acc-char-tools { display: flex; gap: 8px; margin: 12px 0 4px; flex-wrap: wrap; }
+  .acc-addform { background: var(--bg2); border: 1px solid var(--line2); border-radius: 10px; padding: 10px; margin-top: 8px; display: flex; flex-direction: column; gap: 8px; }
+  .acc-addform-title { font-size: 13.5px; font-weight: 700; }
+  .acc-addform label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--txt2); }
+  .acc-addform input, .acc-addform select { min-height: 36px; border: 1px solid var(--line2); border-radius: 8px; padding: 4px 8px; font-size: 13px; background: #fff; color: var(--txt); }
+  .acc-item.editing { position: relative; }
+  .acc-del { position: absolute; top: 4px; right: 4px; width: 24px; height: 24px; border-radius: 50%; border: none; background: rgba(220,38,38,.9); color: #fff; font-size: 13px; cursor: pointer; line-height: 1; z-index: 2; }
+  .acc-info-box { margin-top: 12px; background: var(--bg2); border: 1px solid var(--line2); border-radius: 10px; }
+  .acc-info-box summary { cursor: pointer; padding: 10px 12px; font-size: 13.5px; font-weight: 700; user-select: none; list-style: none; }
+  .acc-info-box summary::-webkit-details-marker { display: none; }
+  .acc-info-box summary::before { content: "⚙ "; }
+  .acc-edit2 { display: flex; flex-direction: column; gap: 8px; padding: 0 12px 12px; }
+  .acc-edit2 label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--txt2); }
+  .acc-edit2 input { min-height: 36px; border: 1px solid var(--line2); border-radius: 8px; padding: 4px 8px; font-size: 13px; background: #fff; color: var(--txt); }
   .acc-mv-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 0; flex: 1; min-width: 0; }
   .acc-mv-grid .acc-item-img { aspect-ratio: 3 / 4; }
   .acc-item { cursor: pointer; }
@@ -913,7 +945,7 @@ html.es-darkfix canvas {
     <header class="top">
       <div class="top-title">
         <span>偶像梦幻祭 · 资料库</span>
-        <span class="ver" id="libVer">v2.9.42</span>
+        <span class="ver" id="libVer">v2.9.43</span>
       </div>
       <input type="text" class="search" id="libSearch" placeholder="搜索卡名 / 角色 / 卡池…" />
       <span class="top-btns">
@@ -3064,6 +3096,18 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
 
   // —— 版本日志（与 pet.js / CHANGELOG.md 同步）——
   const CHANGELOG = [
+    { ver: "2.9.43", date: "2026-10-28", items: [
+      "账号页全面重构：由原来「一页堆全部账号」改为「账号 → 偶像」两级浏览（顶部账号切换栏，账号内卡面按偶像分类，点偶像进详情页预览/编辑）",
+      "偶像详情页：该偶像的五星卡与 MV 服装分栏展示，点卡面可放大预览；「编辑卡面」可逐卡删除、添加新卡（选择类型：五星 / 服装）",
+      "账号信息编辑收纳为折叠区，可保存昵称/区服/登录账号/密码、导出数据包、删除账号；导入数据包功能保留",
+      "不影响「服装」页的 MV 服装预览功能（账号卡面与服装预览独立）",
+    ], detail: [
+      "· 账号页顶部为账号切换栏（横向 chips）：点账号名切换、＋添加、导入数据包；手机端横向排布不占空间",
+      "· 账号总览：该账号全部卡面按偶像分类成卡片（偶像缩略图 + 五星数 + 服装数），点偶像进入详情页",
+      "· 偶像详情页：五星卡 / MV 服装两个分区，点卡面放大预览；「编辑卡面」打开编辑态：每张卡右上角 ✕ 删除，底部表单添加（类型/卡名/图片链接）",
+      "· 账号信息（昵称/区服/账号/密码）收纳在底部折叠「账号信息 · 编辑」：保存 / 导出数据包 / 删除账号",
+      "· 数据兼容：原 localStorage 数据（es_acc_v3）与新数据包格式不变，导入导出无缝；「服装」页 MV 服装预览功能不受影响",
+    ] },
     { ver: "2.9.42", date: "2026-10-27", items: [
       "更新日志新增「详细版」：近几版可点开查看更细的变更内容（v2.9.41 起共 6 版带详细说明）",
       "每个页面顶部新增「使用说明」折叠区：选歌 / 主页各页签 / 设置 / 万象棋 / 术语表都有对应用法说明，点开即看",
@@ -4511,8 +4555,9 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
     if (tab) tab.hidden = !accHelpOn();
     if (!accHelpOn() && $("view-acc") && !$("view-acc").hidden) switchEsView("enc");
   }
-  let accEditId = "";
-  let accPwShow = {};
+  let accCurId = "";
+  let accCurChar = "";
+  let accCharEdit = false;
 
   // —— MV 服装 · 更换服装（两级：第一级=偶像更换服装主页面，第二级=点服装弹出的详细预览；数据统一格式） ——
   const MV_CHARS = [
@@ -4754,118 +4799,205 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
     t._tm = setTimeout(() => t.classList.remove("on"), 1500);
   }
   function renderAcc() {
-    const list = accLoad();
     const box = $("accList");
     if (!box) return;
-    box.innerHTML = "";
-    // —— 账号页顶部工具栏：无论有没有账号都显示 ——
-    box.innerHTML += `<div class="acc-toolbar">
-      <button type="button" class="acc-btn primary" data-acc-add>＋ 添加账号</button>
-      <label class="acc-btn">导入数据包<input type="file" class="of-pack" accept=".txt,.json,text/plain,application/json" hidden data-acc-pack-import="__all__" /></label>
+    const list = accLoad();
+    if (!accCurId || !list.some((x) => x.id === accCurId)) accCurId = list.length ? list[0].id : "";
+    const a = list.find((x) => x.id === accCurId) || null;
+    let html = "";
+    // 顶部：账号切换栏 + 添加 / 导入
+    html += `<div class="acc-topbar">
+      <div class="acc-chips">
+        ${list.map((x) => `<button type="button" class="acc-chip${x.id === accCurId ? " active" : ""}" data-acc-pick="${escAttr(x.id)}">${esc(x.label || "账号")}${x.server ? `<em>${esc(x.server)}</em>` : ""}</button>`).join("")}
+        <button type="button" class="acc-chip add" data-acc-add>＋ 添加</button>
+        <label class="acc-chip import">导入数据包<input type="file" class="of-pack" accept=".txt,.json,text/plain,application/json" hidden data-acc-pack-import="__all__" /></label>
+      </div>
     </div>`;
-    if (!list.length) {
-      box.innerHTML += `<div class="acc-empty-tip">还没有账号：点「导入数据包」选择 .txt 数据包（含账号、五星卡、MV 服装），或点「添加账号」手动录入。</div>`;
+    if (!a) {
+      html += `<div class="acc-empty-tip">还没有账号：点「＋ 添加」手动录入账号，或「导入数据包」选择 .txt / .json 数据包（含账号、五星卡、MV 服装）。</div>`;
+      box.innerHTML = html;
+      accBind(box, null, "");
+      return;
     }
-    list.forEach((a, ai) => {
-      const g = document.createElement("div");
-      g.className = "acc-group";
-      const showPw = !!accPwShow[a.id];
-      const editing = accEditId === a.id;
-      const help = accHelpOn();
-      // 标题：开账号帮助=昵称+区服；关=账号N（自定义名称）
-      const title = help ? `${esc(a.label)}<span class="acc-server">${esc(a.server || "")}</span>` : `账号${ai + 1}（${esc(a.label)}）`;
-      let html = `<div class="acc-head">
-          <span class="acc-title">${title}</span>
-          <span class="acc-row">
-            ${help ? `<button type="button" class="acc-btn" data-acc-edit="${escAttr(a.id)}">${editing ? "收起" : "编辑账号"}</button>` : ""}
-          </span>
-        </div>`;
-      if (help && editing) {
-        html += `<div class="acc-edit">
-          <label>账号昵称</label><input id="ed-label" value="${escAttr(a.label)}" />
-          <label>区服</label><input id="ed-server" value="${escAttr(a.server || "")}" />
-          <label>账号</label><input id="ed-user" value="${escAttr(a.user || "")}" />
-          <label>密码</label><input id="ed-pass" type="text" value="${escAttr(a.pass || "")}" />
-          <label>总五星卡（每行：偶像 | 卡名 | 图片链接，可留空）</label>
-          <textarea id="ed-stars">${esc((a.stars || []).map((s) => [s.char || "", s.name || "", s.img || ""].join("|")).join("\n"))}</textarea>
-          <div class="ed-actions">
-            <button type="button" class="acc-btn primary" data-acc-save="${escAttr(a.id)}">保存</button>
-            <button type="button" class="acc-btn" data-acc-pack-export="${escAttr(a.id)}">导出数据包</button>
-            <label class="acc-btn">导入数据包<input type="file" class="of-pack" accept=".txt,.json,text/plain,application/json" hidden data-acc-pack-import="${escAttr(a.id)}" /></label>
-            <button type="button" class="acc-btn" data-acc-cancel>取消</button>
-          </div>
-        </div>`;
-      } else if (help) {
-        html += `<div class="acc-info">
-          区服：${esc(a.server || "—")}<br/>
-          账号：${esc(a.user || "—")}<br/>
-          密码：<span class="pw">${showPw ? esc(a.pass || "—") : "••••••"}</span>
-          <button type="button" class="acc-btn" data-acc-pw="${escAttr(a.id)}">${showPw ? "隐藏" : "显示"}</button>
-        </div>`;
-      }
-      // 总五星：按偶像统计 + 卡面网格（与帮助开关无关）
-      const stMap = {};
-      (a.stars || []).forEach((s) => { const k = s.char || "未标注"; stMap[k] = (stMap[k] || 0) + 1; });
-      const stKeys = Object.keys(stMap);
-      if ((a.stars || []).length) {
-        html += `<div class="enc-sec">总五星（${(a.stars || []).length}）</div>
-          <div class="acc-stats">${stKeys.map((k) => `<span class="acc-stat">${esc(k)}<b>${stMap[k]}</b></span>`).join("")}</div>
-          <div class="acc-grid">`;
-        (a.stars || []).forEach((s) => {
-          html += `<div class="acc-item">
-            ${s.img ? `<img class="acc-item-img" src="${escAttr(s.img)}" alt="" data-zoom="${escAttr(s.img)}" />` : `<div class="acc-empty">无卡面</div>`}
-            <div class="acc-item-name">${esc(s.name || "未命名")}${s.char ? `<br/>${esc(s.char)}` : ""}</div>
+    if (accCurChar) {
+      // ===== 偶像详情页：该偶像的卡面分类 =====
+      const char = accCurChar;
+      const stars = (a.stars || []).filter((s) => (s.char || "") === char);
+      const role = (a.roles || []).find((r) => (r.name || "") === char);
+      const outfits = role ? (role.outfits || []) : [];
+      html += `<div class="acc-back" data-acc-back>← 返回账号总览</div>
+        <div class="acc-char-title">${esc(char)}<em>${esc(a.label || "")} · 五星 ${stars.length} · 服装 ${outfits.length}</em></div>`;
+      if (stars.length) {
+        html += `<div class="enc-sec">五星卡（${stars.length}）</div><div class="acc-grid">`;
+        stars.forEach((s, i) => {
+          html += `<div class="acc-item${accCharEdit ? " editing" : ""}">
+            ${s.img ? `<img class="acc-item-img" src="${escAttr(s.img)}" alt="" loading="lazy" data-zoom="${escAttr(s.img)}" />` : `<div class="acc-empty">无卡面</div>`}
+            <div class="acc-item-name">${esc(s.name || "未命名")}</div>
+            ${accCharEdit ? `<button type="button" class="acc-del" data-acc-del-star="${i}" aria-label="删除">✕</button>` : ""}
           </div>`;
         });
         html += `</div>`;
       }
-      g.innerHTML = html;
-      box.appendChild(g);
-    });
-    // —— 账号编辑 ——
-    box.querySelectorAll("[data-acc-edit]").forEach((b) => b.onclick = () => { accEditId = accEditId === b.dataset.accEdit ? "" : b.dataset.accEdit; renderAcc(); });
-    box.querySelectorAll("[data-acc-pw]").forEach((b) => b.onclick = () => { accPwShow[b.dataset.accPw] = !accPwShow[b.dataset.accPw]; renderAcc(); });
-    box.querySelectorAll("[data-acc-cancel]").forEach((b) => b.onclick = () => { accEditId = ""; renderAcc(); });
-    box.querySelectorAll("[data-acc-save]").forEach((b) => b.onclick = () => {
-      const grp = b.closest(".acc-group");
-      const list2 = accLoad();
-      const a = list2.find((x) => x.id === b.dataset.accSave);
-      if (!a) return;
-      a.label = (grp.querySelector("#ed-label") || {}).value || a.label;
-      a.server = (grp.querySelector("#ed-server") || {}).value || "";
-      a.user = (grp.querySelector("#ed-user") || {}).value || "";
-      a.pass = (grp.querySelector("#ed-pass") || {}).value || "";
-      const stTxt = (grp.querySelector("#ed-stars") || {}).value || "";
-      a.stars = stTxt.split("\n").map((line) => line.trim()).filter(Boolean).map((line) => {
-        const parts = line.split("|");
-        return { char: (parts[0] || "").trim(), name: (parts[1] || "").trim(), img: (parts[2] || "").trim() };
+      if (outfits.length) {
+        html += `<div class="enc-sec">MV 服装（${outfits.length}）</div><div class="acc-grid">`;
+        outfits.forEach((o, i) => {
+          html += `<div class="acc-item${accCharEdit ? " editing" : ""}">
+            ${o.img ? `<img class="acc-item-img" src="${escAttr(o.img)}" alt="" loading="lazy" data-zoom="${escAttr(o.img)}" />` : `<div class="acc-empty">无卡面</div>`}
+            <div class="acc-item-name">${esc(o.name || "未命名")}</div>
+            ${accCharEdit ? `<button type="button" class="acc-del" data-acc-del-outfit="${i}" aria-label="删除">✕</button>` : ""}
+          </div>`;
+        });
+        html += `</div>`;
+      }
+      if (!stars.length && !outfits.length) html += `<div class="acc-empty-tip">${esc(char)} 还没有卡面，点下方「编辑卡面」添加。</div>`;
+      html += `<div class="acc-char-tools">
+        <button type="button" class="acc-btn primary" data-acc-char-edit>${accCharEdit ? "完成" : "编辑卡面"}</button>
+        <label class="acc-btn">导入该账号<input type="file" class="of-pack" accept=".txt,.json,text/plain,application/json" hidden data-acc-pack-import="${escAttr(a.id)}" /></label>
+      </div>`;
+      if (accCharEdit) {
+        html += `<div class="acc-addform">
+          <div class="acc-addform-title">添加卡面 · ${esc(char)}</div>
+          <label>类型<select id="accNewType"><option value="star">五星卡</option><option value="outfit">MV 服装</option></select></label>
+          <label>卡名 / 服装名<input id="accNewName" placeholder="如：天翔KAGETSU / 千紫万红" /></label>
+          <label>图片链接<input id="accNewImg" placeholder="https://…（可留空）" /></label>
+          <button type="button" class="acc-btn primary" data-acc-add-item>添加</button>
+        </div>`;
+      }
+      box.innerHTML = html;
+      accBind(box, a, char);
+      return;
+    }
+    // ===== 账号总览：按偶像分类 =====
+    const charMap = {};
+    (a.stars || []).forEach((s) => { const k = s.char || "未标注"; (charMap[k] = charMap[k] || { stars: 0, outfits: 0, img: "" }); charMap[k].stars++; if (!charMap[k].img && s.img) charMap[k].img = s.img; });
+    (a.roles || []).forEach((r) => { const k = r.name || "未标注"; const n = (charMap[k] = charMap[k] || { stars: 0, outfits: 0, img: "" }); n.outfits += (r.outfits || []).length; if (!n.img && r.outfits && r.outfits[0] && r.outfits[0].img) n.img = r.outfits[0].img; });
+    const charKeys = Object.keys(charMap);
+    if (charKeys.length) {
+      html += `<div class="enc-sec">${esc(a.label || "")} · 卡面按偶像分类（${charKeys.length} 位）</div><div class="acc-chargrid">`;
+      charKeys.forEach((k) => {
+        const c = charMap[k];
+        html += `<button type="button" class="acc-char" data-acc-char="${escAttr(k)}">
+          ${c.img ? `<img class="acc-char-img" src="${escAttr(c.img)}" alt="" loading="lazy" />` : `<div class="acc-char-noimg">无图</div>`}
+          <span class="acc-char-name">${esc(k)}</span>
+          <span class="acc-char-num">五星 ${c.stars} · 服装 ${c.outfits}</span>
+        </button>`;
       });
-      accSave(list2);
-      accEditId = "";
-      renderAcc();
-    });
-    // —— 数据包：导出 / 导入（txt 文本格式，账号密码仅存本机）——
+      html += `</div>`;
+    } else {
+      html += `<div class="acc-empty-tip">账号「${esc(a.label || "")}」还没有卡面：点上方偶像名进入详情页编辑添加，或用数据包导入。</div>`;
+    }
+    // 账号信息：编辑 / 导出 / 删除
+    html += `<details class="acc-info-box"><summary>账号信息 · 编辑</summary>
+      <div class="acc-edit2">
+        <label>账号昵称<input id="ed-label" value="${escAttr(a.label || "")}" /></label>
+        <label>区服<input id="ed-server" value="${escAttr(a.server || "")}" /></label>
+        <label>登录账号<input id="ed-user" value="${escAttr(a.user || "")}" /></label>
+        <label>密码<input id="ed-pass" type="text" value="${escAttr(a.pass || "")}" /></label>
+        <div class="ed-actions">
+          <button type="button" class="acc-btn primary" data-acc-save="${escAttr(a.id)}">保存账号信息</button>
+          <button type="button" class="acc-btn" data-acc-pack-export="${escAttr(a.id)}">导出数据包</button>
+          <button type="button" class="acc-btn" data-acc-del-acc="${escAttr(a.id)}">删除账号</button>
+        </div>
+      </div>
+    </details>`;
+    box.innerHTML = html;
+    accBind(box, a, "");
+  }
+
+  function accBind(box, a, char) {
+    if (!box) return;
+    // 切账号
+    box.querySelectorAll("[data-acc-pick]").forEach((b) => b.onclick = () => { accCurId = b.dataset.accPick; accCurChar = ""; accCharEdit = false; renderAcc(); });
+    // 添加账号
     box.querySelectorAll("[data-acc-add]").forEach((b) => b.onclick = () => {
       const list2 = accLoad();
       const na = { id: "a" + Date.now() + Math.random().toString(16).slice(2, 6), label: "新账号", server: "", user: "", pass: "", note: "", stars: [], roles: [] };
-      list2.push(na);
-      accSave(list2);
-      accEditId = na.id;
+      list2.push(na); accSave(list2);
+      accCurId = na.id; accCurChar = ""; accCharEdit = false;
       renderAcc();
     });
+    // 返回总览
+    box.querySelectorAll("[data-acc-back]").forEach((b) => b.onclick = () => { accCurChar = ""; accCharEdit = false; renderAcc(); });
+    // 进入偶像详情
+    box.querySelectorAll("[data-acc-char]").forEach((b) => b.onclick = () => { accCurChar = b.dataset.accChar; accCharEdit = false; renderAcc(); });
+    // 编辑开关
+    box.querySelectorAll("[data-acc-char-edit]").forEach((b) => b.onclick = () => { accCharEdit = !accCharEdit; renderAcc(); });
+    // 删除五星卡
+    box.querySelectorAll("[data-acc-del-star]").forEach((b) => b.onclick = () => {
+      const list2 = accLoad();
+      const ac = list2.find((x) => x.id === accCurId);
+      if (!ac || !char) return;
+      const i = Number(b.dataset.accDelStar);
+      const arr = (ac.stars || []).filter((s) => (s.char || "") === char);
+      const idx = ac.stars.indexOf(arr[i]);
+      if (idx >= 0) ac.stars.splice(idx, 1);
+      accSave(list2); renderAcc();
+    });
+    // 删除服装
+    box.querySelectorAll("[data-acc-del-outfit]").forEach((b) => b.onclick = () => {
+      const list2 = accLoad();
+      const ac = list2.find((x) => x.id === accCurId);
+      if (!ac || !char) return;
+      const i = Number(b.dataset.accDelOutfit);
+      const role = (ac.roles || []).find((r) => (r.name || "") === char);
+      if (role) { (role.outfits || []).splice(i, 1); if (!role.outfits.length) ac.roles = ac.roles.filter((r) => r !== role); }
+      accSave(list2); renderAcc();
+    });
+    // 添加卡面
+    box.querySelectorAll("[data-acc-add-item]").forEach((b) => b.onclick = () => {
+      const list2 = accLoad();
+      const ac = list2.find((x) => x.id === accCurId);
+      if (!ac || !char) return;
+      const type = (box.querySelector("#accNewType") || {}).value || "star";
+      const name = (box.querySelector("#accNewName") || {}).value || "";
+      const img = (box.querySelector("#accNewImg") || {}).value || "";
+      if (!name) { if (window.alert) window.alert("请填写卡名 / 服装名"); return; }
+      if (type === "star") {
+        if (!Array.isArray(ac.stars)) ac.stars = [];
+        if (!ac.stars.some((s) => s.char === char && s.name === name)) ac.stars.push({ char: char, name: name, img: img });
+      } else {
+        if (!Array.isArray(ac.roles)) ac.roles = [];
+        let r = ac.roles.find((y) => y.name === char);
+        if (!r) { r = { id: "r" + Date.now() + Math.random().toString(16).slice(2, 7), name: char, outfits: [] }; ac.roles.push(r); }
+        if (!r.outfits.some((o) => o.name === name)) r.outfits.push({ name: name, img: img, star: 0 });
+      }
+      accSave(list2); renderAcc();
+    });
+    // 保存账号信息
+    box.querySelectorAll("[data-acc-save]").forEach((b) => b.onclick = () => {
+      const list2 = accLoad();
+      const ac = list2.find((x) => x.id === b.dataset.accSave);
+      if (!ac) return;
+      ac.label = (box.querySelector("#ed-label") || {}).value || ac.label;
+      ac.server = (box.querySelector("#ed-server") || {}).value || "";
+      ac.user = (box.querySelector("#ed-user") || {}).value || "";
+      ac.pass = (box.querySelector("#ed-pass") || {}).value || "";
+      accSave(list2); renderAcc();
+    });
+    // 导出数据包
     box.querySelectorAll("[data-acc-pack-export]").forEach((b) => b.onclick = () => {
       const list2 = accLoad();
-      const a = list2.find((x) => x.id === b.dataset.accPackExport);
-      if (!a) return;
-      const txt = accToTxt([a]);
+      const ac = list2.find((x) => x.id === b.dataset.accPackExport);
+      if (!ac) return;
+      const txt = accToTxt([ac]);
       const blob = new Blob(["\ufeff" + txt], { type: "text/plain;charset=utf-8" });
       const url = URL.createObjectURL(blob);
       const aEl = document.createElement("a");
       aEl.href = url;
-      aEl.download = (a.label || "账号") + "-数据.txt";
+      aEl.download = (ac.label || "账号") + "-数据.txt";
       aEl.click();
       setTimeout(() => URL.revokeObjectURL(url), 2000);
     });
+    // 删除账号
+    box.querySelectorAll("[data-acc-del-acc]").forEach((b) => b.onclick = () => {
+      if (!window.confirm) return;
+      if (!window.confirm("确认删除该账号及其全部卡面数据？此操作不可恢复。")) return;
+      const list2 = accLoad().filter((x) => x.id !== b.dataset.accDelAcc);
+      accSave(list2);
+      accCurId = ""; accCurChar = ""; accCharEdit = false;
+      renderAcc();
+    });
+    // 导入数据包
     box.querySelectorAll("[data-acc-pack-import]").forEach((input) => input.onchange = () => {
       const f = input.files && input.files[0];
       if (!f) return;
@@ -4875,7 +5007,6 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
         try {
           const text = rd.result;
           if (aid === "__all__") {
-            // 整体导入：一个数据包可含多个账号（按「账号」行切分）
             if (text.charAt(0) === "{") {
               const p = JSON.parse(text);
               const accs = (p && p.accounts) || [p];
@@ -4889,7 +5020,6 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
             } else {
               accMergePack(text);
             }
-            renderAcc();
           } else {
             if (text.charAt(0) === "{") {
               const p = JSON.parse(text);
@@ -4897,15 +5027,15 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
             } else {
               accMergeTxt(text, aid);
             }
-            accEditId = "";
-            renderAcc();
           }
+          accCurChar = ""; accCharEdit = false;
+          renderAcc();
         } catch (e) { if (window.alert) window.alert("数据包解析失败：" + e.message); }
       };
       rd.readAsText(f);
       input.value = "";
     });
-    // —— 服装图点击放大 ——
+    // 卡面放大
     box.querySelectorAll("[data-zoom]").forEach((img) => img.onclick = () => openZoom(img.dataset.zoom));
   }
 
@@ -5090,7 +5220,7 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
 
   // —— 初始化 ——
   function init() {
-    $("libVer").textContent = "v2.9.42";
+    $("libVer").textContent = "v2.9.43";
     buildMobileNav();
     // 手机端「确定搜索」初始位置：右侧列表区域悬浮（用户指定），可拖动
     if (IS_MOBILE) {
