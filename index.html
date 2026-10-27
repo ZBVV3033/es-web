@@ -202,6 +202,26 @@ body {
 .act-cd.off { color: var(--txt3); font-weight: 600; }
 .act-src { font-size: 11.5px; color: var(--txt3); line-height: 1.5; }
 
+/* 页面使用说明（每页顶部折叠） */
+.page-help {
+  background: #fff; border: 1px solid var(--line); border-radius: 10px;
+  margin-bottom: 10px; box-shadow: 0 1px 3px rgba(23,26,48,.05);
+}
+.page-help summary {
+  cursor: pointer; padding: 9px 14px; font-size: 13px; font-weight: 700;
+  color: var(--acc2); user-select: none; list-style: none;
+}
+.page-help summary::-webkit-details-marker { display: none; }
+.page-help summary::before { content: "📖 "; }
+.page-help[open] summary { border-bottom: 1px solid var(--line); }
+.page-help-body { padding: 10px 14px 12px; font-size: 13px; color: var(--txt); line-height: 1.75; }
+.page-help-body p { margin: 4px 0; }
+.page-help-body b { color: var(--acc2); }
+/* 日志详细版 */
+.log-detail { margin: -2px 0 10px; }
+.log-detail summary { cursor: pointer; font-size: 12.5px; color: var(--acc2); font-weight: 700; padding: 4px 0; user-select: none; }
+.log-detail-list { margin-top: 4px; }
+
 /* 万象棋 */
 .wz-wrap { display: flex; flex-direction: column; gap: 12px; }
 .wz-sec { font-size: 15px; font-weight: 700; color: var(--acc2); margin: 10px 0 4px; }
@@ -893,7 +913,7 @@ html.es-darkfix canvas {
     <header class="top">
       <div class="top-title">
         <span>偶像梦幻祭 · 资料库</span>
-        <span class="ver" id="libVer">v2.9.41</span>
+        <span class="ver" id="libVer">v2.9.42</span>
       </div>
       <input type="text" class="search" id="libSearch" placeholder="搜索卡名 / 角色 / 卡池…" />
       <span class="top-btns">
@@ -907,6 +927,18 @@ html.es-darkfix canvas {
       <main class="content">
         <!-- 偶像梦幻祭 -->
         <section class="page" id="page-es" hidden>
+        <details class="page-help"><summary>使用说明（点开）</summary>
+          <div class="page-help-body">
+            <p><b>服装</b>：点偶像切换服装（两级：偶像列表 → 点服装看预览），点右上角「换」/「放大」看图。</p>
+            <p><b>图鉴</b>：左侧选角色，右侧看卡面 / 服装 / 个人情报；点卡面可放大。</p>
+            <p><b>五星时间线</b>：按时间列出全部 ★5 卡，可筛选组合 / 类型。</p>
+            <p><b>日服情报</b>：日服最新活动 / 招募 / 卡池 / 个衣情报，来源：日服情报微博 @EnsembleStars 与小红书 @yuou，每条附原文链接可溯源。</p>
+            <p><b>卡池排期</b>：国服近期卡池与活动排期（顶部为日服最新卡池参考图）；标注「日服推测」的条目为按日服进度的推断，非官方排期。</p>
+            <p><b>活动计时</b>：国服 / 日服当前活动实时倒计时（秒级刷新），结束后自动标记「已结束」；日服待官方精确时间的条目会显示「待公告」。</p>
+            <p><b>账号</b>：在「设置」开启「账号帮助」后显示，记录各账号与所持卡（仅保存在本机浏览器）。</p>
+          </div>
+        </details>
+
           <div class="es-tabs">
             <button type="button" class="es-tab" data-view="acc" id="esTabAcc" hidden>账号</button>
             <button type="button" class="es-tab" data-view="mv">服装</button>
@@ -952,6 +984,19 @@ html.es-darkfix canvas {
 
         <!-- 按偶像选歌 -->
         <section class="page" id="page-songs">
+          <details class="page-help"><summary>使用说明（点开）</summary>
+            <div class="page-help-body">
+              <p><b>选人</b>：输入偶像名 / 组合名（支持中 / 日 / 英文）后回车直接选中，或在下方列表点选；可多选。</p>
+              <p><b>多选规则</b>：优先显示 ≥2 位所选偶像同台的曲目；若没有 2 人同台曲，优先显示所选偶像的非组合曲（不会出现 0 首）。</p>
+              <p><b>过滤</b>：全部 / 组合 / solo / 非组合 / 全员；MV 类型：游戏内可选 / 2D·其他。</p>
+              <p><b>排序</b>：自动（开启三人红月模式=老歌优先，否则最新在前）/ 最新优先 / 最旧优先。</p>
+              <p><b>类型优先</b>：默认（非组合→组合→2D→solo）/ 组合 / 非组合，调整分组显示顺序。</p>
+              <p><b>关系网</b>：在「设置」开启「关系网」后，选 2 人及以上出现「关系网」按钮，弹窗展示组合 / 历史组合 / 圈子 / 寝室 / 元班级。</p>
+              <p><b>站位</b>：歌曲卡片底部 5 格站位（C 位 ★），点格可编辑 / 拖拽换位；在「设置」可导出站位数据。</p>
+              <p><b>卡片</b>：点歌曲卡片可看详情（封面 / 成员 / 站位）；卡片显示原名 + 译名标签。</p>
+            </div>
+          </details>
+
           <div class="song-mode-row">
             <span class="sm-wrap">
               <button type="button" class="sm-btn on" data-sm="simple">简单模式</button>
@@ -1001,12 +1046,37 @@ html.es-darkfix canvas {
 
         <!-- 版本日志 -->
         <section class="page" id="page-log" hidden>
+          <details class="page-help"><summary>使用说明（点开）</summary>
+            <div class="page-help-body">
+              <p><b>显示设置</b>：账号帮助、关系网开关、三人红月模式、屏蔽模式、站位导出——全部保存在本机浏览器（localStorage），换设备不共享。</p>
+              <p><b>三人红月模式</b>：开启后滝维吹归入「其他角色」，选歌优先显示 2024-12 以前（天翔KAGETSU 之前）的老歌。</p>
+              <p><b>屏蔽模式</b>：可屏蔽偶像或组合（正式组合 → 洗牌/企划 → 其他），被屏蔽者的相关曲目不再出现在选歌结果。</p>
+              <p><b>编辑站位</b>：在歌曲卡片底部编辑站位后，点「导出站位」复制数据发回，可固化进曲库。</p>
+              <p><b>版本日志</b>：每版更新摘要；近几版可点「详细版」展开查看更细的变更内容。</p>
+              <p><b>数据来源</b>：曲目 / 卡池 / 卡面 / 服装 / 时间线均来自官网 ensemble-stars.jp、官方公告与情报号，未编造。</p>
+            </div>
+          </details>
+
           <div class="log-wrap" id="logBody"></div>
         </section>
         <section class="page" id="page-wz" hidden>
+          <details class="page-help"><summary>使用说明（点开）</summary>
+            <div class="page-help-body">
+              <p><b>王者万象棋</b>：游戏模式攻略速查页——更新要点 / 棋手调整 / 系统更新 / 活动日历 / 玩法入口 / 钻石狂潮规则与速查。</p>
+              <p>数据按版本更新，与官方公告同步；「活动日历」会标注进行中 / 未开始 / 已结束。</p>
+            </div>
+          </details>
+
           <div class="log-wrap" id="wzBody"></div>
         </section>
         <section class="page" id="page-term" hidden>
+          <details class="page-help"><summary>使用说明（点开）</summary>
+            <div class="page-help-body">
+              <p><b>术语表</b>：偶像梦幻祭常用术语，按分组浏览（中文名 / 日文名 / 说明 / 来源）。</p>
+              <p>来源均标注于每条卡片底部，可据此核对原文。</p>
+            </div>
+          </details>
+
           <div class="log-wrap" id="termGroups"></div>
         </section>
       </main>
@@ -2994,23 +3064,58 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
 
   // —— 版本日志（与 pet.js / CHANGELOG.md 同步）——
   const CHANGELOG = [
+    { ver: "2.9.42", date: "2026-10-27", items: [
+      "更新日志新增「详细版」：近几版可点开查看更细的变更内容（v2.9.41 起共 6 版带详细说明）",
+      "每个页面顶部新增「使用说明」折叠区：选歌 / 主页各页签 / 设置 / 万象棋 / 术语表都有对应用法说明，点开即看",
+    ], detail: [
+      "· 版本日志：近 6 版（2.9.41 活动计时 / 2.9.40 网易云译名 / 2.9.39 卡池参考图 / 2.9.38 排序 / 2.9.37 单选修复 / 2.9.36 日服情报）新增「详细版」折叠，展开可看逐条细项；无详细内容的旧版本不显示按钮",
+      "· 每页使用说明：主页（服装/图鉴/五星时间线/日服情报/卡池排期/活动计时/账号）、选歌页（选人/多选规则/过滤/排序/类型优先/关系网/站位/卡片）、设置页（显示设置/三人红月/屏蔽/站位导出/数据来源）、王者万象棋、术语表",
+      "· 说明默认折叠不占位置，点「使用说明」展开；样式适配手机端",
+    ] },
     { ver: "2.9.41", date: "2026-10-27", items: [
       "新增「活动计时」页：国服/日服活动实时倒计时（剩余 X天X小时X分X秒，每秒刷新），国服 3 档进行中活动（夜色狂想→11-04 22:00、WELCOME优雅之旅→11-16 24:00、万圣节特别活动2026→11-19 24:00，官方公告时间）；日服万圣节活动进行中 + 2wink VS 流星队招募/活动预告（待官方精确时间后补全倒计时），每条标来源",
+    ], detail: [
+      "· 主页新增「活动计时」页签（位于「卡池排期」右侧）",
+      "· 国服 3 档活动为官方公告精确时间：特别通告 · 夜色狂想 10-24 12:00→11-04 22:00（⭐5 巴日和）；WELCOME・优雅之旅 10-24 12:00→11-16 24:00；万圣节特别活动2026 10-27 12:00→11-19 24:00（5 人天使服装限定工作）",
+      "· 每条活动显示：名称+类型+起止时间+实时剩余（秒级刷新）+来源；结束后自动变灰标记「已结束」",
+      "· 日服：万圣节活动 2026 官网确认进行中（结束时间待官方公告）；招募/活动「2wink VS 流星队」预告 10-30/10-31 开启（⭐5 裕太/⭐5 翠，精确时间待公告后补倒计时）",
+      "· 所有时间均来自官方公告 / 情报号，无编造；来源标注在每条卡片底部",
     ] },
     { ver: "2.9.40", date: "2026-10-27", items: [
       "歌曲中文译名换成网易云正式歌名（24 首）：生硬直译/音译的译名（如「哇恰加纳多？→ワチャガナドゥ？」「愚蠢的外星人→Foolish Alien」「伤疤→SCAB」「=EYE=→Eye」「丝→糸」等）按网易云显示的正式歌名修正",
+    ], detail: [
+      "· 批量核对网易云音乐中 ES 歌曲的正式歌名：网易云对偶像梦幻祭歌曲基本保留日文/英文原名",
+      "· 24 首「难绷」译名还原为网易云正式歌名，举例：ワチャガナドゥ？（原音译「哇恰加纳多？」）、Foolish Alien、SCAB、One with One、Or the Beautiful Golden Drop、君恋志願、糸（原「丝」）、=EYE=→Eye（网易云写作 Eye）、Noisy:Beep、RAMBLING MOON、Stranger's Sun 等",
+      "· 卡片仍显示「原名 + 译名标签」，译名即网易云正式歌名；天翔KAGETSU / 流星花火 补全 cn 字段",
+      "· 替换采用逐条局部替换（n 作唯一锚点），歌曲总数 336 不变，脚本验证 26/26 命中",
     ] },
     { ver: "2.9.39", date: "2026-10-27", items: [
       "卡池排期页新增「日服最新卡池参考图」：3 张代表性卡面（乱凪砂 Solo 曲 FLOWERY ERA 宣传视觉、⭐5 乱凪砂 卡面、个衣3 立绘），来源：日服情报微博 @EnsembleStars 10-24/10-25 公告",
+    ], detail: [
+      "· 卡池排期页顶部新增图片区，3 张均为日服最新卡池/个衣相关的代表性卡面，已上传 GitHub assets/cards 并验证可访问",
+      "· 图片下方标注说明与来源（日服情报微博 @EnsembleStars 公告日期）",
+      "· 后续日服新卡池/个衣情报会持续更新该图片区",
     ] },
     { ver: "2.9.38", date: "2026-10-27", items: [
       "歌曲搜索新增自选排序：可选手动「最新优先 / 最旧优先 / 自动」（自动=三人红月模式老歌优先、其余最新在前），以及「类型优先：默认 / 组合 / 非组合」调整分组显示顺序",
+    ], detail: [
+      "· 选歌页工具栏新增「排序」：自动 / 最新优先 / 最旧优先；自动 = 开启三人红月模式时老歌优先（天翔KAGETSU 之前），其余最新在前",
+      "· 新增「类型优先」：默认（非组合→组合→2D→solo）/ 组合（组合曲最前）/ 非组合（非组合曲最前）",
+      "· 两套控件在高级/列表模式均生效，选择结果即时重排",
     ] },
     { ver: "2.9.37", date: "2026-10-27", items: [
       "修复单选偶像选歌的过滤 bug：单选 1 位偶像时也错误地只显示「非组合曲」，导致红月等组合曲（如天翔KAGETSU）被过滤掉；现在单选显示该偶像的全部曲目（组合曲＋非组合曲＋solo），三人红月模式下搜敬人也能看到红月的歌",
+    ], detail: [
+      "· 根因：单选 1 位偶像时误走「多选兜底」逻辑（先找 ≥2 人同台歌曲→无→只留非组合曲），红月组合曲被过滤光",
+      "· 修复：单选直接显示该偶像全部曲目（songSel.size === 1 分支），多选逻辑不变",
+      "· node 模拟验证：含/不含维吹两种三人红月模式下，搜敬人天翔KAGETSU 均出现",
     ] },
     { ver: "2.9.36", date: "2026-10-27", items: [
       "日服情报新增「小红书 @yuou」来源条目：乱凪砂 个衣3（服装/发型/异色/SPP『Graceful Punishment』/抽卡动画/卡池情报）、朱樱司 个衣3 CG、活动＆招募预告、巡演预告、个衣卡池预告（2026-10-24~10-27 发布，每条带笔记链接）",
+    ], detail: [
+      "· 日服情报页新增小红书 @yuou（9.5 万粉丝）来源的情报条目，每条附笔记链接可溯源",
+      "· 内容覆盖：乱凪砂 个衣3（服装/发型/异色/SPP/抽卡动画/卡池）、朱樱司 个衣3 CG、活动＆招募预告、巡演预告、个衣卡池预告",
+      "· 情报发布时间 2026-10-24~10-27，后续将持续同步更新",
     ] },
     { ver: "2.9.29", date: "2026-10-27", items: [
       "关系网按钮改为 2 人及以上即可显示（原 3 人以上），设置开关开启后生效",
@@ -4843,6 +4948,9 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
     CHANGELOG.forEach((v) => {
       html += `<div class="log-ver">v${esc(v.ver)}<span class="log-date">${esc(v.date)}</span></div>
         <ul class="log-items">${v.items.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>`;
+      if (v.detail && v.detail.length) {
+        html += `<details class="log-detail"><summary>详细版（${v.detail.length} 条）</summary><ul class="log-items log-detail-list">${v.detail.map((i) => `<li>${esc(i)}</li>`).join("")}</ul></details>`;
+      }
     });
     body.innerHTML = html;
     const tg = $("accHelpToggle");
@@ -4982,7 +5090,7 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
 
   // —— 初始化 ——
   function init() {
-    $("libVer").textContent = "v2.9.41";
+    $("libVer").textContent = "v2.9.42";
     buildMobileNav();
     // 手机端「确定搜索」初始位置：右侧列表区域悬浮（用户指定），可拖动
     if (IS_MOBILE) {
