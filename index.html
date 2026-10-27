@@ -851,7 +851,7 @@ html.es-darkfix canvas {
     <header class="top">
       <div class="top-title">
         <span>偶像梦幻祭 · 资料库</span>
-        <span class="ver" id="libVer">v2.9.32</span>
+        <span class="ver" id="libVer">v2.9.33</span>
       </div>
       <input type="text" class="search" id="libSearch" placeholder="搜索卡名 / 角色 / 卡池…" />
       <span class="top-btns">
@@ -1868,6 +1868,8 @@ html.es-darkfix canvas {
       if (!hit.length) return;
       out.classes.push({ name: c.name, members: c.mem, hit: new Set(hit) });
     });
+    // 优先显示有重合部分的：每个分区内按已选成员命中数降序（多人重合的分组排前面）
+    [out.units, out.hist, out.circles, out.dorms, out.classes].forEach((arr) => arr.sort((a, b) => b.hit.size - a.hit.size));
     return out;
   }
 
@@ -4661,7 +4663,7 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
 
   // —— 初始化 ——
   function init() {
-    $("libVer").textContent = "v2.9.32";
+    $("libVer").textContent = "v2.9.33";
     buildMobileNav();
     // 手机端「确定搜索」初始位置：右侧列表区域悬浮（用户指定），可拖动
     if (IS_MOBILE) {
