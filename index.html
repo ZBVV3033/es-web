@@ -864,7 +864,7 @@ html.es-darkfix canvas {
     <header class="top">
       <div class="top-title">
         <span>偶像梦幻祭 · 资料库</span>
-        <span class="ver" id="libVer">v2.9.36</span>
+        <span class="ver" id="libVer">v2.9.37</span>
       </div>
       <input type="text" class="search" id="libSearch" placeholder="搜索卡名 / 角色 / 卡池…" />
       <span class="top-btns">
@@ -2949,6 +2949,9 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
 
   // —— 版本日志（与 pet.js / CHANGELOG.md 同步）——
   const CHANGELOG = [
+    { ver: "2.9.37", date: "2026-10-27", items: [
+      "修复单选偶像选歌的过滤 bug：单选 1 位偶像时也错误地只显示「非组合曲」，导致红月等组合曲（如天翔KAGETSU）被过滤掉；现在单选显示该偶像的全部曲目（组合曲＋非组合曲＋solo），三人红月模式下搜敬人也能看到红月的歌",
+    ] },
     { ver: "2.9.36", date: "2026-10-27", items: [
       "日服情报新增「小红书 @yuou」来源条目：乱凪砂 个衣3（服装/发型/异色/SPP『Graceful Punishment』/抽卡动画/卡池情报）、朱樱司 个衣3 CG、活动＆招募预告、巡演预告、个衣卡池预告（2026-10-24~10-27 发布，每条带笔记链接）",
     ] },
@@ -3467,19 +3470,24 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
       list = S.filter((s) => s.t !== "all");
       if (songSel.size) {
         const sel = Array.from(songSel).map(normIdol);
-        // 多选：优先显示 ≥2 位所选偶像同台的曲目（2 人=共同出演）
-        const co2 = list.filter((s) => {
-          let cnt = 0;
-          for (const id of s.i) if (sel.includes(normIdol(id)) && ++cnt >= 2) return true;
-          return false;
-        });
-        if (co2.length) {
-          list = co2;
+        const mine = list.filter((s) => s.i.some((id) => sel.includes(normIdol(id))));
+        if (songSel.size === 1) {
+          // 单人选：显示所有含该偶像的曲目（组合曲＋非组合曲＋solo），不做非组合优先（否则红月等组合曲会被过滤掉）
+          list = mine;
         } else {
-          // 完全没有 2 人同台的曲目：优先显示所选偶像出演的非组合曲（兜底，避免 0 首）
-          const mine = list.filter((s) => s.i.some((id) => sel.includes(normIdol(id))));
-          const noUnit = mine.filter((s) => songKind(s) !== "unit" && songKind(s) !== "all");
-          list = noUnit.length ? noUnit : mine;
+          // 多选：优先显示 ≥2 位所选偶像同台的曲目（2 人=共同出演）
+          const co2 = list.filter((s) => {
+            let cnt = 0;
+            for (const id of s.i) if (sel.includes(normIdol(id)) && ++cnt >= 2) return true;
+            return false;
+          });
+          if (co2.length) {
+            list = co2;
+          } else {
+            // 完全没有 2 人同台的曲目：优先显示所选偶像出演的非组合曲（兜底，避免 0 首）
+            const noUnit = mine.filter((s) => songKind(s) !== "unit" && songKind(s) !== "all");
+            list = noUnit.length ? noUnit : mine;
+          }
         }
       }
       // 「组合曲」含跨组合多组合曲（排最前）；「非组合曲」不含纯组合曲
@@ -4782,7 +4790,7 @@ window.ES_SONGS = [{"n":"RED GARDEN","u":"fine","i":["天祥院英智","日日�
 
   // —— 初始化 ——
   function init() {
-    $("libVer").textContent = "v2.9.36";
+    $("libVer").textContent = "v2.9.37";
     buildMobileNav();
     // 手机端「确定搜索」初始位置：右侧列表区域悬浮（用户指定），可拖动
     if (IS_MOBILE) {
