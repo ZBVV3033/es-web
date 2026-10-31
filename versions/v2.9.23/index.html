@@ -294,15 +294,6 @@ body {
 .song-mvtag.nomv { background: #f2f2f6; color: #6b7280; border: 1px solid #9ca3af; }
 /* 歌曲封面左上角颜色标签（参考图样式：四色底块） */
 .song-cover-wrap { position: relative; flex: none; }
-.song-cover-wrap[data-col="red"] { background: #e5484d; }
-.song-cover-wrap[data-col="green"] { background: #30a46c; }
-.song-cover-wrap[data-col="yellow"] { background: #f5a623; }
-.song-cover-wrap[data-col="blue"] { background: #3b82f6; }
-.song-cover-wrap[data-col="red"]::after, .song-cover-wrap[data-col="green"]::after, .song-cover-wrap[data-col="yellow"]::after, .song-cover-wrap[data-col="blue"]::after {
-  content: ""; position: absolute; inset: 0; border-radius: 10px;
-  background: linear-gradient(135deg, rgba(255,255,255,.28) 0%, rgba(255,255,255,0) 42%);
-  pointer-events: none;
-}
 .song-col-tag { position: absolute; left: -5px; top: -5px; width: 15px; height: 15px; border-radius: 5px; border: 2px solid #fff; box-shadow: 0 1px 3px rgba(0,0,0,.28); }
 .song-col-tag.red { background: #e5484d; }
 .song-col-tag.green { background: #30a46c; }
