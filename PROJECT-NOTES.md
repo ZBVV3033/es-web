@@ -16,17 +16,17 @@
 | 项目 | 值 |
 |---|---|
 | 线上主地址 | https://zbvv3033.github.io/es-web/ |
-| 版本归档地址 | https://zbvv3033.github.io/es-web/versions/v2.9.22/ |
+| 版本归档地址 | https://zbvv3033.github.io/es-web/versions/v2.9.24/ |
 | GitHub 仓库 | https://github.com/ZBVV3033/es-web （公开仓库） |
-| 当前版本 | **v2.9.22**（文件 546562 bytes，根 index.html 与 versions/v2.9.22/ 内容一致） |
+| 当前版本 | **v2.9.24**（文件 2781554 bytes，根 index.html 与 versions/v2.9.24/ 内容一致） |
 | 歌曲总数 | 336 首（window.ES_SONGS 数组） |
 
 ---
 
 ## 2. 工程文件与环境
 
-- **权威源文件（本地 Windows）**：`D:\1w\1\es-web-latest.html`（546562 bytes，与线上一致）
-- **云主机工作目录**：`/home/user/Doubao/chats/38448183619118338/es-web-latest.html`（同一文件）
+- **权威源文件（本地 Windows）**：`D:\1w\1\es-web-latest.html`（2781554 bytes，与线上一致；含站位头像/分队渲染）
+- **云主机工作目录**：`/home/user/Doubao/chats/38448183619118338/es-web-latest.html`（同一文件，v2.9.24）
 - **GitHub 仓库克隆**：`/home/user/Doubao/chats/38448183619118338/_repo/`（根 index.html = 线上主版本）
 - **工程结构**：单文件 HTML = HTML 框架 + `<style>` 样式区 + 8 段 `<script>` 功能代码 + 中部 `window.ES_SONGS` 数据数组
 - **封面图**：GitHub 仓库 `assets/covers/cover_000.jpg ~ cover_257.jpg`（258 张），HTML 内仅存相对路径
@@ -67,8 +67,11 @@
 ## 4. 已实现功能清单
 
 - 歌曲列表（336 首）+ 封面 + 组合 + 成员 + 国服译名
+- **站位头像**（v2.9.24 新增）：193 首带站位歌曲卡片显示圆形角色头像（按号位排：中1·左2·右1·左1·右2，右下角号位角标）；12 首多组合合唱曲超 5 人自动分两队两行显示（每队自己的站位+队名标签，数据 `s.stTeams`）
+- **站位数据源表**：STARMAKER 80 / COSMIC 77 / NEW DIMENSION 63（合并写 195 首 ES_SONGS + 13 首 ES_STANDS_EXTRA）；OTHER / Rhythm Link 表未录入
+- **头像包**：用户提供 idolicon.zip 59 个角色头像（base64 内嵌 `window.ES_HEADS`，44 个站位角色名映射 `window.ES_HEAD_NAME`）
 - 搜索框（搜歌名/成员/组合）
-- 站位显示与站位搜索框（`#libPosSearch`，52 首国服站位）
+- 贴贴显示与搜索框（`#libPosSearch`，52 首国服译名贴贴数据，来源小红书号 5311066953；注意 pos=贴贴 与 st=站位 是两套独立数据）
 - 歌曲详情弹层（点封面放大、作词/作曲/编曲/来源链接）
 - 类型标签（游戏内/2D 等）、版本号显示
 - 移动端适配、Electron 暗色反制
