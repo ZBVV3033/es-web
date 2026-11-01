@@ -452,7 +452,7 @@ html.es-darkfix canvas {
     .tl-filter { min-height: 40px; font-size: 13px; padding: 6px 10px; }
     /* 确定搜索：悬浮在画面中间靠右，可拖动，不遮挡顶部 UI */
     #songGo {
-      position: fixed; right: 14px; top: 42%; z-index: 120;
+      position: fixed; right: 14px; bottom: 96px; z-index: 120;
       min-height: 44px; font-size: 14px; padding: 8px 26px;
       box-shadow: 0 3px 12px rgba(0,0,0,.35);
       white-space: nowrap;
@@ -723,7 +723,47 @@ html.es-darkfix canvas {
     .mv-preview { width: 100%; }
     .mv-grid { max-height: none; grid-template-columns: repeat(4, 1fr); }
   }
-  </style>
+  
+  /* —— v2.9.25 关系网 —— */
+  .song-rel-btn {
+    flex: none; padding: 5px 14px; border-radius: 999px;
+    border: 1px solid rgba(139,92,246,.5); background: rgba(139,92,246,.08);
+    color: #7c3aed; font-size: 12.5px; font-weight: 700; cursor: pointer; line-height: 1.5;
+  }
+  .song-rel-btn:hover { background: rgba(139,92,246,.18); }
+  .rel-mask { position: fixed; inset: 0; background: rgba(10,14,24,.55); display: flex; align-items: center; justify-content: center; z-index: 300; padding: 14px; }
+  .rel-box { background: #fff; border-radius: 16px; max-width: 640px; width: 100%; max-height: 82vh; overflow: auto; padding: 16px 16px 20px; box-shadow: 0 10px 40px rgba(0,0,0,.25); position: relative; }
+  .rel-close { position: absolute; top: 10px; right: 12px; width: 30px; height: 30px; border-radius: 50%; border: 0; background: rgba(0,0,0,.06); font-size: 14px; cursor: pointer; }
+  .rel-title { font-size: 17px; font-weight: 800; margin-bottom: 4px; padding-right: 34px; }
+  .rel-sub { font-size: 12.5px; color: #5b6478; margin-bottom: 10px; }
+  .rel-sec-hd { font-size: 12px; font-weight: 800; color: #7c3aed; margin: 14px 0 2px; border-bottom: 1px solid rgba(139,92,246,.2); padding-bottom: 3px; }
+  .rel-unit { margin: 12px 0 4px; font-size: 13.5px; font-weight: 800; color: #2563c9; }
+  .rel-unit .rel-cnt { font-weight: 400; font-size: 12px; color: #8a91a6; margin-left: 6px; }
+  .rel-desc { font-size: 12px; color: #6b7280; margin: 2px 0; }
+  .rel-mem { display: flex; flex-wrap: wrap; gap: 6px; }
+  .rel-chip { display: inline-flex; align-items: center; gap: 5px; background: #eef2f7; padding: 3px 10px 3px 5px; border-radius: 999px; font-size: 12.5px; color: #232a3d; }
+  .rel-chip.me { background: rgba(240,0,160,.14); border: 1px solid rgba(240,0,160,.45); color: #232a3d; font-weight: 700; }
+  .rel-head { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; vertical-align: middle; }
+
+/* ===== v2.9.26 使用教程 ===== */
+.tut-btn-row { display: flex; justify-content: flex-end; margin: 8px 0 2px; }
+.tut-btn { border: 1px solid rgba(240,0,160,.35); background: #fff; color: #d60a7b; border-radius: 14px; padding: 5px 14px; font-size: 13px; cursor: pointer; flex: none; }
+.tut-btn:hover { background: rgba(240,0,160,.08); }
+.tut-setrow { cursor: pointer; justify-content: space-between; }
+.tut-setrow:hover { background: rgba(240,0,160,.06); }
+.tut-setrow .set-go { color: #d60a7b; font-size: 13px; }
+.tut-mask { position: fixed; inset: 0; z-index: 130; background: rgba(10,12,24,.55); display: flex; align-items: center; justify-content: center; padding: 18px; }
+.tut-box { background: #fff; border-radius: 16px; max-width: 560px; width: 100%; max-height: 82vh; overflow-y: auto; box-shadow: 0 12px 40px rgba(0,0,0,.25); }
+.tut-head { position: sticky; top: 0; background: #fff; border-bottom: 1px solid #eef0f6; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; z-index: 2; }
+.tut-head h3 { margin: 0; font-size: 16px; color: #171a30; }
+.tut-close { border: none; background: rgba(23,26,48,.06); width: 28px; height: 28px; border-radius: 50%; font-size: 14px; color: #3c4257; cursor: pointer; line-height: 1; }
+.tut-body { padding: 6px 18px 18px; }
+.tut-sec { margin: 14px 0 0; }
+.tut-sec h4 { font-size: 14px; color: #d60a7b; margin: 0 0 6px; font-weight: 600; }
+.tut-step { font-size: 13.5px; color: #3c4257; line-height: 1.65; margin: 5px 0; padding-left: 16px; position: relative; }
+.tut-step::before { content: ""; position: absolute; left: 2px; top: 8px; width: 6px; height: 6px; border-radius: 50%; background: rgba(240,0,160,.5); }
+.tut-tip { background: #fdf0f7; border: 1px solid rgba(240,0,160,.18); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: #8a2a60; margin: 14px 0 0; }
+</style>
   <script>
 // 心情钟 · 强制暗色反制开关（仅 Electron 运行时生效）
 // 用户实际使用的 Electron 软件会在渲染层把浅色页面套成深色，
@@ -805,7 +845,7 @@ html.es-darkfix canvas {
     <header class="top">
       <div class="top-title">
         <span>偶像梦幻祭 · 资料库</span>
-        <span class="ver" id="libVer">v2.9.24</span>
+        <span class="ver" id="libVer">v2.9.26</span>
       </div>
       <input type="text" class="search" id="libSearch" placeholder="搜索卡名 / 角色 / 卡池…" />
       <span class="top-btns">
@@ -819,6 +859,7 @@ html.es-darkfix canvas {
       <main class="content">
         <!-- 偶像梦幻祭 -->
         <section class="page" id="page-es" hidden>
+<div class="tut-btn-row"><button type="button" class="tut-btn" data-tut="es">本页教程</button></div>
           <div class="es-tabs">
             <button type="button" class="es-tab" data-view="acc" id="esTabAcc" hidden>账号</button>
             <button type="button" class="es-tab" data-view="mv">服装</button>
@@ -860,6 +901,7 @@ html.es-darkfix canvas {
 
         <!-- 按偶像选歌 -->
         <section class="page" id="page-songs">
+<div class="tut-btn-row"><button type="button" class="tut-btn" data-tut="songs">本页教程</button></div>
           <div class="song-mode-row">
             <span class="sm-wrap">
               <button type="button" class="sm-btn on" data-sm="simple">简单模式</button>
@@ -867,7 +909,7 @@ html.es-darkfix canvas {
               <button type="button" class="sm-btn" data-sm="list">列表选人</button>
             </span>
           </div>
-          <div class="song-hint">输入偶像名或点选（可多选，多选=共同出演），选完点「确定搜索」。站位数据来源：小红书号 5311066953（国服译名站位），歌曲数据来源官网 Discography，未编造。</div>
+          <div class="song-hint">输入偶像名或点选（可多选，多选=共同出演），选完点「确定搜索」。站位数据来源：小红书 5311066953，歌曲数据来源官网 Discography。</div>
           <div class="song-search-box">
             <input type="text" id="libSongSearch" placeholder="输入偶像名或组合名，回车直接选中" autocomplete="off">
             <button type="button" class="song-search-clear" id="libSongSearchClear" title="清空输入" hidden>✕</button>
@@ -901,6 +943,7 @@ html.es-darkfix canvas {
               <button type="button" class="sf-btn col-btn" data-col="blue">蓝</button>
             </span>
             <span class="song-count" id="songCount"></span>
+            <button type="button" class="song-rel-btn" id="songRelBtn" hidden>关系网</button>
           </div>
           <div class="song-list" id="songList"></div>
         </section>
@@ -1592,6 +1635,90 @@ html.es-darkfix canvas {
   // 偶像按「主组合」分组：每个偶像只归入一个组合。
   // 主组合 = 该偶像参与的常规组合曲中出现次数最多的组合（跨组合合唱/翻唱不会抢走主组合），
   // 出现次数相同取 ES_UNIT_ORDER 靠前者；无法归组的进「其他角色」
+
+  // —— 关系网数据（官方资料；v2.9.25 自关系网线合并）——
+  const ES_CIRCLES = [
+    { name: "丹希厨房", desc: "椎名丹希为核心的料理圈子，制作多国料理", mem: ["椎名丹希", "濑名泉", "神崎飒马", "伏见弓弦", "七种茨"] },
+    { name: "甜品会", desc: "甜食爱好者分享自制点心与甜品店情报", mem: ["礼濑真宵", "HiMERU", "朱樱司", "樱河琥珀"] },
+    { name: "茶话会（茗味）", desc: "自由氛围的咖啡茶会，各自带来讲究的茶叶", mem: ["巴日和", "朔间凛月", "风早巽", "天祥院英智", "紫之创"] },
+    { name: "茶话会（Kaori）", desc: "轻松茶道圈子，茶室与洋间都会开茶会", mem: ["三毛缟斑", "神崎飒马", "乙狩阿多尼斯", "朱樱司", "樱河琥珀"] },
+    { name: "园艺者", desc: "种植花草蔬菜，收成提供给丹希厨房", mem: ["风早巽", "逆先夏目", "紫之创", "高峯翠", "葵日向"] },
+    { name: "武道家「心」", desc: "习武修身养性，也提供健身建议", mem: ["三毛缟斑", "守泽千秋", "鬼龙红郎", "南云铁虎", "天城一彩"] },
+    { name: "「BB」乐队", desc: "会乐器者的音乐圈子，追求音乐表现", mem: ["朔间零", "大神晃牙", "衣更真绪", "葵日向", "葵裕太"] },
+    { name: "运动生存者", desc: "篮球、鬼抓人等活力运动圈子", mem: ["守泽千秋", "天祥院英智", "明星昴流", "乙狩阿多尼斯", "天满光"] },
+    { name: "玩乐部", desc: "抽签决定每天玩什么游戏", mem: ["天城燐音", "仙石忍", "涟纯", "春川宙", "葵裕太"] },
+    { name: "Pretty5", desc: "喜欢可爱事物与咖啡厅，女子会氛围", mem: ["巴日和", "影片美伽", "鸣上岚", "姬宫桃李", "白鸟蓝良"] },
+    { name: "创作怪物", desc: "绘画雕刻陶艺等创作，靠破坏重建发泄压力", mem: ["天城燐音", "朔间凛月", "斋宫宗", "游木真", "冰鹰北斗"] },
+    { name: "留宿户外队", desc: "一泊二日露营与自然散步", mem: ["月永雷欧", "椎名丹希", "鬼龙红郎", "礼濑真宵", "天满光"] },
+    { name: "神秘部", desc: "巡礼能量景点、寻找传说生物", mem: ["朔间零", "仁兔成鸣", "青叶纺", "深海奏汰", "游木真"] },
+    { name: "书会（群书）", desc: "读书会，天气好在室外也读", mem: ["青叶纺", "乱凪砂", "羽风薰", "朱樱司", "紫之创"] },
+    { name: "书会（漫画会）", desc: "以漫画为主的轻快阅读圈子", mem: ["莲巳敬人", "涟纯", "衣更真绪", "高峯翠", "姬宫桃李"] },
+    { name: "生物俱乐部（海洋生物）", desc: "深海奏汰为中心，水族馆治愈系", mem: ["深海奏汰", "濑名泉", "羽风薰", "神崎飒马", "仙石忍"] },
+    { name: "生物俱乐部（陆地生物）", desc: "宠物情报交换，去牧场动物园", mem: ["仁兔成鸣", "日日树涉", "明星昴流", "大神晃牙", "真白友也"] },
+    { name: "ES讲座（茨塾）", desc: "七种茨主办，游戏式补习", mem: ["HiMERU", "七种茨", "逆先夏目", "南云铁虎", "春川宙"] },
+    { name: "ES讲座（敬人塾）", desc: "莲巳敬人主办，杂学补习带茶点", mem: ["莲巳敬人", "伏见弓弦", "影片美伽", "天城一彩", "白鸟蓝良"] },
+    { name: "「浪漫戏剧」剧团", desc: "日日树涉主导，自制服装道具演剧", mem: ["月永雷欧", "莲巳敬人", "乱凪砂", "斋宫宗", "日日树涉", "冰鹰北斗", "逆先夏目", "鸣上岚", "真白友也"] }
+  ];
+  // —— 梦之咲学生会（官方设定，历任 + 现任成员，职务按官方档案）——
+  const ES_STUDENT_COUNCIL = { name: "梦之咲学生会", desc: "历任与现任：前前前会长朔间零，前前会长天祥院英智，前会长衣更真绪，副会长莲巳敬人，现任会长姬宫桃李，现任成员紫之创、白鸟蓝良、仙石忍、朱樱司", mem: ["朔间零", "天祥院英智", "衣更真绪", "莲巳敬人", "姬宫桃李", "紫之创", "白鸟蓝良", "仙石忍", "朱樱司"] };
+  // —— 出身学校（官方设定，只写出身学校不写年级）——
+  const ES_SCHOOLS = [
+    { name: "玲明学园", mem: ["巴日和", "涟纯", "风早巽", "HiMERU"] },
+    { name: "秀越学园", mem: ["七种茨", "乱凪砂"] }
+  ];
+  // —— 幼驯染 / 亲属（官方资料明确标注，非社区称呼）——
+  const ES_OSANA_NAJIMI = [
+    { a: "天祥院英智", b: "莲巳敬人", tag: "幼驯染" },
+    { a: "衣更真绪", b: "朔间凛月", tag: "幼驯染" },
+    { a: "三毛缟斑", b: "深海奏汰", tag: "幼驯染" },
+    { a: "鬼龙红郎", b: "斋宫宗", tag: "幼驯染" },
+    { a: "巴日和", b: "乱凪砂", tag: "幼驯染" },
+    { a: "逆先夏目", b: "青叶纺", tag: "幼驯染" },
+    { a: "伏见弓弦", b: "姬宫桃李", tag: "幼驯染" },
+    { a: "樱河琥珀", b: "朱樱司", tag: "亲属" }
+  ];
+  // —— 星奏馆寝室分配（官方宿舍图）—— 楼层 → 房间 → 成员（规范中文名）
+  const ES_DORMS = [
+    { name: "1F", rooms: [
+      { no: "1F-101", mem: ["朔间凛月", "影片美伽"] },
+      { no: "1F-102", mem: ["羽风薰", "葵裕太", "乱凪砂"] },
+      { no: "1F-103", mem: ["天祥院英智", "朔间零", "白鸟蓝良"] },
+      { no: "1F-104", mem: ["春川宙", "三毛缟斑", "日日树涉", "明星昴流"] },
+      { no: "1F-105", mem: ["南云铁虎", "HiMERU", "鸣上岚"] },
+      { no: "1F-106", mem: ["礼濑真宵", "真白友也"] },
+      { no: "1F-107", mem: ["风早巽", "大神晃牙"] },
+      { no: "1F-108", mem: ["涟纯", "樱河琥珀"] },
+      { no: "1F-109", mem: ["姬宫桃李", "伏见弓弦"] }
+    ] },
+    { name: "2F", rooms: [
+      { no: "2F-201", mem: ["莲巳敬人", "紫之创", "冰鹰北斗"] },
+      { no: "2F-202", mem: ["七种茨", "天满光", "高峯翠", "青叶纺"] },
+      { no: "2F-203", mem: ["游木真", "乙狩阿多尼斯", "守泽千秋"] },
+      { no: "2F-204", mem: ["葵日向", "天城一彩", "椎名丹希"] }
+    ] },
+    { name: "3F", rooms: [
+      { no: "3F-301", mem: ["月永雷欧", "逆先夏目", "仁兔成鸣"] },
+      { no: "3F-302", mem: ["斋宫宗", "濑名泉", "鬼龙红郎", "衣更真绪"] },
+      { no: "3F-303", mem: ["深海奏汰", "天城燐音", "巴日和"] },
+      { no: "3F-304", mem: ["朱樱司", "神崎飒马", "仙石忍"] }
+    ] }
+  ];
+  // —— 元班级（梦之咲学院 ES1 时期班级分配，官方图鉴）—— 班名 = 元+年级+班 → 成员（规范中文名）
+  const ES_CLASSES = [
+    { name: "元1-A", mem: ["南云铁虎", "紫之创", "真白友也", "葵日向", "高峯翠"] },
+    { name: "元1-B", mem: ["姬宫桃李", "仙石忍", "葵裕太", "天满光", "朱樱司", "春川宙"] },
+    { name: "元2-A", mem: ["明星昴流", "冰鹰北斗", "游木真", "神崎飒马", "乙狩阿多尼斯", "逆先夏目"] },
+    { name: "元2-B", mem: ["大神晃牙", "朔间凛月", "衣更真绪", "伏见弓弦", "鸣上岚", "影片美伽"] },
+    { name: "元3-A", mem: ["莲巳敬人", "天祥院英智", "羽风薰", "濑名泉", "守泽千秋", "斋宫宗", "三毛缟斑"] },
+    { name: "元3-B", mem: ["鬼龙红郎", "日日树涉", "深海奏汰", "朔间零", "仁兔成鸣", "月永雷欧", "青叶纺"] }
+  ];
+  // —— 历史正式组合（梦之咲时代正式成立过的组合，非洗牌/企划临时名义）——
+  const ES_HIST_UNITS = [
+    { name: "元fine", mem: ["巴日和", "天祥院英智", "乱凪砂", "青叶纺"] },
+    { name: "五奇人", mem: ["朔间零", "日日树涉", "深海奏汰", "斋宫宗", "逆先夏目"] },
+    { name: "旧Valkyrie", mem: ["斋宫宗", "影片美伽", "仁兔成鸣"] },
+    { name: "Deadman's", mem: ["朔间零", "羽风薰", "大神晃牙", "乙狩阿多尼斯"] }
+  ];
   function buildIdolGroups() {
     const S = global.ES_SONGS || [];
     if (!S.length) return [];
@@ -1725,6 +1852,13 @@ html.es-darkfix canvas {
     idolNorm,
     normIdolName,
     buildIdolGroups,
+    ES_HIST_UNITS,
+    ES_CIRCLES,
+    ES_DORMS,
+    ES_CLASSES,
+    ES_STUDENT_COUNCIL,
+    ES_SCHOOLS,
+    ES_OSANA_NAJIMI,
     CATS,
     CAT_ORDER,
     autoCat,
@@ -2698,6 +2832,22 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 
   // —— 版本日志（与 pet.js / CHANGELOG.md 同步）——
   const CHANGELOG = [
+      
+      { ver: "2.9.26", date: "2026-11-01", items: [
+      "新增「使用教程」：设置页可查看完整教程；每个页面右上角有「本页教程」按钮；首次打开自动弹出全局教程",
+      "核对全站代码与功能：清理无效页面入口与死代码，补齐缺失说明，导航与功能确认无坏链"
+    ], detail: [
+      "教程覆盖首页 6 个板块 / 选歌 / 设置全部功能：站位两种模式、贴贴、头像、分队、关系网、账号帮助、更新日志",
+      "首次弹窗只出现一次，之后可在设置页随时打开"
+    ] },
+    { ver: "2.9.25", date: "2026-11-01", items: [
+      "新增「关系网」：设置里开启后，选歌页选 2 人及以上会出现「关系网」按钮，弹窗展示组合 / 历史正式组合 / 兴趣圈子 / 星奏馆寝室 / 元班级 / 学生会 / 出身学校 / 幼驯染关系，成员带真实头像",
+      "UI 优化：修正「确定搜索」按钮遮挡说明文字的问题（按钮改为右下角悬浮，仍可拖动）；精简选歌页说明文案",
+      "关系网弹窗适配手机端显示"
+    ], detail: [
+      "「关系网」弹窗中粉色高亮为已选成员；同组合 / 同圈子 / 同寝室 / 同班 / 同校 / 学生会成员一并展示",
+      "关系网头像使用 idolicon 头像包（ES_HEADS），无头像的角色回退为纯文字显示"
+    ] },
     { ver: "2.9.24", date: "2026-11-01", items: [
       "站位显示升级：设置→显示设置 可切换两种模式——按号位顺序（默认）与游戏内站位（按站位表 4·2·1·3·5 物理位置摆放，空位直接显示号位数字）",
       "193 首歌曲卡片显示站位角色头像 + 号位角标；12 首多组合合唱曲超 5 人自动分两队，各队显示各自站位",
@@ -3161,6 +3311,8 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
     renderSongList();
   }
   function renderIdolGroups() {
+    const relBtn = $("songRelBtn");
+    if (relBtn) relBtn.hidden = songSel.size < 2 || !relnetOn();
     const S = window.ES_SONGS || [];
     const idolBox = $("songIdols");
     if (!idolBox) return;
@@ -3199,6 +3351,62 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
         renderIdolGroups();
       };
     });
+  }
+
+  // 关系网聚合：多类关系（组合 / 历史正式组合 / 圈子 / 寝室 / 元班级 / 学生会 / 出身学校 / 幼驯染），只返回与已选成员相关的部分（v2.9.25）
+  function buildRelationGroups(selArr) {
+    const sel = new Set(selArr || []);
+    const out = { units: [], hist: [], circles: [], dorms: [], classes: [], council: null, schools: [], osana: [] };
+    // 组合（沿用 buildIdolGroups 的分组结果：当前正式组合）
+    (window.PetShared ? PetShared.buildIdolGroups() : []).forEach((g) => {
+      const inSel = g.idols.filter((id) => sel.has(id));
+      if (!inSel.length) return;
+      out.units.push({ name: g.name, members: g.idols, hit: new Set(inSel) });
+    });
+    // 历史正式组合
+    (window.PetShared ? PetShared.ES_HIST_UNITS : []).forEach((h) => {
+      const hit = h.mem.filter((m) => sel.has(m));
+      if (!hit.length) return;
+      out.hist.push({ name: h.name, members: h.mem, hit: new Set(hit) });
+    });
+    // 圈子
+    (window.PetShared ? PetShared.ES_CIRCLES : []).forEach((c) => {
+      const hit = c.mem.filter((m) => sel.has(m));
+      if (!hit.length) return;
+      out.circles.push({ name: c.name, desc: c.desc, members: c.mem, hit: new Set(hit) });
+    });
+    // 寝室（按房间聚合，同房成员全部展示）
+    (window.PetShared ? PetShared.ES_DORMS : []).forEach((f) => {
+      f.rooms.forEach((r) => {
+        const hit = r.mem.filter((m) => sel.has(m));
+        if (!hit.length) return;
+        out.dorms.push({ name: r.no, floor: f.name, members: r.mem, hit: new Set(hit) });
+      });
+    });
+    // 元班级（同班成员全部展示）
+    (window.PetShared ? PetShared.ES_CLASSES : []).forEach((c) => {
+      const hit = c.mem.filter((m) => sel.has(m));
+      if (!hit.length) return;
+      out.classes.push({ name: c.name, members: c.mem, hit: new Set(hit) });
+    });
+    // 梦之咲学生会（历任 + 现任）
+    const scHit = (window.PetShared && PetShared.ES_STUDENT_COUNCIL ? PetShared.ES_STUDENT_COUNCIL.mem : []).filter((m) => sel.has(m));
+    if (scHit.length && window.PetShared) out.council = { name: PetShared.ES_STUDENT_COUNCIL.name, desc: PetShared.ES_STUDENT_COUNCIL.desc, members: PetShared.ES_STUDENT_COUNCIL.mem, hit: new Set(scHit) };
+    // 出身学校
+    (window.PetShared ? PetShared.ES_SCHOOLS : []).forEach((s) => {
+      const hit = s.mem.filter((m) => sel.has(m));
+      if (!hit.length) return;
+      out.schools.push({ name: s.name, members: s.mem, hit: new Set(hit) });
+    });
+    // 幼驯染 / 亲属（两人配对）
+    (window.PetShared ? PetShared.ES_OSANA_NAJIMI : []).forEach((p) => {
+      const hit = [p.a, p.b].filter((m) => sel.has(m));
+      if (!hit.length) return;
+      out.osana.push({ name: p.a + " × " + p.b, tag: p.tag, members: [p.a, p.b], hit: new Set(hit) });
+    });
+    // 优先显示有重合部分的：每个分区内按已选成员命中数降序（多人重合的分组排前面）
+    [out.units, out.hist, out.circles, out.dorms, out.classes, out.schools, out.osana].forEach((arr) => arr.sort((a, b) => b.hit.size - a.hit.size));
+    return out;
   }
   function renderSongs() {
     renderIdolGroups();
@@ -3247,6 +3455,8 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
       const want = posQueryNorm(libPosQuery);
       if (want) list = list.filter((s) => posPairsOf(s.pos).has(want));
     }
+    const relBtn = $("songRelBtn");
+    if (relBtn) relBtn.hidden = songSel.size < 2 || !relnetOn();
     $("songCount").textContent = libSongFilter === "allstars"
       ? `全员曲 · 共 ${list.length} 首`
       : (songSel.size ? `已选 ${songSel.size} 位偶像 · 共 ${list.length} 首` : `全部曲目 · 共 ${list.length} 首`);
@@ -3291,6 +3501,8 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
     bindLibSongControls();
   }
   function bindLibSongControls() {
+    const relBtn = $("songRelBtn");
+    if (relBtn) relBtn.onclick = showRelNet;
     const clearBtn = $("songClear");
     if (clearBtn) clearBtn.onclick = () => { songSel.clear(); renderSongs(); };
     document.querySelectorAll(".lib-sf .sf-btn[data-sf]").forEach((b) => {
@@ -3316,6 +3528,10 @@ function stItemHtml(name, i, cnt){
 const ST_GAME_ORDER = [3, 1, 0, 2, 4];
 const ST_GAME_NUM = [4, 2, 1, 3, 5];
 const ST_MODE_KEY = "es-st-mode";
+  // —— v2.9.25 关系网开关（站位线 localStorage 模式，与账号帮助/站位显示一致）——
+  const RELNET_KEY = "es-relnet";
+  function relnetOn() { return localStorage.getItem(RELNET_KEY) === "1"; }
+  function relnetSet(on) { try { localStorage.setItem(RELNET_KEY, on ? "1" : "0"); } catch (e) {} }
 function stModeGame(){ try { return localStorage.getItem(ST_MODE_KEY) === "game"; } catch (e) { return false; } }
 function stSetMode(m){ try { localStorage.setItem(ST_MODE_KEY, m); } catch (e) {} }
 function stGameItemHtml(arr){
@@ -3362,6 +3578,108 @@ function songCardHtml(s) {
   }
 
   // ============ 歌曲详情弹层（上架时间 / 成员CV / 作詞作曲編曲） ============
+
+  // —— v2.9.25 关系网弹窗（成员带真实头像：复用 window.ES_HEADS / ES_HEAD_NAME）——
+  function relHeadHtml(m) {
+    const key = window.ES_HEAD_NAME ? window.ES_HEAD_NAME[m] : null;
+    const src = key && window.ES_HEADS ? window.ES_HEADS[key] : "";
+    return src ? `<img class="rel-head" src="${src}" alt="">` : "";
+  }
+  function showRelNet() {
+    const g0 = document.getElementById("songGo");
+    if (g0) g0.style.display = "none";
+    const sel = Array.from(songSel);
+    const old = document.getElementById("relNetBox");
+    if (old) old.remove();
+    if (!sel.length) return;
+    const rel = buildRelationGroups(sel);
+    const mapped = new Set();
+    rel.units.forEach((u) => u.hit.forEach((m) => mapped.add(m)));
+    rel.hist.forEach((h) => h.hit.forEach((m) => mapped.add(m)));
+    rel.circles.forEach((c) => c.hit.forEach((m) => mapped.add(m)));
+    rel.dorms.forEach((d) => d.hit.forEach((m) => mapped.add(m)));
+    rel.classes.forEach((c) => c.hit.forEach((m) => mapped.add(m)));
+    if (rel.council) rel.council.hit.forEach((m) => mapped.add(m));
+    rel.schools.forEach((s) => s.hit.forEach((m) => mapped.add(m)));
+    rel.osana.forEach((o) => o.hit.forEach((m) => mapped.add(m)));
+    const unmapped = sel.filter((m) => !mapped.has(m));
+    const chip = (mem, hit) => mem.map((m) => `<span class="rel-chip${hit.has(m) ? " me" : ""}">${relHeadHtml(m)}${esc(m)}</span>`).join("");
+    let html = `<div class="rel-title">关系网 · 已选 ${sel.length} 位偶像</div>
+      <div class="rel-sub">粉色高亮为已选成员，同组合 / 同圈子 / 同寝室 / 同班 / 同校 / 学生会成员一并展示</div>`;
+    if (rel.units.length) {
+      html += `<div class="rel-sec-hd">组合（UNIT）</div>`;
+      rel.units.forEach((u) => {
+        html += `<div class="rel-unit">${esc(u.name)}<span class="rel-cnt">${u.members.length} 人</span></div>
+          <div class="rel-mem">${chip(u.members, u.hit)}</div>`;
+      });
+    }
+    if (rel.hist.length) {
+      html += `<div class="rel-sec-hd">历史正式组合</div>`;
+      rel.hist.forEach((h) => {
+        html += `<div class="rel-unit hist">${esc(h.name)}<span class="rel-cnt">${h.members.length} 人</span></div>
+          <div class="rel-mem">${chip(h.members, h.hit)}</div>`;
+      });
+    }
+    if (rel.council) {
+      html += `<div class="rel-sec-hd">梦之咲学生会</div>`;
+      html += `<div class="rel-unit council">${esc(rel.council.name)}<span class="rel-cnt">${rel.council.members.length} 人</span></div>
+        <div class="rel-desc">${esc(rel.council.desc)}</div><div class="rel-mem">${chip(rel.council.members, rel.council.hit)}</div>`;
+    }
+    if (rel.circles.length) {
+      html += `<div class="rel-sec-hd">兴趣圈子（サークル）</div>`;
+      rel.circles.forEach((c) => {
+        html += `<div class="rel-unit circle">${esc(c.name)}<span class="rel-cnt">${c.members.length} 人</span></div>
+          <div class="rel-desc">${esc(c.desc)}</div><div class="rel-mem">${chip(c.members, c.hit)}</div>`;
+      });
+    }
+    if (rel.dorms.length) {
+      html += `<div class="rel-sec-hd">星奏馆寝室</div>`;
+      rel.dorms.forEach((d) => {
+        html += `<div class="rel-unit dorm">${esc(d.name)}（${esc(d.floor)}）<span class="rel-cnt">${d.members.length} 人</span></div>
+          <div class="rel-mem">${chip(d.members, d.hit)}</div>`;
+      });
+    }
+    if (rel.classes.length) {
+      html += `<div class="rel-sec-hd">元班级（梦之咲）</div>`;
+      rel.classes.forEach((c) => {
+        html += `<div class="rel-unit cls">${esc(c.name)}<span class="rel-cnt">${c.members.length} 人</span></div>
+          <div class="rel-mem">${chip(c.members, c.hit)}</div>`;
+      });
+    }
+    if (rel.schools.length) {
+      html += `<div class="rel-sec-hd">出身学校</div>`;
+      rel.schools.forEach((s) => {
+        html += `<div class="rel-unit school">${esc(s.name)}<span class="rel-cnt">${s.members.length} 人</span></div>
+          <div class="rel-mem">${chip(s.members, s.hit)}</div>`;
+      });
+    }
+    if (rel.osana.length) {
+      html += `<div class="rel-sec-hd">幼驯染 / 亲属</div>`;
+      rel.osana.forEach((o) => {
+        html += `<div class="rel-unit osana">${esc(o.name)}<span class="rel-cnt">${esc(o.tag)}</span></div>
+          <div class="rel-mem">${chip(o.members, o.hit)}</div>`;
+      });
+    }
+    if (unmapped.length) {
+      html += `<div class="rel-sec-hd">未归入常规组合</div><div class="rel-mem">${unmapped.map((m) => `<span class="rel-chip me">${relHeadHtml(m)}${esc(m)}</span>`).join("")}</div>`;
+    }
+    if (!rel.units.length && !rel.hist.length && !rel.circles.length && !rel.dorms.length && !rel.classes.length && !rel.council && !rel.schools.length && !rel.osana.length) {
+      html += `<div class="rel-sub">暂未匹配到组合 / 圈子 / 寝室 / 班级 / 学生会 / 学校 / 幼驯染关系</div>`;
+    }
+    const mask = document.createElement("div");
+    mask.id = "relNetBox";
+    mask.className = "rel-mask";
+    mask.innerHTML = `<div class="rel-box" onclick="event.stopPropagation()">
+      <button type="button" class="rel-close" title="关闭">✕</button>${html}</div>`;
+    const closeRelNet = () => {
+      mask.remove();
+      const g = document.getElementById("songGo");
+      if (g) g.style.display = "";
+    };
+    mask.onclick = closeRelNet;
+    mask.querySelector(".rel-close").onclick = closeRelNet;
+    document.body.appendChild(mask);
+  }
   function showSongDetail(s) {
     const old = document.getElementById("libSongDetail");
     if (old) old.remove();
@@ -4112,6 +4430,11 @@ function songCardHtml(s) {
         <input type="checkbox" id="accHelpToggle" ${accHelpOn() ? "checked" : ""} />
       </div>
       <div class="set-row">
+        <span>关系网（选歌页选 2 人及以上显示「关系网」按钮）</span>
+        <input type="checkbox" id="relnetToggle" ${relnetOn() ? "checked" : ""} />
+      </div>
+      <div class="set-row tut-setrow" id="logTutBtn" role="button" tabindex="0"><span>使用教程</span><span class="set-go">完整使用说明，点此查看 →</span></div>
+      <div class="set-row">
         <span>站位显示</span>
         <label class="set-opt"><input type="radio" name="stMode" value="order" ${stModeGame() ? "" : "checked"} /> 按号位顺序（中1·左2·右1·左1·右2）</label>
         <label class="set-opt"><input type="radio" name="stMode" value="game" ${stModeGame() ? "checked" : ""} /> 游戏内站位（4·2·1·3·5，空位显示数字）</label>
@@ -4127,6 +4450,10 @@ function songCardHtml(s) {
     body.innerHTML = html;
     const tg = $("accHelpToggle");
     if (tg) tg.onchange = () => { accSetHelp(tg.checked); applyAccTab(); };
+    const rt = $("relnetToggle");
+    if (rt) rt.onchange = () => { relnetSet(rt.checked); const b = $("songRelBtn"); if (b) b.hidden = songSel.size < 2 || !relnetOn(); };
+    const logTutBtn = $("logTutBtn");
+    if (logTutBtn) logTutBtn.onclick = () => showTut("global");
     document.querySelectorAll('input[name="stMode"]').forEach((r) => r.onchange = () => { stSetMode(r.value); renderSongs(); });
     applyAccTab();
   }
@@ -4181,8 +4508,117 @@ function songCardHtml(s) {
   }
 
   // —— 初始化 ——
+
+  // ===== v2.9.26 使用教程 =====
+  const ES_TUTS = {
+    global: { t: "资料库完整教程", s: [
+      { h: "这个网页是什么", steps: [
+        "这是《偶像梦幻祭》资料库，共 3 个页面：首页、选歌、设置。用顶部按钮或底部导航随时切换。",
+        "数据（曲目、卡池、卡面、服装、时间线）均来自官网 ensemble-stars.jp 与官方公告。"
+      ] },
+      { h: "首页（6 个板块）", steps: [
+        "账号：你有的卡一览。服装：MV 服装一览。图鉴：角色介绍。",
+        "五星时间线：五星卡的时间线。日服情报：日服新活动。卡池排期：卡池时间。点顶部标签切换。"
+      ] },
+      { h: "选歌页", steps: [
+        "选偶像 → 确定搜索 → 看歌。站位、贴贴、头像、分队、关系网都在这一页。详见选歌页本页教程。"
+      ] },
+      { h: "设置页", steps: [
+        "账号帮助、关系网开关、站位显示模式、更新日志、本教程。详见设置页本页教程。"
+      ] },
+      { h: "站位小知识", steps: [
+        "号位规则：中间是 1，左 2 是 2，右 1 是 3，左 1 是 4，右 2 是 5。",
+        "两种显示模式：按号位顺序排列，或按游戏内 42135 那样摆（空位放数字），在设置里切换。",
+        "超过 5 人的合唱曲自动分两队显示。站位格显示角色头像。",
+        "「贴贴」是另一套独立数据（曲子里谁和谁站一起/互动的号位），和站位分开看。"
+      ] }
+    ], tip: "每个页面右上角都有「本页教程」，随时可以再看。本弹窗只首次打开自动出现一次，之后可在设置页打开。" },
+    es: { t: "首页教程", s: [
+      { h: "顶部标签怎么用", steps: [
+        "账号 / 服装 / 图鉴 / 五星时间线 / 日服情报 / 卡池排期：点哪个标签就看哪个板块。"
+      ] },
+      { h: "站位是什么", steps: [
+        "每首歌都按官方站位表显示。号位规则：中间是 1，左 2 是 2，右 1 是 3，左 1 是 4，右 2 是 5。"
+      ] },
+      { h: "两种显示模式", steps: [
+        "按号位顺序：从左到右按 1、2、3、4、5 排。",
+        "游戏内站位：像游戏里 42135 那样摆，空的位置直接放数字。",
+        "两种模式在「设置 → 站位显示」里切换。"
+      ] },
+      { h: "头像和分队", steps: [
+        "站位格显示角色头像（圆形小图），一眼看清谁站哪里。",
+        "合唱曲超过 5 人时，自动按队伍拆成两行分别显示站位。"
+      ] },
+      { h: "贴贴（pos）", steps: [
+        "歌曲下方的「贴贴」是另一套数据，和站位是两回事，代表曲子里角色互动/靠近的号位。"
+      ] }
+    ], tip: "站位看不清？去设置里换个显示模式试试。" },
+    songs: { t: "选歌页教程", s: [
+      { h: "先选偶像", steps: [
+        "点偶像名字（胶囊按钮）＝选中（变粉色），再点＝取消，可以多选。",
+        "想换人：点「清空选择」全部取消，重新选。"
+      ] },
+      { h: "快速输入", steps: [
+        "搜索框直接输偶像名或组合名（比如 Puffy☆Bunny、La Mort），回车自动选中。"
+      ] },
+      { h: "按站位号找歌", steps: [
+        "站位搜索框输「2-4」这类，查 2 号位和 4 号位贴贴的歌。"
+      ] },
+      { h: "确定搜索", steps: [
+        "按当前选的偶像＋筛选出结果。手机上要连点两次（防误触）。"
+      ] },
+      { h: "歌曲卡片怎么看", steps: [
+        "每首歌一张卡：歌名、演唱队伍、贴贴（站位号）、站位格（头像＋自动分队）、封面。",
+        "点卡片主体＝弹出歌曲详情；点封面图＝放大看图。"
+      ] },
+      { h: "关系网", steps: [
+        "选中 2 人或以上，会出现「关系网」按钮。",
+        "点开能看到 TA 们共同的：组合、历史正式组合、学生会、兴趣圈子、寝室、班级。已选的人粉色高亮。",
+        "前提：先在「设置 → 关系网」里打开开关。"
+      ] }
+    ], tip: "简单 / 完整模式在右上角切换，完整模式信息更全。" },
+    log: { t: "设置页教程", s: [
+      { h: "账号帮助", steps: [
+        "查看各账号所持卡一览（数据只存在本机浏览器里）。"
+      ] },
+      { h: "关系网", steps: [
+        "总开关。开启后，选歌页选 2 人及以上才会显示「关系网」按钮。"
+      ] },
+      { h: "站位显示", steps: [
+        "按号位顺序（中 1·左 2·右 1·左 1·右 2 这样排）。",
+        "游戏内站位（像游戏里 42135 那样摆，空位直接放数字）。"
+      ] },
+      { h: "更新日志", steps: [
+        "从下往上看每个版本改了什么。当前版本 v2.9.26。"
+      ] },
+      { h: "使用教程", steps: [
+        "就是这份完整说明，随时点开随时看。每个页面右上角也有本页教程。"
+      ] }
+    ], tip: "改完设置立即生效，数据只保存在你的浏览器。" }
+  };
+  let tutMask = null;
+  function tutHtml(key) {
+    const d = ES_TUTS[key] || ES_TUTS.global;
+    let h = `<div class="tut-head"><h3>${esc(d.t)}</h3><button type="button" class="tut-close" data-tut-close="1" aria-label="关闭">✕</button></div><div class="tut-body">`;
+    (d.s || []).forEach((g) => {
+      h += `<div class="tut-sec"><h4>${esc(g.h)}</h4>` + (g.steps || []).map((x) => `<p class="tut-step">${esc(x)}</p>`).join("") + `</div>`;
+    });
+    if (d.tip) h += `<p class="tut-tip">${esc(d.tip)}</p>`;
+    return h + `</div>`;
+  }
+  function showTut(key) {
+    closeTut();
+    const mask = document.createElement("div");
+    mask.className = "tut-mask";
+    mask.innerHTML = `<div class="tut-box">${tutHtml(key)}</div>`;
+    mask.addEventListener("click", (e) => { if (e.target === mask || e.target.closest("[data-tut-close]")) closeTut(); });
+    document.body.appendChild(mask);
+    tutMask = mask;
+  }
+  function closeTut() { if (tutMask) { tutMask.remove(); tutMask = null; } }
+  function maybeShowFirstTut() { if (localStorage.getItem("es-tut-v2")) return; localStorage.setItem("es-tut-v2", "1"); showTut("global"); }
   function init() {
-    $("libVer").textContent = "v2.9.24";
+    $("libVer").textContent = "v2.9.26";
     buildMobileNav();
     // 手机端「确定搜索」初始位置：右侧列表区域悬浮（用户指定），可拖动
     if (IS_MOBILE) {
@@ -4329,6 +4765,8 @@ function songCardHtml(s) {
     if (topSet) topSet.onclick = () => switchPage("log");
     switchPage("songs");
     setLibSongMode("list");
+    document.querySelectorAll(".tut-btn").forEach((b) => { b.onclick = () => showTut(b.dataset.tut); });
+    maybeShowFirstTut();
   }
 
   document.addEventListener("DOMContentLoaded", init);
