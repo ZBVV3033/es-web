@@ -8,11 +8,13 @@ const ES_CARDS_G5 = [
     "cn": "",
     "status": "ready",
     "img": "img/g5/166751_h2.png",
+    "imgBefore": "img/g5/166751_h1.png",
+    "imgBloomed": "img/g5/166751_h2.png",
     "srcType": "scout",
     "srcName": "フィーチャースカウト 真緒編",
     "srcDate": "2020年06月25日",
     "link": "https://gamerch.com/ensemble-star-music/166751",
-    "note": "gamerch Music五星一览采集·640×800开花版；中/英文名待补"
+    "note": "花后h2主展示；花前h1待UI切换；中/英文名待补；归属以主工程buildIdolGroups为准"
   },
   {
     "id": "g5_167773",
@@ -23,11 +25,13 @@ const ES_CARDS_G5 = [
     "cn": "",
     "status": "ready",
     "img": "img/g5/167773_h2.png",
+    "imgBefore": "img/g5/167773_h1.png",
+    "imgBloomed": "img/g5/167773_h2.png",
     "srcType": "scout",
     "srcName": "スカウト！ケモノサバイバル",
     "srcDate": "2020年06月29日",
     "link": "https://gamerch.com/ensemble-star-music/167773",
-    "note": "gamerch Music五星一览采集·640×800开花版；中/英文名待补"
+    "note": "花后h2主展示；花前h1待UI切换；中/英文名待补；归属以主工程buildIdolGroups为准"
   },
   {
     "id": "g5_177971",
@@ -38,11 +42,13 @@ const ES_CARDS_G5 = [
     "cn": "",
     "status": "ready",
     "img": "img/g5/177971_h2.png",
+    "imgBefore": "img/g5/177971_h1.png",
+    "imgBloomed": "img/g5/177971_h2.png",
     "srcType": "scout",
     "srcName": "フィーチャースカウト HiMERU編",
     "srcDate": "2020年08月10日",
     "link": "https://gamerch.com/ensemble-star-music/177971",
-    "note": "gamerch Music五星一览采集·640×800开花版；中/英文名待补"
+    "note": "花后h2主展示；花前h1待UI切换；中/英文名待补；归属以主工程buildIdolGroups为准"
   },
   {
     "id": "g5_178676",
@@ -53,11 +59,13 @@ const ES_CARDS_G5 = [
     "cn": "",
     "status": "ready",
     "img": "img/g5/178676_h2.png",
+    "imgBefore": "img/g5/178676_h1.png",
+    "imgBloomed": "img/g5/178676_h2.png",
     "srcType": "scout",
     "srcName": "スカウト！サマースノー",
     "srcDate": "2020年08月14日",
     "link": "https://gamerch.com/ensemble-star-music/178676",
-    "note": "gamerch Music五星一览采集·640×800开花版；中/英文名待补"
+    "note": "花后h2主展示；花前h1待UI切换；中/英文名待补；归属以主工程buildIdolGroups为准"
   },
   {
     "id": "g5_245785",
@@ -68,11 +76,13 @@ const ES_CARDS_G5 = [
     "cn": "",
     "status": "ready",
     "img": "img/g5/245785_h2.png",
+    "imgBefore": "img/g5/245785_h1.png",
+    "imgBloomed": "img/g5/245785_h2.png",
     "srcType": "scout",
     "srcName": "フィーチャースカウト ジュン編",
     "srcDate": "2021年04月10日",
     "link": "https://gamerch.com/ensemble-star-music/245785",
-    "note": "gamerch Music五星一览采集·640×800开花版；中/英文名待补"
+    "note": "花后h2主展示；花前h1待UI切换；中/英文名待补；归属以主工程buildIdolGroups为准"
   },
   {
     "id": "g5_255842",
@@ -83,11 +93,13 @@ const ES_CARDS_G5 = [
     "cn": "",
     "status": "ready",
     "img": "img/g5/255842_h2.png",
+    "imgBefore": "img/g5/255842_h1.png",
+    "imgBloomed": "img/g5/255842_h2.png",
     "srcType": "event",
     "srcName": "攻略！迷宮結ぶアリアドネの糸",
     "srcDate": "2021年05月15日",
     "link": "https://gamerch.com/ensemble-star-music/255842",
-    "note": "gamerch Music五星一览采集·640×800开花版；中/英文名待补"
+    "note": "花后h2主展示；花前h1待UI切换；中/英文名待补；归属以主工程buildIdolGroups为准"
   },
   {
     "id": "g5_260261",
@@ -98,11 +110,13 @@ const ES_CARDS_G5 = [
     "cn": "",
     "status": "ready",
     "img": "img/g5/260261_h2.png",
+    "imgBefore": "img/g5/260261_h1.png",
+    "imgBloomed": "img/g5/260261_h2.png",
     "srcType": "event",
     "srcName": "『SS』編／2nd Stageサブマリン",
     "srcDate": "2021年05月31日",
     "link": "https://gamerch.com/ensemble-star-music/260261",
-    "note": "gamerch Music五星一览采集·640×800开花版；中/英文名待补"
+    "note": "花后h2主展示；花前h1待UI切换；中/英文名待补；归属以主工程buildIdolGroups为准"
   },
   {
     "id": "g5_264252",
@@ -113,11 +127,13 @@ const ES_CARDS_G5 = [
     "cn": "",
     "status": "ready",
     "img": "img/g5/264252_h2.png",
+    "imgBefore": "img/g5/264252_h1.png",
+    "imgBloomed": "img/g5/264252_h2.png",
     "srcType": "scout",
     "srcName": "スカウト！Ring.A.Bell",
     "srcDate": "2021年06月14日",
     "link": "https://gamerch.com/ensemble-star-music/264252",
-    "note": "gamerch Music五星一览采集·640×800开花版；中/英文名待补"
+    "note": "花后h2主展示；花前h1待UI切换；中/英文名待补；归属以主工程buildIdolGroups为准"
   },
   {
     "id": "g5_291022",
@@ -128,11 +144,13 @@ const ES_CARDS_G5 = [
     "cn": "",
     "status": "ready",
     "img": "img/g5/291022_h2.png",
+    "imgBefore": "img/g5/291022_h1.png",
+    "imgBloomed": "img/g5/291022_h2.png",
     "srcType": "event",
     "srcName": "羽撃き◆雲散らすソリッドステージ",
     "srcDate": "2021年09月30日",
     "link": "https://gamerch.com/ensemble-star-music/291022",
-    "note": "gamerch Music五星一览采集·640×800开花版；中/英文名待补"
+    "note": "花后h2主展示；花前h1待UI切换；中/英文名待补；归属以主工程buildIdolGroups为准"
   },
   {
     "id": "g5_299794",
@@ -143,11 +161,13 @@ const ES_CARDS_G5 = [
     "cn": "",
     "status": "ready",
     "img": "img/g5/299794_h2.png",
+    "imgBefore": "img/g5/299794_h1.png",
+    "imgBloomed": "img/g5/299794_h2.png",
     "srcType": "scout",
     "srcName": "フィーチャースカウト 奏汰編",
     "srcDate": "2021年11月10日",
     "link": "https://gamerch.com/ensemble-star-music/299794",
-    "note": "gamerch Music五星一览采集·640×800开花版；中/英文名待补"
+    "note": "花后h2主展示；花前h1待UI切换；中/英文名待补；归属以主工程buildIdolGroups为准"
   },
   {
     "id": "g5_324621",
@@ -158,11 +178,13 @@ const ES_CARDS_G5 = [
     "cn": "",
     "status": "ready",
     "img": "img/g5/324621_h2.png",
-    "srcType": "event",
+    "imgBefore": "img/g5/324621_h1.png",
+    "imgBloomed": "img/g5/324621_h2.png",
+    "srcType": "scout",
     "srcName": "Focus＊ファインダー越しの四季",
     "srcDate": "2022年01月15日",
     "link": "https://gamerch.com/ensemble-star-music/324621",
-    "note": "gamerch Music五星一览采集·640×800开花版；中/英文名待补"
+    "note": "花后h2主展示；花前h1待UI切换；中/英文名待补；归属以主工程buildIdolGroups为准"
   },
   {
     "id": "g5_332130",
@@ -173,11 +195,13 @@ const ES_CARDS_G5 = [
     "cn": "",
     "status": "ready",
     "img": "img/g5/332130_h2.png",
+    "imgBefore": "img/g5/332130_h1.png",
+    "imgBloomed": "img/g5/332130_h2.png",
     "srcType": "scout",
     "srcName": "スカウト！ロマンチック？デイト",
     "srcDate": "2022年02月14日",
     "link": "https://gamerch.com/ensemble-star-music/332130",
-    "note": "gamerch Music五星一览采集·640×800开花版；中/英文名待补"
+    "note": "花后h2主展示；花前h1待UI切换；中/英文名待补；归属以主工程buildIdolGroups为准"
   },
   {
     "id": "g5_349949",
@@ -188,11 +212,13 @@ const ES_CARDS_G5 = [
     "cn": "",
     "status": "ready",
     "img": "img/g5/349949_h2.png",
+    "imgBefore": "img/g5/349949_h1.png",
+    "imgBloomed": "img/g5/349949_h2.png",
     "srcType": "event",
     "srcName": "追憶＊遊色が奏でるオブリガート",
     "srcDate": "2022年04月30日",
     "link": "https://gamerch.com/ensemble-star-music/349949",
-    "note": "gamerch Music五星一览采集·640×800开花版；中/英文名待补"
+    "note": "花后h2主展示；花前h1待UI切换；中/英文名待补；归属以主工程buildIdolGroups为准"
   },
   {
     "id": "g5_364182",
@@ -203,11 +229,13 @@ const ES_CARDS_G5 = [
     "cn": "",
     "status": "ready",
     "img": "img/g5/364182_h2.png",
+    "imgBefore": "img/g5/364182_h1.png",
+    "imgBloomed": "img/g5/364182_h2.png",
     "srcType": "scout",
     "srcName": "スカウト！バンカラグラフィティ",
     "srcDate": "2022年06月14日",
     "link": "https://gamerch.com/ensemble-star-music/364182",
-    "note": "gamerch Music五星一览采集·640×800开花版；中/英文名待补"
+    "note": "花后h2主展示；花前h1待UI切换；中/英文名待补；归属以主工程buildIdolGroups为准"
   },
   {
     "id": "g5_367226",
@@ -218,10 +246,12 @@ const ES_CARDS_G5 = [
     "cn": "",
     "status": "ready",
     "img": "img/g5/367226_h2.png",
+    "imgBefore": "img/g5/367226_h1.png",
+    "imgBloomed": "img/g5/367226_h2.png",
     "srcType": "scout",
     "srcName": "フィーチャースカウト 奏汰編2",
     "srcDate": "2022年06月25日",
     "link": "https://gamerch.com/ensemble-star-music/367226",
-    "note": "gamerch Music五星一览采集·640×800开花版；中/英文名待补"
+    "note": "花后h2主展示；花前h1待UI切换；中/英文名待补；归属以主工程buildIdolGroups为准"
   }
 ];
