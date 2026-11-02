@@ -20,10 +20,14 @@ cards-workbench/
 │  ├─ g5_focus.tsv                # 首批重点角色 15 条（含花前 h1、花后 h2 两个图 hash）
 │  └─ stands_members.tsv          # 从主工程站位表 ES_STANDS_EXTRA 抽取的「组合=>显式成员」证据
 ├─ scripts/
-│  ├─ parse_g5.ps1                # 解析快照/在线页 → g5_all.tsv / g5_focus.tsv（可重跑）
-│  └─ download_g5.ps1             # 按 TSV 下载 h1(花前)/h2(花后) 原图并记录真实宽高
+│  ├─ parse_g5.ps1                # 解析五星一览 → data/g5_all.tsv、g5_focus.tsv（含花前h1/花后h2 hash）
+│  ├─ download_g5.ps1             # 按 TSV 下载 h1(花前)/h2(花后) 原图并记录真实宽高
+│  ├─ build_cards.ps1             # 由 g5_focus.tsv 生成 sample/cards_g5.js（数据与界面解耦）
+│  ├─ verify.ps1                  # 自检：JS语法/记录数/图存在/归属红线（奏汰必须流星隊）
+│  └─ run_all.ps1                 # 一键串联 parse→download→build→verify（新机推荐入口）
 └─ checks/
    ├─ check_report.log            # 小样静态校验（JS 语法、图路径、括号配平、闭合）
+   ├─ verify.log                  # 工作流自检结果（ready/star5/图缺失/归属断言）
    ├─ g5_parse.log                # 解析计数
    └─ g5_dl.log                   # 下载成功/失败、尺寸、字节
 ```
@@ -56,16 +60,27 @@ cards-workbench/
 5. **队长核实**：待官方/fandom 组合页确认后置顶打徽标。
 6. **集成与部署**：未替换主工程旧 `renderEnc/ENCY`；未更新 `PROJECT-NOTES.md`；未做 Pages 部署。集成时图片统一到 `assets/cards/`，并同步版本号与未完成清单。
 
-## 五、新机复跑步骤（Windows PowerShell 7 / pwsh）
+## 五、新机复跑步骤（可复用工作流）
 
+**前置**：Windows + PowerShell 7（`pwsh`）；`node` 可选（verify 语法检查用，缺失会跳过该项）；网络可访问 `gamerch.com` 与 `cdn.gamerch.com`；克隆/拉取本仓库后进入 `cards-workbench/`。
+
+**一键（推荐）**：
 ```powershell
 cd cards-workbench
-pwsh scripts/parse_g5.ps1        # 1) 解析五星页 → data/g5_all.tsv、g5_focus.tsv（首次会下载快照到 data/g131711.html）
-pwsh scripts/download_g5.ps1    # 2) 下载花前 h1 + 花后 h2 到 sample/img/g5（只下花后加 -Versions h2）
-# 3) 直接双击打开 sample/cards_sample.html 查看小样（无需服务器；引用相对路径）
-# 4) 校验：node --check sample/cards_g5.js；核对 checks/*.log
+pwsh scripts/run_all.ps1     # 解析 → 下载花前h1+花后h2 → 生成 cards_g5.js → 自检
+# 完成后用浏览器直接打开 sample/cards_sample.html（无需服务器，引用相对路径）
 ```
-- 扩展角色：先在 `parse_g5.ps1` 的 `$map` 增加「角色假名 → ROLE_META.key」，并在小样 `ROLE_META` 补权威成员；未映射角色一律跳过，防止挂错组合。
+
+**分步（排错时用）**：
+```powershell
+pwsh scripts/parse_g5.ps1      # 1) 首次自动下载快照 data/g131711.html，解析出 g5_all.tsv / g5_focus.tsv
+pwsh scripts/download_g5.ps1   # 2) 下载双版卡图到 sample/img/g5（只下花后：加 -Versions h2）
+pwsh scripts/build_cards.ps1   # 3) TSV → sample/cards_g5.js（srcType=scout/event、双图字段、ready/missing）
+pwsh scripts/verify.ps1       # 4) 自检；退出码非 0 表示有问题，详见 checks/verify.log
+```
+- **扩展角色/组合**：先在 `parse_g5.ps1` 与 `build_cards.ps1` 的 `$roleMap` 增加「角色假名 → ROLE_META.key」，并在小样 `ROLE_META` 补权威成员；未映射角色一律跳过，防止挂错组合。
+- **数据字段**：`img`=花后 h2（主展示，兼容当前小样）；`imgBefore`=花前 h1、`imgBloomed`=花后 h2，供后续花前/花后双图 UI 使用；`en/cn` 暂空待补。
+- **归属红线**：组合归属以主工程 `buildIdolGroups()`/`ES_ROLE_NAMES` 为准；`verify.ps1` 内置奏汰归属断言（必须流星隊、不得 UNDEAD），改数据后重跑自检。
 
 ## 六、本目录刻意未纳入的本地文件（避免污染协作库）
 
