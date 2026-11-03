@@ -884,7 +884,7 @@ html.es-darkfix canvas {
     <header class="top">
       <div class="top-title">
         <span>偶像梦幻祭 · 资料库</span>
-        <span class="ver" id="libVer">v2.9.43</span>
+        <span class="ver" id="libVer">v2.9.45</span>
       </div>
       <input type="text" class="search" id="libSearch" placeholder="搜索卡名 / 角色 / 卡池…" />
       <span class="top-btns">
@@ -2793,7 +2793,7 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
     {
       id: "subaru", name: "明星昴流", jp: "明星スバル", unit: "Trickstar",
       info: "Trickstar成员，开朗的气氛制造者",
-      cards: [
+      cards: [{ name: "［希望の新年］明星 スバル", star: "★★★★★", img: "", src: "官方招募卡", link: "https://em1.ensemble-stars.jp/app_help/gachas/23/index.html" }, 
         { name: "スカウト Stage：スバル（2026）", star: "★★★★★", img: "", src: "gamerch 官方卡面", link: "https://gamerch.com/ensemble-star-music/957030" },
         { name: "［桜色の春風］明星 スバル（旧作!）", star: "★★★★★", img: "", src: "gamerch 保管庫", link: "https://gamerch.com/hokan-ensemble-stars/entry/402746" }
       ],
@@ -2840,7 +2840,7 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
     {
       id: "hokuto", name: "冰鹰北斗", jp: "氷鷹 北斗", unit: "Trickstar",
       info: "Trickstar队长",
-      cards: [
+      cards: [{ name: "［紅きマタドール］氷鷹 北斗", star: "★★★★★", img: "", src: "官方招募卡", link: "https://em1.ensemble-stars.jp/app_help/gachas/46/index.html" }, 
         { name: "［自分流の悟空］氷鷹 北斗", star: "★★★★★", img: "", src: "gamerch 官方卡面", link: "https://gamerch.com/ensemble-star-music/293821" },
         { name: "［Chill Yellow］氷鷹 北斗", star: "★★★★★", img: "", src: "gamerch 官方卡面", link: "https://gamerch.com/ensemble-star-music/entry/397391" }
       ],
@@ -3356,6 +3356,8 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 
   // —— 版本日志（与 pet.js / CHANGELOG.md 同步）——
   const CHANGELOG = [
+  { ver: "2.9.45", date: "2026-11-04", notes: "补五星卡：明星昴流［希望の新年］" },
+  { ver: "2.9.44", date: "2026-11-04", notes: "补五星卡：冰鹰北斗［紅きマタドール］" },
   { ver: "2.9.43", date: "2026-11-04", notes: "补五星卡：天城一彩［ONLY SHINE］、仁兔成鸣［約束の聖歌］" },
   { ver: "2.9.42", date: "2026-11-04", notes: "补五星卡：影片美伽［ポイズンアラモード］、鸣上岚［愛の花束］" },
   { ver: "2.9.41", date: "2026-11-04", notes: "UNDEAD 17首歌键位数据全部注入成功（含U.S.A.翻唱/SWINGIN' PARONIRIA），keys覆盖从15首增至17首" },
@@ -5690,7 +5692,7 @@ function songCardHtml(s) {
         "游戏内站位（像游戏里 42135 那样摆，空位直接放数字）。"
       ] },
       { h: "更新日志", steps: [
-        "从下往上看每个版本改了什么。当前版本 v2.9.43。"
+        "从下往上看每个版本改了什么。当前版本 v2.9.45。"
       ] },
       { h: "使用教程", steps: [
         "就是这份完整说明，随时点开随时看。每个页面右上角也有本页教程。"
@@ -5719,7 +5721,7 @@ function songCardHtml(s) {
   function closeTut() { if (tutMask) { tutMask.remove(); tutMask = null; } }
   function maybeShowFirstTut() { if (localStorage.getItem("es-tut-v2")) return; localStorage.setItem("es-tut-v2", "1"); showTut("global"); }
   function init() {
-    $("libVer").textContent = "v2.9.43";
+    $("libVer").textContent = "v2.9.45";
     buildMobileNav();
     // 手机端「确定搜索」初始位置：右侧列表区域悬浮（用户指定），可拖动
     if (IS_MOBILE) {
