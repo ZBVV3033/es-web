@@ -884,7 +884,7 @@ html.es-darkfix canvas {
     <header class="top">
       <div class="top-title">
         <span>偶像梦幻祭 · 资料库</span>
-        <span class="ver" id="libVer">v2.9.45</span>
+        <span class="ver" id="libVer">v2.9.46</span>
       </div>
       <input type="text" class="search" id="libSearch" placeholder="搜索卡名 / 角色 / 卡池…" />
       <span class="top-btns">
@@ -2676,7 +2676,7 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
     {
       id: "mao", name: "衣更真绪", jp: "衣更真緒", unit: "Trickstar",
       info: "『招募！Ambassador／食道乐』★5（10-14 开启，日服）",
-      cards: [
+      cards: [{ name: "［日向の幼馴染］衣更 真緒", star: "★★★★★", img: "", src: "官方活动卡", link: "https://em1.ensemble-stars.jp/app_help/events/24/index.html" }, 
         { name: "宵の宴♪バンドアンサンブル（开花）", star: "★★★★★", img: "assets/cards/mao_banquet.png", src: "官方卡面（堆糖图库搬运）", link: "https://m.duitang.com/blogs/tag/?name=%E5%BC%80%E8%8A%B1" },
         { name: "ありふれた特別", star: "★★★★★", img: "img/g5/166751_h2.png", src: "gamerch 官方卡面", link: "https://gamerch.com/ensemble-star-music/166751" },
         { name: "想いのブーケ", star: "★★★★★", img: "img/g5/264252_h2.png", src: "gamerch 官方卡面", link: "https://gamerch.com/ensemble-star-music/264252" },
@@ -3356,6 +3356,7 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 
   // —— 版本日志（与 pet.js / CHANGELOG.md 同步）——
   const CHANGELOG = [
+  { ver: "2.9.46", date: "2026-11-04", notes: "补五星卡：衣更真绪［日向の幼馴染］" },
   { ver: "2.9.45", date: "2026-11-04", notes: "补五星卡：明星昴流［希望の新年］" },
   { ver: "2.9.44", date: "2026-11-04", notes: "补五星卡：冰鹰北斗［紅きマタドール］" },
   { ver: "2.9.43", date: "2026-11-04", notes: "补五星卡：天城一彩［ONLY SHINE］、仁兔成鸣［約束の聖歌］" },
@@ -5692,7 +5693,7 @@ function songCardHtml(s) {
         "游戏内站位（像游戏里 42135 那样摆，空位直接放数字）。"
       ] },
       { h: "更新日志", steps: [
-        "从下往上看每个版本改了什么。当前版本 v2.9.45。"
+        "从下往上看每个版本改了什么。当前版本 v2.9.46。"
       ] },
       { h: "使用教程", steps: [
         "就是这份完整说明，随时点开随时看。每个页面右上角也有本页教程。"
@@ -5721,7 +5722,7 @@ function songCardHtml(s) {
   function closeTut() { if (tutMask) { tutMask.remove(); tutMask = null; } }
   function maybeShowFirstTut() { if (localStorage.getItem("es-tut-v2")) return; localStorage.setItem("es-tut-v2", "1"); showTut("global"); }
   function init() {
-    $("libVer").textContent = "v2.9.45";
+    $("libVer").textContent = "v2.9.46";
     buildMobileNav();
     // 手机端「确定搜索」初始位置：右侧列表区域悬浮（用户指定），可拖动
     if (IS_MOBILE) {
