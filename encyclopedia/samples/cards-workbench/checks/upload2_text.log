@@ -1,0 +1,16 @@
+VERIFIED README.md
+VERIFIED 图鉴重做计划.md
+VERIFIED sample/cards_sample.html
+VERIFIED sample/cards_g5.js
+VERIFIED data/g5_all.tsv
+VERIFIED data/g5_focus.tsv
+VERIFIED data/stands_members.tsv
+VERIFIED scripts/parse_g5.ps1
+VERIFIED scripts/download_g5.ps1
+VERIFIED scripts/build_cards.ps1
+VERIFIED scripts/verify.ps1
+VERIFIED scripts/run_all.ps1
+VERIFIED checks/check_report.log
+VERIFIED checks/verify.log
+VERIFIED checks/g5_parse.log
+VERIFIED checks/g5_dl.log

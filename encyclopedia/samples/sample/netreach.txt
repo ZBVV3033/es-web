@@ -1,0 +1,4 @@
+OK	https://www.bilibili.com/	200
+OK	https://support.ensemble-stars.jp/music/cat_2/5892/	200
+OK	https://em1.ensemble-stars.jp/app_help/gachas/27/card_list.html	200
+OK	https://gamerch.com/hokan-ensemble-stars/entry/402742	200
