@@ -884,7 +884,7 @@ html.es-darkfix canvas {
     <header class="top">
       <div class="top-title">
         <span>偶像梦幻祭 · 资料库</span>
-        <span class="ver" id="libVer">v2.9.39</span>
+        <span class="ver" id="libVer">v2.9.40</span>
       </div>
       <input type="text" class="search" id="libSearch" placeholder="搜索卡名 / 角色 / 卡池…" />
       <span class="top-btns">
@@ -2665,7 +2665,7 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
     {
       id: "raika", name: "Raika", jp: "ライカ", unit: "Special for Princess!",
       info: "『噩梦★黑暗与LimeLIEt』活动★5（10-15 开启，日服）",
-      cards: [
+      cards: [{ name: "［感谢の歌を歌って］ライカ", star: "★★★★★", img: "", src: "gamerch 官方卡面", link: "https://gamerch.com/ensemble-star-music/961152" }, 
         { name: "［魅力の詰め合わせ］ライカ", star: "★★★★★", img: "", src: "gamerch 官方卡面", link: "https://gamerch.com/ensemble-star-music/957030" },
         { name: "Lyrical White（リリカル・ホワイト）", star: "★★★", img: "assets/cards/raika_lyrical.png", src: "Ensemble Stars Wiki 官方卡面", link: "https://ensemble-stars.fandom.com/wiki/(Lyrical_White)_Raika" }
       ],
@@ -3356,6 +3356,7 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 
   // —— 版本日志（与 pet.js / CHANGELOG.md 同步）——
   const CHANGELOG = [
+  { ver: "2.9.40", date: "2026-11-04", notes: "Raika补第二张五星卡［感谢の歌を歌って］，所有角色均有2+张五星卡" },
   { ver: "2.9.39", date: "2026-11-04", notes: "补五星卡：影片美伽［Valkyrieの芸術品］、鸣上岚［乙女の花園］" },
   { ver: "2.9.38", date: "2026-11-04", notes: "补五星卡：天城一彩［上級外遊び］、仁兔成鸣［音楽の小人］、Kanna［感谢は手短に］+［游色ラフファセット］" },
   { ver: "2.9.37", date: "2026-11-04", notes: "①注入166首歌时长+属性（gamerch数据）；②拆分mikanaru为mika(Valkyrie)+arashi(Knights)；③Raika添加五星卡［魅力の詰め合わせ］" },
@@ -5686,7 +5687,7 @@ function songCardHtml(s) {
         "游戏内站位（像游戏里 42135 那样摆，空位直接放数字）。"
       ] },
       { h: "更新日志", steps: [
-        "从下往上看每个版本改了什么。当前版本 v2.9.39。"
+        "从下往上看每个版本改了什么。当前版本 v2.9.40。"
       ] },
       { h: "使用教程", steps: [
         "就是这份完整说明，随时点开随时看。每个页面右上角也有本页教程。"
@@ -5715,7 +5716,7 @@ function songCardHtml(s) {
   function closeTut() { if (tutMask) { tutMask.remove(); tutMask = null; } }
   function maybeShowFirstTut() { if (localStorage.getItem("es-tut-v2")) return; localStorage.setItem("es-tut-v2", "1"); showTut("global"); }
   function init() {
-    $("libVer").textContent = "v2.9.39";
+    $("libVer").textContent = "v2.9.40";
     buildMobileNav();
     // 手机端「确定搜索」初始位置：右侧列表区域悬浮（用户指定），可拖动
     if (IS_MOBILE) {
