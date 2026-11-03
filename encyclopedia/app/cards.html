@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>图鉴小样 v0.8 · 组合逐人最新卡 → 角色五星/四星分区（含真图核对区）</title>
+<style>
+  :root{
+    --bg:#f2f4fa; --bg2:#e8ebf4; --bg3:#dde2ee; --card:#fff;
+    --line:rgba(23,26,48,.08); --line2:rgba(23,26,48,.16);
+    --txt:#23273d; --txt2:rgba(35,39,61,.68); --txt3:rgba(35,39,61,.48);
+    --acc2:#2563c9; --gold:#e8a33d; --purple:#a678d8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--txt);font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;font-size:14px}
+  .wrap{max-width:1100px;margin:0 auto;padding:14px}
+  .note{background:#fff7e8;border:1px solid #f3d9a8;border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.7;color:#6b5320;margin-bottom:14px}
+  .note b{color:#8a5b00}.note ul{margin:6px 0 0 18px}
+  .head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+  .head h1{font-size:19px;font-weight:700}
+  .head .ver{font-size:12px;color:var(--txt3);background:var(--bg2);padding:2px 10px;border-radius:999px}
+  .toolbar{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+  .search{flex:1;min-width:200px;font-size:13px;border:1px solid var(--line2);border-radius:9px;background:#fff;color:var(--txt);padding:8px 11px;outline:none}
+  .search:focus{border-color:var(--acc2)}
+  .stats{font-size:12.5px;color:var(--txt2);margin-left:auto;display:flex;gap:12px;flex-wrap:wrap}
+  .stats b{color:var(--gold)}.stats .p4 b{color:var(--purple)}
+  /* 组合块 */
+  .unit{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:14px;overflow:hidden}
+  .u-head{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--bg2);flex-wrap:wrap}
+  .u-dot{width:12px;height:12px;border-radius:50%;flex:none}
+  .u-name{font-size:16px;font-weight:700}
+  .u-sub{font-size:12px;color:var(--txt2)}
+  .u-leader{font-size:12px;color:#a9771f;font-weight:700}
+  .u-meta{margin-left:auto;font-size:12.5px;color:var(--txt2);display:flex;gap:12px}
+  .u-meta .m5{color:var(--gold);font-weight:700}.u-meta .m4{color:var(--purple);font-weight:700}
+  .u-body{padding:12px 14px}
+  .mem-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+  @media(max-width:860px){.mem-grid{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:560px){.mem-grid{grid-template-columns:repeat(2,1fr)}.stats{margin-left:0;width:100%}}
+  .rep{border:1px solid var(--line);border-radius:11px;overflow:hidden;cursor:pointer;background:#fff;transition:transform .12s,box-shadow .12s}
+  .rep:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(23,26,48,.12s)}
+  .rep-top{position:relative;aspect-ratio:4/5;background:linear-gradient(160deg,var(--bg2),var(--bg3));display:flex;align-items:center;justify-content:center}
+  .rep-top img{width:100%;height:100%;object-fit:contain;object-position:center;display:block}
+  .rep-top .ph{width:74%;text-align:center;color:var(--txt3)}
+  .rep-top .ph .starline{font-size:12px;letter-spacing:1px}
+  .rep-top .ph .letter{font-size:30px;font-weight:700;opacity:.32;margin:4px 0}
+  .rep-top .ph .ph-txt{font-size:10.5px;line-height:1.5}
+  .rep.pending .rep-top{background:repeating-linear-gradient(45deg,#f4f5fa,#f4f5fa 8px,#eceef7 8px,#eceef7 16px)}
+  .rbadge{position:absolute;left:8px;top:8px;font-size:11px;font-weight:700;color:#fff;padding:3px 8px;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,.18)}
+  .rbadge.r5{background:linear-gradient(135deg,#f5b83d,#d98912)}
+  .rbadge.r4{background:linear-gradient(135deg,#b98be0,#8b5cc4)}
+  .leader-badge{position:absolute;right:8px;top:8px;font-size:10px;font-weight:700;color:#fff;background:linear-gradient(135deg,#f5b83d,#d98912);padding:2px 8px;border-radius:8px}
+  .rep-foot{padding:9px 10px 10px}
+  .rep-foot .rn{font-size:13.5px;font-weight:700}
+  .rep-foot .rsub{font-size:11px;color:var(--txt3);margin-top:2px}
+  .rep-foot .rcnt{font-size:11px;color:var(--acc2);margin-top:5px;font-weight:700}
+  /* 面包屑 + 角色头 */
+  .crumb{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+  .backbtn{border:1px solid var(--line2);background:#fff;color:var(--acc2);border-radius:999px;padding:7px 14px;font-size:13px;cursor:pointer;font-weight:700}
+  .crumb .here{font-size:15px;font-weight:700}
+  .role-head{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;gap:14px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
+  .rh-av{width:58px;height:58px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;flex:none}
+  .rh-name{font-size:18px;font-weight:700}
+  .rh-sub{font-size:12.5px;color:var(--txt2);margin-top:3px}
+  .leader-chip{font-size:11px;font-weight:700;color:#fff;background:linear-gradient(135deg,#f5b83d,#d98912);padding:2px 10px;border-radius:999px;margin-left:8px}
+  .rh-meta{margin-left:auto;display:flex;gap:14px;font-size:13px}
+  .rh-meta .m5{color:var(--gold);font-weight:700}.rh-meta .m4{color:var(--purple);font-weight:700}
+  .sec-title{display:flex;align-items:baseline;gap:10px;font-size:15px;font-weight:700;margin:6px 2px 10px}
+  .sec-title.s5{color:#b9791a}.sec-title.s4{color:#7c4fb0}
+  .sec-title .cnt{font-size:12px;color:var(--txt3);font-weight:400}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px}
+  @media(max-width:860px){.grid{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:560px){.grid{grid-template-columns:repeat(2,1fr)}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:11px;overflow:hidden;cursor:pointer;transition:transform .12s,box-shadow .12s}
+  .card:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(23,26,48,.12s)}
+  .pic{position:relative;aspect-ratio:4/5;background:linear-gradient(160deg,var(--bg2),var(--bg3));display:flex;align-items:center;justify-content:center}
+  .pic img{width:100%;height:100%;object-fit:contain;object-position:center;display:block}
+  .pic .ph{width:70%;text-align:center;color:var(--txt3)}
+  .pic .ph .starline{font-size:13px;letter-spacing:1px}
+  .pic .ph .roleletter{font-size:32px;font-weight:700;opacity:.32;margin:5px 0}
+  .pic .ph .ph-txt{font-size:11px;line-height:1.5}
+  .card.pending .pic{background:repeating-linear-gradient(45deg,#f4f5fa,#f4f5fa 8px,#eceef7 8px,#eceef7 16px)}
+  .status-tag{position:absolute;right:8px;top:8px;font-size:10px;color:#fff;padding:2px 7px;border-radius:8px}
+  .st-ready{background:rgba(37,99,201,.85)}.st-pending{background:rgba(90,155,214,.75)}
+  .st-single{background:rgba(201,121,31,.92);top:26px!important;white-space:nowrap}
+  .meta{padding:9px 10px 10px}
+  .cn{font-size:13.5px;font-weight:700;line-height:1.35}
+  .en{font-size:12px;color:var(--txt2);margin-top:3px;line-height:1.35}
+  .jp{font-size:11.5px;color:var(--txt3);margin-top:2px;line-height:1.35}
+  .pool{margin-top:6px;display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+  .ptag{font-size:10px;font-weight:700;color:#fff;padding:1px 7px;border-radius:7px;flex:none}
+  .ptag.scout{background:var(--acc2)}.ptag.event{background:#e8862b}
+  .pname{font-size:11px;color:var(--txt2);line-height:1.3;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pdate{font-size:10.5px;color:var(--txt3);flex:none}
+  .empty{padding:22px;text-align:center;color:var(--txt3);font-size:13px;background:var(--card);border:1px dashed var(--line2);border-radius:12px;margin-bottom:22px}
+  /* 图片核对区（非图鉴数据） */
+  .imgcheck{background:#fff;border:1px dashed var(--line2);border-radius:14px;padding:14px;margin-top:8px}
+  .imgcheck h3{font-size:14px;margin-bottom:4px}
+  .imgcheck .hint{font-size:12px;color:var(--txt3);margin-bottom:12px;line-height:1.6}
+  .ic-row{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}
+  .ic-img{width:180px;border-radius:10px;border:1px solid var(--line2);overflow:hidden;flex:none}
+  .ic-img img{width:100%;display:block}
+  .ic-info{font-size:13px;line-height:1.9;min-width:240px}
+  .thumbs-sec{margin-top:14px;border-top:1px dashed var(--line2);padding-top:12px}
+  .thumbs-h{font-size:12.5px;font-weight:700;margin-bottom:8px}
+  .ic-thumbs{display:flex;gap:10px;flex-wrap:wrap}
+  .ic-thumbs>div{text-align:center}
+  .ic-thumbs img{width:104px;border:1px solid var(--line2);border-radius:8px;display:block}
+  .ic-thumbs span{display:block;font-size:11px;color:var(--txt3);margin-top:3px}
+  .thumbs-note{font-size:12px;color:var(--txt2);margin-top:8px;line-height:1.6}
+  .ic-info b{color:var(--txt)}
+  .mask{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:none;align-items:center;justify-content:center;padding:14px}
+  .mask.on{display:flex}
+  .dlg{background:#fff;border-radius:16px;max-width:420px;width:100%;overflow:hidden}
+  .dlg-pic{aspect-ratio:4/5;background:linear-gradient(160deg,var(--bg2),var(--bg3));display:flex;align-items:center;justify-content:center;color:var(--txt3);font-size:13px;padding:8px}
+  .dlg-pic img{max-width:100%;max-height:100%;object-fit:contain;object-position:center;display:block}
+  #dlgPic{position:relative}
+  .form-toggle{position:absolute;left:6px;bottom:6px;display:flex;gap:4px;z-index:4}
+  .form-toggle button{border:1px solid rgba(0,0,0,.15);background:rgba(255,255,255,.94);color:var(--txt2);font-size:11px;line-height:1;padding:4px 9px;border-radius:11px;cursor:pointer}
+  .form-toggle button.on{background:var(--acc2);color:#fff;border-color:var(--acc2)}
+  .dlg-body{padding:14px 16px 16px}
+  .dlg-row{display:flex;gap:8px;margin-top:8px;font-size:13px}
+  .dlg-row .k{color:var(--txt3);flex:none;width:64px}
+  .dlg-close{margin:12px auto 4px;display:block;min-width:120px;min-height:40px;border:none;border-radius:20px;background:var(--acc2);color:#fff;font-size:14px;font-weight:700;cursor:pointer}
+  /* ===== 完整详情页 ===== */
+  .detail-layout{display:grid;grid-template-columns:216px minmax(0,1fr);gap:24px;align-items:start;margin-bottom:16px}
+  @media(max-width:600px){.detail-layout{grid-template-columns:1fr}}
+  .d-left{display:flex;flex-direction:column;gap:14px;align-items:flex-start}
+  .d-maincard{position:relative;width:196px;aspect-ratio:4/5;background:linear-gradient(160deg,var(--bg2),var(--bg3));border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;align-items:center;justify-content:center;cursor:zoom-in}
+  .d-mainimg{width:100%;height:100%;object-fit:contain;object-position:center;display:block}
+  .d-thumbs{display:flex;gap:12px;justify-content:flex-start}
+  .d-thumbs .dt{flex:none;width:96px;border:1px solid var(--line2);background:#fff;border-radius:10px;padding:5px;cursor:pointer;text-align:center;line-height:1.3}
+  .d-thumbs .dt.on{border-color:var(--acc2);box-shadow:0 0 0 2px rgba(37,99,201,.15)}
+  .d-thumbs .dt img{width:100%;aspect-ratio:4/5;object-fit:contain;display:block;border-radius:6px;background:var(--bg2)}
+  .d-thumbs .dt span{display:block;font-size:11px;color:var(--txt2);margin-top:3px}
+  .d-right{min-width:0}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+  .d-sec-h{font-size:13.5px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+  .d-soon{font-size:10.5px;font-weight:700;color:#a9771f;background:#fff3d9;padding:1px 8px;border-radius:999px}
+  .d-wideimg{width:100%;border-radius:10px;object-fit:contain;max-height:260px;background:var(--bg2);display:block}
+  .d-ph{border:1.5px dashed var(--line2);border-radius:10px;color:var(--txt3);font-size:12.5px;padding:26px 14px;text-align:center;line-height:1.7;background:repeating-linear-gradient(45deg,#f7f8fc,#f7f8fc 8px,#eef0f8 8px,#eef0f8 16px)}
+  .d-mv-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:560px){.d-mv-grid{grid-template-columns:1fr}}
+  .d-mv-slot{border:1.5px dashed var(--line2);border-radius:12px;padding:12px;text-align:center;background:repeating-linear-gradient(45deg,#f7f8fc,#f7f8fc 8px,#eef0f8 8px,#eef0f8 16px)}
+  .d-mv-ph{aspect-ratio:3/4;max-height:230px;display:flex;align-items:center;justify-content:center;color:var(--txt3);font-size:13px;margin-bottom:8px}
+  .d-mv-slot span{display:block;font-size:10.5px;color:var(--txt3);word-break:break-all}
+  .d-info{padding:14px 18px}
+  .d-rows .d-row{display:flex;gap:16px;padding:7px 0;border-bottom:1px dashed var(--line);font-size:13.5px;line-height:1.55;align-items:baseline}
+  .d-rows .d-row:last-child{border-bottom:none}
+  .d-row .k{color:var(--txt3);flex:none;width:74px;font-size:13px}
+  .d-row .v{min-width:0;word-break:break-word}
+  .cn-trans{color:var(--txt2);margin-left:8px}
+  .stars{font-weight:700;letter-spacing:2px}
+  .src-tag{font-weight:700;padding:1px 8px;border-radius:8px;color:#fff;margin-right:6px;font-size:12px}
+  .src-tag.scout{background:var(--acc2)}.src-tag.event{background:#e8862b}
+  .d-link{color:var(--acc2);text-decoration:none;font-weight:700}.d-link:hover{text-decoration:underline}
+  .d-note{color:var(--txt2);font-size:12.5px}
+  .d-muted{color:var(--txt3);font-size:12.5px}
+  .type-pill{font-weight:700;letter-spacing:.5px}
+  .cat-tag{display:inline-block;font-size:12px;color:#fff;background:#6c7896;border-radius:8px;padding:1px 8px;margin-right:6px}
+  .src-name{margin-right:8px}.src-date{color:var(--txt3);font-size:12.5px}
+  .mv-pill{display:inline-block;font-weight:700;font-size:12.5px;border-radius:9px;padding:1px 9px}
+  .mv-yes{color:#1c7d3d;background:#e3f5e9}.mv-no{color:#7a8296;background:#eceff4}
+  .d-wide-panel{margin-bottom:16px}
+  /* 主图点击放大层 */
+  .zoommask{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:300;display:none;align-items:center;justify-content:center;padding:24px}
+  .zoommask.on{display:flex}
+  .zoomwrap{position:relative;max-width:92vw;max-height:92vh}
+  .zoomwrap img{max-width:92vw;max-height:90vh;object-fit:contain;display:block;border-radius:10px}
+  .zoom-close{position:absolute;top:-14px;right:-14px;width:34px;height:34px;border-radius:50%;border:none;background:#fff;color:#222;font-size:18px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.35)}
+
+  .imgcheck{display:none!important}
+  /* 只读待补五星清单（纯文字·不绑定低清图） */
+  .blist{display:flex;flex-direction:column;gap:8px;margin-bottom:22px}
+  .bl-row{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;background:var(--card);border:1px solid var(--line2);border-radius:10px;padding:8px 12px;font-size:13px}
+  .bl-tag{flex:0 0 auto;font-size:11px;line-height:1.5;padding:0 9px;border-radius:999px;color:#fff;white-space:nowrap}
+  .bl-tag.no_standard_art{background:#8a93a6}
+  .bl-tag.candidate_multi{background:#3fa6f4}
+  .bl-tag.candidate_relaxed,.bl-tag.candidate_other{background:#c9791f}
+  .bl-title{color:#2b3038;font-weight:600}
+  .bl-date{color:var(--txt3);font-size:12px}
+  .bl-note{color:var(--txt3);font-size:12px}
+  .bl-link{margin-left:auto;color:var(--acc2);text-decoration:none;font-size:12px;white-space:nowrap}
+  /* 待补图五星占位卡（空卡面、不绑定低清图） */
+  .ph-sec{color:var(--txt3)}
+  .ph-card{opacity:.95}
+  .ph-pic{position:relative;display:flex;align-items:center;justify-content:center;min-height:180px;background:var(--card);border:1px dashed var(--line2);border-radius:14px}
+  .ph-empty{color:var(--txt3);font-size:12px}
+  .ph-tag{background:#8a93a6;top:26px;white-space:nowrap}
+  .ph-link{color:var(--acc2);text-decoration:none;font-size:12px;white-space:nowrap}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="note">
+    <b>小样 v0.9（组合逐人最新卡 → 角色五星/四星分区；成对 62 对（5★22 / 4★40，gamerch 640×800）+ 单侧补全 2 张（5★24，橙色角标＝缺另一朝向））</b>
+    <ul>
+      <li><b>一级·组合块</b>：直接逐人显示该成员自己的最新卡面（已采集优先、星级高/档期新优先）；队长核实后排第一位并打金徽标（仓库无队长记录，当前组合头标注「队长：待核实」，不臆断人名）。</li>
+      <li><b>二级·角色页</b>：点开某人，五星区 / 四星区分开显示；正式卡带日文卡名 + 卡池/活动来源档期，中/英文名后续批量补齐。</li>
+      <li><b>命名权威</b>：角色中/日文名与组合归属正式版以仓库 <code>buildIdolGroups()</code>/<code>ES_ROLE_NAMES</code> 为准；旧图鉴错挂（衣更真绪旧标 MaM，实为 Trickstar）不沿用；fandom 仅补卡面英/日文名与 Acquiring 来源。</li>
+      <li><b>图片通道</b>：成对 gamerch 640×800 真图 62 对；另有 2 张单侧标准图（橙色角标＝缺另一朝向、朝向待核）；均核对署名与五星，无图不顶替。来源为日服卡名/档期，角色组合归属仍以仓库为准；下方核对区为历史低清/3★验证素材，<b>不计入图鉴数据</b>；角色页底部「待补五星」为 23 条未入库卡的纯文字清单（不出低清图、不参与计数）。</li>
+    </ul>
+  </div>
+
+  <div class="head"><h1>偶像图鉴 · 卡面</h1><span class="ver">小样 v0.9 · 成对62对+单侧2 · 5★24/4★40 · 待补23条纯文字清单 · 组合→角色</span></div>
+
+  <div class="toolbar">
+    <input class="search" id="q" placeholder="搜索：卡名（中/英/日）、角色名、组合名" />
+    <div class="stats"><span>命中 <b id="stTotal">0</b> 张</span><span class="p5">5★ <b id="st5">0</b></span><span class="p4">4★ <b id="st4">0</b></span></div>
+  </div>
+
+  <div id="content"></div>
+
+  <div class="imgcheck">
+    <h3>图片通道核对区（非图鉴数据 · 仅验证图文对应，防止拿错角色/星级）</h3>
+    <div class="hint">本区为早期通道验证素材（3★测试图与低清缩略），仅用于确认图文对应与星级，不进入上方正式网格；正式真图见上方网格。</div>
+    <div class="ic-row">
+      <div class="ic-img"><img src="img/raika_lyrical_3star.jpg" alt="Raika Lyrical White 3star" /></div>
+      <div class="ic-info">
+        <div>角色：<b>Raika（ライカ）</b> · 组合：<b>Special for Princess!</b></div>
+        <div>卡名：Lyrical White（リリカル・ホワイト）</div>
+        <div>星级：<b style="color:var(--purple)">★★★（3★，不在本次范围）</b></div>
+        <div>图内署名：右下角「ライカ / Raika」、三星 → 与标签一致，角色未拿错</div>
+        <div>来源：<a href="https://ensemble-stars.fandom.com/wiki/(Lyrical_White)_Raika" target="_blank" rel="noopener" style="color:var(--acc2)">fandom 页面 ↗</a></div>
+      </div>
+    </div>
+    <div class="thumbs-sec">
+      <div class="thumbs-h">历史参考：HiMERU 5★ 低清缩略（100×125），仅用于早期通道验证；现已被上方 640×800 真图替代，不绑定卡名、不进正式网格。</div>
+      <div class="ic-thumbs">
+        <div><img src="img/h5_1_thumb.jpg" alt="HiMERU 5star reference 1" /><span>参考1 · 五颗金星</span></div>
+        <div><img src="img/h5_2_thumb.jpg" alt="HiMERU 5star reference 2" /><span>参考2 · 五颗金星</span></div>
+        <div><img src="img/h5_3_thumb.jpg" alt="HiMERU 5star reference 3" /><span>参考3 · 五颗金星</span></div>
+      </div>
+      <div class="thumbs-note">三张均为蓝发 HiMERU、五星；页头 Crazy:B logo 与成员（Rinne / HiMERU / Kohaku / Niki）印证归属正确。当前分辨率不足以唯一对应英文卡名，为避免张冠李戴，不写入正式卡数据。</div>
+    </div>
+  </div>
+</div>
+
+<div class="mask" id="mask">
+  <div class="dlg">
+    <div class="dlg-pic" id="dlgPic">卡面图位（正式版显示大图，可放大）</div>
+    <div class="dlg-body" id="dlgBody"></div>
+    <button class="dlg-close" onclick="closeDlg()">关闭</button>
+  </div>
+</div>
+
+<div class="zoommask" id="zoomMask" onclick="closeZoomBg(event)">
+  <div class="zoomwrap"><img id="zoomImg" src="" alt="卡面大图"/><button class="zoom-close" onclick="closeZoom()">×</button></div>
+</div>
+
+<script src="cards_g5.js?v=20261102c"></script>
+<script src="cards_g4.js"></script>
+<script src="cards_backlog.js"></script>
+<script src="cards_g5_placeholders.js"></script>
+<script>
+/* ===== 角色基准（正式版由主工程 buildIdolGroups / ES_ROLE_NAMES 生成）===== */
+const ROLE_META = [
+  {key:"himeru", zh:"HiMERU", jp:"ひめる", en:"HiMERU", unit:"Crazy:B", color:"#a678d8", leader:false},
+  {key:"jun",    zh:"涟纯",   jp:"漣ジュン", en:"Jun",    unit:"Eden",            color:"#3f6fb5", leader:false},
+  {key:"kanata", zh:"深海奏汰", jp:"深海奏汰", en:"Kanata",  unit:"流星隊",          color:"#2f8f83", leader:false},
+  {key:"mao",    zh:"衣更真绪", jp:"衣更真緒", en:"Mao",     unit:"Trickstar",       color:"#d2595f", leader:false},
+];
+/* 核实后填 roleKey；null=待核实，组合头显示“队长：待核实”，不臆断 */
+const UNIT_LEADER = { "Crazy:B":null, "Eden":null, "流星隊":null, "Trickstar":null, "UNDEAD":null };
+const UNIT_SUB={"Crazy:B":"クレビ","Eden":"エデン","流星隊":"Ryuseitai","UNDEAD":"アンデッド","Trickstar":"トリックスター"};
+const UNIT_COLOR={"Crazy:B":"#a678d8","Eden":"#3f6fb5","流星隊":"#3fae8a","UNDEAD":"#7a5fb0","Trickstar":"#d2595f"};
+const UNIT_ORDER=["Crazy:B","Eden","流星隊","Trickstar","UNDEAD"];
+
+/* ===== 数据数组：cards_g5.js（五星成对 640×800）+ cards_g4.js（四星成对 640×800）=====
+   无可靠署名图的角色/卡面保持占位，不伪造。 */
+const ES_CARDS = [
+  ...(typeof ES_CARDS_G5 !== "undefined" ? ES_CARDS_G5 : []),
+  ...(typeof ES_CARDS_G4 !== "undefined" ? ES_CARDS_G4 : []),
+
+
+
+];
+let state={view:"units", role:null, q:"", detail:null};
+const $=s=>document.querySelector(s);
+function roleOf(k){return ROLE_META.find(r=>r.key===k)||{zh:k,jp:"",en:"",unit:"",color:"#9aa3b8",leader:false}}
+function starLabel(n){return "★".repeat(n)}
+function hit(c){
+  if(state.q){
+    const r=roleOf(c.role);
+    const hay=[c.cn,c.en,c.jp,r.zh,r.jp,r.en,r.unit,(UNIT_SUB[r.unit]||"")].join(" ").toLowerCase();
+    if(!hay.includes(state.q.toLowerCase())) return false;
+  }
+  return true;
+}
+function cardsOf(roleKey){return ES_CARDS.filter(c=>c.role===roleKey && hit(c))}
+function latestCard(roleKey){
+  return ES_CARDS.filter(c=>c.role===roleKey).slice().sort((a,b)=>{
+    if((a.status==="ready")!==(b.status==="ready")) return a.status==="ready"?-1:1;
+    if(a.star!==b.star) return b.star-a.star;
+    return (b.srcDate||"").localeCompare(a.srcDate||"");
+  })[0];
+}
+function sortCards(list){return list.slice().sort((a,b)=>{
+  if((a.status==="ready")!==(b.status==="ready")) return a.status==="ready"?-1:1;
+  return (b.srcDate||"").localeCompare(a.srcDate||"");
+});}
+
+/* ---------- L1 组合块：逐人最新卡 ---------- */
+function memberCardHTML(roleKey){
+  const r=roleOf(roleKey); const c=latestCard(roleKey);
+  const n5=ES_CARDS.filter(x=>x.role===roleKey&&x.star===5).length;
+  const n4=ES_CARDS.filter(x=>x.role===roleKey&&x.star===4).length;
+  const pending=!c||c.status!=="ready";
+  const star=c?c.star:5;
+  const leaderMark=(UNIT_LEADER[r.unit]===roleKey)?`<span class="leader-badge">队长</span>`:"";
+  const latestName=c?(c.cn||c.jp||c.en||"—"):"待采集";
+  const after=c?(c.imgBloomed||c.img||""):"";
+  const picInner=c&&after
+    ? `<img src="${after}" alt="${latestName}" />`
+    : `<div class="ph"><div class="starline" style="color:${star===5?"var(--gold)":"var(--purple)"}">${starLabel(star)}</div>
+       <div class="letter" style="color:${r.color}">${r.en.slice(0,1)}</div>
+       <div class="ph-txt">${pending?"待采集":"最新卡面 · 点击进入"}</div></div>`;
+  return `<div class="rep${pending?" pending":""}" onclick="showRole('${roleKey}')">
+    <div class="rep-top">${picInner}<span class="rbadge r${star}">${star===5?"5★":"4★"}</span>${leaderMark}</div>
+    <div class="rep-foot"><div class="rn">${r.zh}</div><div class="rsub">${r.en} · ${r.jp}</div>
+    <div class="rcnt">最新：${c?((c.jp||"—")+(c.cn?`　${c.cn}`:"")):"待采集"} · 5★${n5}/4★${n4} ›</div></div></div>`;
+}
+function renderUnits(){
+  const all=ES_CARDS.filter(hit);
+  $("#stTotal").textContent=all.length;$("#st5").textContent=all.filter(c=>c.star===5).length;$("#st4").textContent=all.filter(c=>c.star===4).length;
+  let html="";
+  UNIT_ORDER.forEach(u=>{
+    const roles=ROLE_META.filter(r=>r.unit===u);
+    if(state.q && !roles.some(r=>cardsOf(r.key).length)) return;
+    const uCards=ES_CARDS.filter(c=>roleOf(c.role).unit===u && hit(c));
+    const m5=uCards.filter(c=>c.star===5).length, m4=uCards.filter(c=>c.star===4).length;
+    const leaderName=UNIT_LEADER[u]?roleOf(UNIT_LEADER[u]).zh:"待核实";
+    const ordered=roles.slice().sort((a,b)=>{
+      const la=UNIT_LEADER[u]===a.key?0:1, lb=UNIT_LEADER[u]===b.key?0:1; return la-lb;
+    });
+    let mem="";
+    ordered.forEach(r=>{ if(state.q && !cardsOf(r.key).length) return; mem+=memberCardHTML(r.key); });
+    if(!mem) return;
+    html+=`<div class="unit">
+      <div class="u-head"><span class="u-dot" style="background:${UNIT_COLOR[u]}"></span>
+        <span class="u-name">${u}</span><span class="u-sub">${UNIT_SUB[u]||""}</span>
+        <span class="u-leader">队长：${leaderName}</span>
+        <span class="u-meta"><span class="m5">5★ ${m5}</span><span class="m4">4★ ${m4}</span><span>成员 ${roles.length}</span></span></div>
+      <div class="u-body"><div class="mem-grid">${mem}</div></div></div>`;
+  });
+  if(!html) html=`<div class="empty">没有匹配的组合/角色/卡面，换个关键词试试。</div>`;
+  $("#content").innerHTML=html;
+}
+
+/* ---------- L2 角色页：五星 / 四星分区 ---------- */
+function showRole(k){state.view="role";state.role=k;render()}
+function backUnits(){state.view="units";state.role=null;render()}
+function cardHTML(c){
+  const r=roleOf(c.role);
+  const picInner=c.img
+    ? `<img src="${c.img}" alt="${c.cn||c.en||""}" />`
+    : `<div class="ph"><div class="starline">${starLabel(c.star)}</div><div class="roleletter" style="color:${r.color}">${r.en.slice(0,1)}</div><div class="ph-txt">卡面图位（正式版：真实卡图）</div></div>`;
+  if(c.status==="ready"){
+    const after=c.img||c.imgBloomed||""; const before=c.imgBefore||"";
+    const beforeOk=!!(before && after);
+    const formBtns=beforeOk?`<div class="form-toggle">
+        <button type="button" data-f="before" onclick="switchForm(this,'before',event)">未开花</button>
+        <button type="button" data-f="after" class="on" onclick="switchForm(this,'after',event)">开花</button></div>`:"";
+    const picEl=after?`<img class="pic-img" src="${after}" alt="${c.cn||c.en||""}" />`:`<div class="ph"><div class="ph-txt">文字已齐·待图</div></div>`;
+    return `<div class="card" onclick='openDetail(${JSON.stringify(c).replace(/'/g,"&#39;")})'>
+      <div class="pic" data-before="${beforeOk?before:""}" data-after="${after}">${picEl}${formBtns}<span class="rbadge r${c.star}">${c.star===5?"5★":"4★"}</span><span class="status-tag st-ready">${c.img?"真图已入库":"文字已齐·待图"}</span>${c.side==="single"?'<span class="status-tag st-single">单侧·缺对侧</span>':""}</div>
+      <div class="meta"><div class="cn">${c.jp||"—"}</div>${c.cn?`<div class="en">${c.cn}</div>`:""}
+        ${c.srcName?`<div class="pool"><span class="ptag ${c.srcType==="event"?"event":"scout"}">${c.srcType==="event"?"活动":"卡池"}</span><span class="pname" title="${c.srcName}">${c.srcName}</span><span class="pdate">${c.srcDate||""}</span></div>`:""}
+      </div></div>`;
+  }
+  return `<div class="card pending">
+    <div class="pic"><div class="ph"><div class="starline" style="color:${c.star===5?"var(--gold)":"var(--purple)"}">${starLabel(c.star)}</div><div class="roleletter" style="color:${r.color}">${r.en.slice(0,1)}</div><div class="ph-txt">待采集卡位</div></div>
+      <span class="rbadge r${c.star}">${c.star===5?"5★":"4★"}</span><span class="status-tag st-pending">待采集</span></div>
+    <div class="meta"><div class="cn" style="color:var(--txt3);font-weight:400">未收录</div><div class="en" style="color:var(--txt3)">批量采集后补充</div></div></div>`;
+}
+function renderRole(){
+  const r=roleOf(state.role); const cs=cardsOf(state.role);
+  $("#stTotal").textContent=cs.length;$("#st5").textContent=cs.filter(c=>c.star===5).length;$("#st4").textContent=cs.filter(c=>c.star===4).length;
+  const five=sortCards(cs.filter(c=>c.star===5)), four=sortCards(cs.filter(c=>c.star===4));
+  const isLeader=UNIT_LEADER[r.key]===r.key;
+  let html=`<div class="crumb"><button class="backbtn" onclick="backUnits()">‹ 返回组合列表</button><span class="here">${r.unit} / ${r.zh}</span></div>`;
+  html+=`<div class="role-head"><div class="rh-av" style="background:${r.color}">${r.zh.slice(0,1)}</div>
+    <div><div class="rh-name">${r.zh}${isLeader?`<span class="leader-chip">队长</span>`:""}<span style="font-weight:400;color:var(--txt3);font-size:13px">（${r.en} · ${r.jp}）</span></div>
+    <div class="rh-sub">${r.unit}${UNIT_SUB[r.unit]?" · "+UNIT_SUB[r.unit]:""}</div></div>
+    <div class="rh-meta"><span class="m5">5★ ${five.length}</span><span class="m4">4★ ${four.length}</span></div></div>`;
+  html+=`<div class="sec-title s5">★★★★★ 五星卡面<span class="cnt">${five.length} 张</span></div>`;
+  html+= five.length?`<div class="grid">${five.map(cardHTML).join("")}</div>`:`<div class="empty">暂无五星卡面（待采集入库）。</div>`;
+  html+=`<div class="sec-title s4">★★★★ 四星卡面<span class="cnt">${four.length} 张</span></div>`;
+  html+= four.length?`<div class="grid">${four.map(cardHTML).join("")}</div>`:`<div class="empty">暂无四星卡面（待采集入库）。</div>`;
+  const ph=(typeof ES_G5_PLACEHOLDERS!=="undefined"?ES_G5_PLACEHOLDERS:[]).filter(p=>p.role===state.role);
+  if(ph.length){
+    html+=`<div class="sec-title ph-sec">待补图五星（空卡面占位 · 不拿低清顶替）<span class="cnt">${ph.length} 张</span></div>`;
+    html+='<div class="grid ph-grid">'+ph.map(p=>`<div class="card ph-card">
+      <div class="pic ph-pic"><span class="rbadge r5">5★</span><span class="status-tag ph-tag">待补图</span><div class="ph-empty">暂无标准卡面</div></div>
+      <div class="meta"><div class="cn">${p.title}</div><div class="en">${p.note||""}</div>
+        <div class="pool"><a class="ph-link" href="${p.link}" target="_blank" rel="noopener">来源 ↗</a><span class="pdate">${p.date||""}</span></div></div></div>`).join("")+'</div>';
+  }
+  $("#content").innerHTML=html;
+}
+function render(){
+  if(state.view==="detail") renderDetail();
+  else if(state.view==="role") renderRole();
+  else renderUnits();
+}
+
+/* ---------- 完整卡面详情页（替换旧弹窗） ---------- */
+function openDetail(c){state.view="detail";state.detail=c;window.scrollTo(0,0);render()}
+function backRole(){state.view="role";state.detail=null;render()}
+function renderDetail(){
+  const c=state.detail; if(!c){backUnits();return}
+  const r=roleOf(c.role);
+  const after=c.img||c.imgBloomed||""; const before=c.imgBefore||"";
+  const beforeOk=!!(before&&after);
+  const wide=c.imgWideAfter||c.imgWideBefore||"";
+  const starColor=c.star===5?"var(--gold)":"var(--purple)";
+  const formToggle=beforeOk
+    ? '<div class="form-toggle"><button type="button" data-f="before" onclick="switchForm(this,\'before\',event)">未开花</button><button type="button" data-f="after" class="on" onclick="switchForm(this,\'after\',event)">开花</button></div>'
+    : "";
+  const thumbBtns=beforeOk
+    ? '<div class="d-thumbs"><button type="button" class="dt" data-f="before" onclick="switchForm(this,\'before\',event)"><img src="'+before+'" alt="未开花缩略"/><span>未开花</span></button><button type="button" class="dt on" data-f="after" onclick="switchForm(this,\'after\',event)"><img src="'+after+'" alt="开花缩略"/><span>开花</span></button></div>'
+    : "";
+  const wideBlock=wide
+    ? '<img class="d-wideimg" src="'+wide+'" alt="横版全图"/>'
+    : '<div class="d-ph">暂无横版全图（差分/原画）；采集到后自动展示<br/>预留字段：imgWideAfter / imgWideBefore</div>';
+  const TYPE_OK=["Sparkle","Brilliant","Flash","Glitter"];
+  const TYPE_STYLE={Sparkle:"#f4b63f",Brilliant:"#3fa6f4",Flash:"#e8686e",Glitter:"#7bc96f"};
+  const typeHtml=c.type&&TYPE_OK.indexOf(c.type)>=0
+    ? '<span class="type-pill" style="color:'+TYPE_STYLE[c.type]+'">'+c.type+'</span>'
+    : '<span class="d-muted">待补（タイプ：Sparkle / Brilliant / Flash / Glitter 之一）</span>';
+  const SRC_CAT_LABEL={feature:"限定主题/个人卡池",memorial:"纪念·FES 卡池",newsong:"新曲/洗牌活动",tour:"巡演活动",point:"点数活动"};
+  const catLabel=c.srcCat?(SRC_CAT_LABEL[c.srcCat]||""):"";
+  let srcHtml;
+  if(c.srcType){
+    srcHtml='<b class="src-tag '+c.srcType+'">'+(c.srcType==="event"?"活动":"卡池")+'</b>'
+      +(catLabel?'<span class="cat-tag">'+catLabel+'</span>':"")
+      +'<span class="src-name">'+(c.srcName||"来源名待补")+'</span>'
+      +(c.srcDate?'<span class="src-date">'+c.srcDate+'</span>':"");
+  }else{
+    srcHtml='<span class="d-muted">来源待补（逐卡 wiki 页补齐类型与名称）</span>';
+  }
+  function mvAdvice(card){
+    if(card.mvOutfit==="yes")return '<span class="mv-pill mv-yes">有 MV 衣装</span>'+(card.mvVerified?'':'<span class="d-muted">　（待手动确认）</span>');
+    if(card.mvOutfit==="no")return '<span class="mv-pill mv-no">无 MV 衣装</span>'+(card.mvVerified?'':'<span class="d-muted">　（待手动确认）</span>');
+    const nm=card.srcName||"";
+    let adv="";
+    if(/FES|周年|10周年|記念|アニバーサリ/.test(nm))adv="no";
+    else if(card.srcType==="scout"&&card.star===5&&/フィーチャー|Focus|フォーカス|スカウト！|テーマ/.test(nm))adv="yes";
+    if(adv==="yes")return '<span class="d-muted">规则初判：可能有（限定主题池五星）·待对照 wiki MV衣装一覧确认</span>';
+    if(adv==="no")return '<span class="d-muted">规则初判：可能无（纪念/FES 池）·待对照确认</span>';
+    return '<span class="d-muted">待核实（以 wiki「MV衣装付きカード一覧」为准，可手动标 yes/no）</span>';
+  }
+  const linkRow=c.link?'<div class="d-row"><span class="k">原文链接</span><span class="v"><a class="d-link" href="'+c.link+'" target="_blank" rel="noopener">来源页面 ↗</a></span></div>':"";
+  const noteRow=c.note?'<div class="d-row"><span class="k">备注</span><span class="v d-note">'+c.note+"</span></div>":"";
+  let h=`<div class="crumb"><button class="backbtn" onclick="backRole()">‹ 返回角色页</button><span class="here">${r.unit} / ${r.zh} / ${c.jp||"卡面详情"}${c.cn?`　${c.cn}`:""}</span></div>`;
+  h+=`<div class="detail-layout">
+    <div class="d-left">
+      <div class="d-maincard" id="dMainPic" onclick="zoomMain()" data-before="${beforeOk?before:""}" data-after="${after}">
+        <img class="d-mainimg" src="${after}" alt=""/>${formToggle}
+        <span class="rbadge r${c.star}">${c.star===5?"5★":"4★"}</span>
+      </div>
+      ${thumbBtns}
+    </div>
+    <div class="d-right"><div class="panel d-info">
+      <div class="d-rows">
+        <div class="d-row"><span class="k">角色</span><span class="v">${r.zh}${r.jp?`（${r.jp}）`:""}</span></div>
+        <div class="d-row"><span class="k">组合</span><span class="v">${r.unit}${UNIT_SUB[r.unit]?" · "+UNIT_SUB[r.unit]:""}</span></div>
+        <div class="d-row"><span class="k">星级</span><span class="v stars" style="color:${starColor}">${"★".repeat(c.star)}</span></div>
+        <div class="d-row"><span class="k">类型タイプ</span><span class="v">${typeHtml}</span></div>
+        <div class="d-row"><span class="k">卡名</span><span class="v">${c.jp||"—"}${c.cn?`<span class="cn-trans">${c.cn}</span>`:""}${c.cn?"":'<span class="d-muted">　中文待译</span>'}</span></div>
+        <div class="d-row"><span class="k">获取来源</span><span class="v">${srcHtml}</span></div>
+        <div class="d-row"><span class="k">MV衣装</span><span class="v">${mvAdvice(c)}</span></div>
+        ${linkRow}${noteRow}
+      </div>
+    </div></div>
+  </div>`;
+  h+=`<div class="panel d-wide-panel"><div class="d-sec-h">横版全图（差分 / 原画）</div>${wideBlock}</div>`;
+  h+=`<div class="panel d-mv-panel"><div class="d-sec-h">3DMV 服装预览 <span class="d-soon">待接入</span></div>
+    <div class="d-mv-grid">
+      <div class="d-mv-slot" data-mv="before"><div class="d-mv-ph">未开花造型 · 预留</div><span>mvOutfitBefore</span></div>
+      <div class="d-mv-slot" data-mv="after"><div class="d-mv-ph">开花造型 · 预留</div><span>mvOutfitAfter</span></div>
+    </div></div>`;
+  $("#content").innerHTML=h;
+}
+function switchForm(btn,form,e){
+  if(e)e.stopPropagation();
+  const key=form==="before"?"before":"after";
+  const grid=btn.closest(".pic");
+  if(grid&&grid.dataset[key]){
+    const img=grid.querySelector("img"); if(img)img.src=grid.dataset[key];
+    grid.querySelectorAll(".form-toggle button").forEach(b=>b.classList.toggle("on",b.dataset.f===key));
+  }
+  const main=$("#dMainPic");
+  if(main&&main.dataset[key]){
+    const img=main.querySelector("img.d-mainimg"); if(img)img.src=main.dataset[key];
+    main.querySelectorAll(".form-toggle button").forEach(b=>b.classList.toggle("on",b.dataset.f===key));
+  }
+  document.querySelectorAll(".d-thumbs .dt").forEach(b=>b.classList.toggle("on",b.dataset.f===key));
+}
+function closeDlg(){$("#mask").classList.remove("on")}
+function zoomMain(){const img=document.querySelector("#dMainPic img.d-mainimg");if(!img||!img.getAttribute("src"))return;$("#zoomImg").src=img.getAttribute("src");$("#zoomMask").classList.add("on")}
+function closeZoom(){$("#zoomMask").classList.remove("on")}
+function closeZoomBg(e){if(e.target.id==="zoomMask")closeZoom()}
+$("#mask").onclick=e=>{if(e.target.id==="mask")closeDlg()};
+$("#q").addEventListener("input",e=>{state.q=e.target.value.trim();render()});
+render();
+</script>
+</body>
+</html>
