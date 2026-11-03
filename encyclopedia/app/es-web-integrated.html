@@ -13,16 +13,17 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
   color-scheme: light;
-  --bg: #f2f4fa;
-  --bg2: #e8ebf4;
-  --bg3: #dde2ee;
-  --line: rgba(23,26,48,.08);
-  --line2: rgba(23,26,48,.16);
-  --txt: #23273d;
-  --txt2: rgba(35,39,61,.68);
-  --txt3: rgba(35,39,61,.48);
-  --acc: #f0a;
-  --acc2: #2563c9;
+  --bg: #f5f7fb;
+  --bg2: #eef1f8;
+  --bg3: #e2e7f2;
+  --line: rgba(30,41,59,.08);
+  --line2: rgba(30,41,59,.16);
+  --txt: #1e293b;
+  --txt2: rgba(30,41,59,.72);
+  --txt3: rgba(30,41,59,.48);
+  --acc: #5b8def;
+  --acc2: #4a7bdb;
+  --acc-light: rgba(91,141,239,.12);
   --gold: #d4a017;
 }
 html, body { height: 100%; }
@@ -72,7 +73,7 @@ body {
   color: var(--txt2); font-size: 14px; cursor: pointer; font-family: inherit;
 }
 .nav-item:hover { background: rgba(23,26,48,.06); color: var(--txt); }
-.nav-item.active { background: rgba(240,0,160,.14); border-color: rgba(240,0,160,.45); color: #fff; font-weight: 700; }
+.nav-item.active { background: rgba(91,141,239,.14); border-color: rgba(91,141,239,.45); color: #fff; font-weight: 700; }
 
 .content { flex: 1 1 auto; min-width: 0; overflow-y: auto; padding: 18px 22px; }
 .page { display: flex; flex-direction: column; gap: 14px; min-height: 100%; }
@@ -100,7 +101,7 @@ body {
   background: transparent; color: var(--txt); cursor: pointer; font-family: inherit; font-size: 14px;
 }
 .enc-char:hover { background: rgba(23,26,48,.06); }
-.enc-char.active { background: rgba(240,0,160,.14); border-color: rgba(240,0,160,.45); color: #fff; }
+.enc-char.active { background: rgba(91,141,239,.14); border-color: rgba(91,141,239,.45); color: #fff; }
 .enc-char.active .unit { color: rgba(255,255,255,.75); }
 .enc-char .unit { font-size: 11.5px; color: var(--txt3); }
 .enc-detail { flex: 1 1 auto; min-width: 0; overflow-y: auto; padding-bottom: 30px; }
@@ -203,7 +204,7 @@ body {
 .log-caret { font-size: 12px; color: var(--txt3); display: inline-block; transition: transform .15s; }
 .log-ver-btn.open .log-caret { transform: rotate(90deg); color: var(--acc); }
 .log-ver-plain { font-weight: 700; }
-.log-detail { margin: 6px 0 4px 18px; padding: 8px 12px 10px 14px; border-left: 2px solid rgba(240,0,160,.25); display: flex; flex-direction: column; gap: 7px; }
+.log-detail { margin: 6px 0 4px 18px; padding: 8px 12px 10px 14px; border-left: 2px solid rgba(91,141,239,.25); display: flex; flex-direction: column; gap: 7px; }
 .log-detail > ul { display: flex; flex-direction: column; gap: 5px; }
 .log-detail li { margin-left: 14px; font-size: 13px; color: var(--txt2); line-height: 1.55; list-style: circle; }
 .log-sec-title { font-size: 13px; font-weight: 700; color: var(--acc2, #b3247f); margin: 3px 0 -2px; }
@@ -238,12 +239,12 @@ body {
 .nav { background: #e8ebf4 !important; }
 .nav-item { color: #3c4257 !important; }
 .nav-item:hover { background: rgba(23,26,48,.06) !important; }
-.nav-item.active { background: rgba(240,0,160,.14) !important; border-color: rgba(240,0,160,.45) !important; color: #fff !important; }
+.nav-item.active { background: rgba(91,141,239,.14) !important; border-color: rgba(91,141,239,.45) !important; color: #fff !important; }
 .tl-filter { color: #3c4257 !important; }
 .es-tab { color: #3c4257 !important; }
 .enc-char { color: #3c4257 !important; }
 .enc-char:hover { background: rgba(23,26,48,.06) !important; }
-.enc-char.active { background: rgba(240,0,160,.14) !important; border-color: rgba(240,0,160,.45) !important; color: #fff !important; }
+.enc-char.active { background: rgba(91,141,239,.14) !important; border-color: rgba(91,141,239,.45) !important; color: #fff !important; }
 .enc-card, .tl-card, .jp-card, .wz-card, .term-card, .in-card { background: #fff !important; border-color: rgba(23,26,48,.12) !important; color: #23273d !important; }
 .search-input, .field, input, select, textarea { background: #fff !important; color: #23273d !important; }
 .empty2, .muted, .sub { color: #5b6478 !important; }
@@ -277,7 +278,7 @@ body {
 .il-group-name { font-size: 12.5px; font-weight: 800; color: #2563c9; padding: 8px 10px 3px; background: #f2f5fb; position: sticky; top: 0; }
 .il-row { display: flex; align-items: baseline; gap: 8px; padding: 8px 10px; cursor: pointer; border-bottom: 1px solid rgba(23,26,48,.07); font-size: 13.5px; color: #2c3344; }
 .il-row:hover { background: #f0f4fa; }
-.il-row.on { background: rgba(240,0,160,.18); color: #fff; }
+.il-row.on { background: rgba(91,141,239,.18); color: #fff; }
 .il-row.on .il-ja, .il-row.on .il-en { color: #ffe9f3; }
 .il-cn { font-weight: 700; min-width: 76px; }
 .il-ja { color: #6b7589; font-size: 12.5px; min-width: 82px; }
@@ -287,7 +288,7 @@ body {
 .song-unit { font-size: 12.5px; font-weight: 700; color: #2563c9; min-width: 88px; }
 .song-idol { padding: 5px 11px; border-radius: 999px; border: 1px solid rgba(23,26,48,.14); cursor: pointer; font-size: 12.5px; color: #3c4257; background: #fff; }
 .song-idol:hover { background: rgba(23,26,48,.06); }
-.song-idol.active { background: rgba(240,0,160,.16); border-color: rgba(240,0,160,.5); color: #fff; font-weight: 700; }
+.song-idol.active { background: rgba(91,141,239,.16); border-color: rgba(91,141,239,.5); color: #fff; font-weight: 700; }
 .song-toolbar { display: flex; align-items: center; gap: 12px; margin-top: 2px; }
 .song-count { font-size: 12.5px; color: #5b6478; }
 .song-list { display: flex; flex-direction: column; gap: 10px; }
@@ -522,7 +523,7 @@ html.es-darkfix canvas {
     }
     .m-nav .mi { display: flex; align-items: center; justify-content: center; line-height: 0; }
     .m-nav button svg { width: 23px; height: 23px; }
-    .m-nav button.active { color: var(--acc); font-weight: 700; background: rgba(240,0,160,.10); }
+    .m-nav button.active { color: var(--acc); font-weight: 700; background: rgba(91,141,239,.10); }
     .m-nav button.active svg { stroke-width: 2.5; }
     .m-nav button.active::before { content: ""; position: absolute; top: 1px; left: 50%; transform: translateX(-50%); width: 20px; height: 3px; border-radius: 3px; background: var(--acc); }
     /* 偶像梦幻祭页签：两列大按钮 */
@@ -560,11 +561,11 @@ html.es-darkfix canvas {
       width: 68px; height: 68px; border-radius: 50%;
       font-size: 14px; font-weight: 700; line-height: 1.15;
       padding: 0; display: flex; align-items: center; justify-content: center;
-      background: linear-gradient(90deg,#2ec46d,#1f9e57); color: #fff;
-      box-shadow: 0 4px 18px rgba(0,0,0,.38);
+      background: var(--acc, #f0a); color: #fff;
+      box-shadow: 0 4px 18px rgba(91,141,239,.35);
       touch-action: none; cursor: grab; white-space: normal; text-align: center;
     }
-    #songGo.confirming { background: linear-gradient(90deg,#e8a33d,#d9822b); border-color: #e8a33d; }
+    #songGo.confirming { background: #d946ef; }
     /* 手机端 MV 服装页：全屏放大底图（图按屏高铺满，可横向滑动看全部格子） */
     .mv-full-btn {
       position: absolute; right: 10px; top: 10px; z-index: 30;
@@ -780,15 +781,15 @@ html.es-darkfix canvas {
   .rel-desc { font-size: 12px; color: #6b7280; margin: 2px 0; }
   .rel-mem { display: flex; flex-wrap: wrap; gap: 6px; }
   .rel-chip { display: inline-flex; align-items: center; gap: 5px; background: #eef2f7; padding: 3px 10px 3px 5px; border-radius: 999px; font-size: 12.5px; color: #232a3d; }
-  .rel-chip.me { background: rgba(240,0,160,.14); border: 1px solid rgba(240,0,160,.45); color: #232a3d; font-weight: 700; }
+  .rel-chip.me { background: rgba(91,141,239,.14); border: 1px solid rgba(91,141,239,.45); color: #232a3d; font-weight: 700; }
   .rel-head { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; vertical-align: middle; }
 
 /* ===== v2.9.26 使用教程 ===== */
 .tut-btn-row { display: flex; justify-content: flex-end; margin: 8px 0 2px; }
-.tut-btn { border: 1px solid rgba(240,0,160,.35); background: #fff; color: #d60a7b; border-radius: 14px; padding: 5px 14px; font-size: 13px; cursor: pointer; flex: none; }
-.tut-btn:hover { background: rgba(240,0,160,.08); }
+.tut-btn { border: 1px solid rgba(91,141,239,.35); background: #fff; color: #4a7bdb; border-radius: 14px; padding: 5px 14px; font-size: 13px; cursor: pointer; flex: none; }
+.tut-btn:hover { background: rgba(91,141,239,.08); }
 .tut-setrow { cursor: pointer; justify-content: space-between; }
-.tut-setrow:hover { background: rgba(240,0,160,.06); }
+.tut-setrow:hover { background: rgba(91,141,239,.06); }
 .tut-setrow .set-go { color: #d60a7b; font-size: 13px; }
 .tut-mask { position: fixed; inset: 0; z-index: 130; background: rgba(10,12,24,.55); display: flex; align-items: center; justify-content: center; padding: 18px; }
 .tut-box { background: #fff; border-radius: 16px; max-width: 560px; width: 100%; max-height: 82vh; overflow-y: auto; box-shadow: 0 12px 40px rgba(0,0,0,.25); }
@@ -799,8 +800,8 @@ html.es-darkfix canvas {
 .tut-sec { margin: 14px 0 0; }
 .tut-sec h4 { font-size: 14px; color: #d60a7b; margin: 0 0 6px; font-weight: 600; }
 .tut-step { font-size: 13.5px; color: #3c4257; line-height: 1.65; margin: 5px 0; padding-left: 16px; position: relative; }
-.tut-step::before { content: ""; position: absolute; left: 2px; top: 8px; width: 6px; height: 6px; border-radius: 50%; background: rgba(240,0,160,.5); }
-.tut-tip { background: #fdf0f7; border: 1px solid rgba(240,0,160,.18); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: #8a2a60; margin: 14px 0 0; }
+.tut-step::before { content: ""; position: absolute; left: 2px; top: 8px; width: 6px; height: 6px; border-radius: 50%; background: rgba(91,141,239,.5); }
+.tut-tip { background: #f0f5ff; border: 1px solid rgba(91,141,239,.18); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: #4a7bdb; margin: 14px 0 0; }
 </style>
   <script>
 // 心情钟 · 强制暗色反制开关（仅 Electron 运行时生效）
@@ -916,9 +917,10 @@ html.es-darkfix canvas {
             <div class="mv-body" id="mvBody"></div>
           </div>
           <div class="es-view" id="view-enc">
-            <div class="enc-main-switch" role="tablist">
+            <div class="enc-main-switch" role="tablist" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
               <button type="button" class="enc-main-tab active" data-encmain="enc">角色图鉴</button>
               <button type="button" class="enc-main-tab" data-encmain="pv">活动预览（卡池/活动 ★5 · 倒计时）</button>
+              <button type="button" class="pv-info-btn" id="encInfoBtn" style="margin-left:auto">说明 / 设置 ⓘ</button>
             </div>
             <div id="view-preview" hidden>
               <div id="pvRoot" class="pv-root">
@@ -1109,8 +1111,8 @@ html.es-darkfix canvas {
           #view-preview .pv-rec-note{font-size:11px;color:var(--muted,#7a8194);margin-top:3px;line-height:1.5}
           #view-preview .pv-rec-src{font-size:11px;margin-top:4px}
           #view-preview .pv-rec-src a{color:var(--acc,#3f6fb5);text-decoration:none;word-break:break-all}
-          #view-preview .pv-info-btn{margin-left:auto;border:1px solid var(--line,#e3e6ec);background:#fff;color:var(--txt2,#444);border-radius:14px;padding:4px 13px;font-size:12px;cursor:pointer;font-weight:600}
-          #view-preview .pv-info-btn.open{background:var(--acc,#3f6fb5);border-color:var(--acc,#3f6fb5);color:#fff}
+          .pv-info-btn{border:1px solid var(--line,#e3e6ec);background:#fff;color:var(--txt2,#444);border-radius:10px;padding:8px 16px;cursor:pointer;font-weight:600;font-family:inherit;font-size:13px}
+          .pv-info-btn.open{background:var(--acc,#3f6fb5);border-color:var(--acc,#3f6fb5);color:#fff}
           #view-preview .pv-info{margin:0 0 12px;background:#f6f8fc;border:1px solid var(--line,#e3e6ec);border-radius:10px;padding:11px 14px;font-size:12px;color:var(--muted,#7a8194);line-height:1.7}
           #view-preview .pv-info ul{margin:6px 0 0;padding-left:18px}
           #view-preview .pv-info li{margin:3px 0}
@@ -1137,7 +1139,15 @@ html.es-darkfix canvas {
             <div class="jp-list" id="jpList"></div>
           </div>
           <div class="es-view" id="view-sched" hidden>
+            <div class="sched-toolbar" style="display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
+              <button type="button" class="sched-mode-btn active" data-schedmode="list">列表</button>
+              <button type="button" class="sched-mode-btn" data-schedmode="calendar">日历</button>
+              <span style="flex:1"></span>
+              <button type="button" class="sched-mode-btn" data-schedserver="cn">国服</button>
+              <button type="button" class="sched-mode-btn active" data-schedserver="jp">日服</button>
+            </div>
             <div class="sched-list" id="schedList"></div>
+            <div id="schedCalendar" hidden></div>
           </div>
         </section>
 
@@ -3239,6 +3249,7 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
     { ver: "2.3.9", date: "2026-10-21", items: ["新增「角色图鉴」：按角色分类浏览卡面与 3D/MV 服装（首批 8 位角色）", "卡面图内置本地（官方卡面图库，可点击放大）；每条标注来源并可一键跳转", "卡库页新增「五星卡库 / 角色图鉴」切换"] },
     { ver: "2.3.8", date: "2026-10-21", items: ["日服情报升级：游戏页顶部「日服进行中/即将开启」实时卡片（带倒计时）", "日服情报补全（噩梦活动/Ambassador/月刊ES/弓弦生日，来源 @EnsembleStars）", "修复状态标签样式"] },
   ];
+  window.CHANGELOG = CHANGELOG;
 
   // —— 术语表（首批，来源：官方帮助页 / 官方support / 攻略专栏，子代理扩充中）——
   const TERMS = [
@@ -3420,7 +3431,7 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
   }
   function encCardMedia(c) {
     return c.img
-      ? `<img src="${esc(c.img)}" data-zoom="${esc(c.img)}" alt="${esc(c.name || "")}">`
+      ? `<img src="${esc(c.img)}" data-zoom="${esc(c.img)}" alt="${esc(c.name || "")}" loading="lazy" decoding="async">`
       : `<div class="eg-ph">待补官方卡面<br>占位 · 不猜图 / 不裂图</div>`;
   }
   function encBloomSrc(c, mode) {
@@ -3430,7 +3441,7 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
   function encBloomMedia(c, mode) {
     const src = encBloomSrc(c, mode);
     return src
-      ? `<img class="eg-bloom-img" src="${esc(src)}" data-zoom="${esc(src)}" alt="${esc(c.name || (mode === "after" ? "开花" : "未开花"))}">`
+      ? `<img class="eg-bloom-img" src="${esc(src)}" data-zoom="${esc(src)}" alt="${esc(c.name || (mode === "after" ? "开花" : "未开花"))}" loading="lazy" decoding="async">`
       : `<div class="eg-ph">待补官方${mode === "after" ? "开花" : "未开花"}卡面<br>占位 · 不猜图</div>`;
   }
   function encSlug(s) { return String(s || "").toLowerCase().replace(/[^a-z0-9一-鿿]+/g, "-").replace(/^-|-$/g, ""); }
@@ -3556,7 +3567,7 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
         <button type="button" class="active" data-mode="before" onclick="encToggleBloom(this,'before')">未开花</button>
         <button type="button" data-mode="after" ${after ? "" : "disabled"} onclick="encToggleBloom(this,'after')">开花</button>
       </div>
-      <div class="eg-thumbs"><div>${before ? `<img src="${esc(before)}" data-zoom="${esc(before)}" alt="未开花">` : `<div class="eg-ph">未开花<br>待补图</div>`}未开花</div><div>${after ? `<img src="${esc(after)}" data-zoom="${esc(after)}" alt="开花">` : `<div class="eg-ph">开花<br>待补图</div>`}开花</div></div></div>`;
+      <div class="eg-thumbs"><div>${before ? `<img src="${esc(before)}" data-zoom="${esc(before)}" alt="未开花" loading="lazy">` : `<div class="eg-ph">未开花<br>待补图</div>`}未开花</div><div>${after ? `<img src="${esc(after)}" data-zoom="${esc(after)}" alt="开花" loading="lazy">` : `<div class="eg-ph">开花<br>待补图</div>`}开花</div></div></div>`;
     html += `<div class="eg-info">
       <div class="eg-row"><span class="k">角色</span><span class="v"><b>${esc(r.name)}</b>（${esc(r.jp)}）</span></div>
       <div class="eg-row"><span class="k">组合</span><span class="v">${esc(r.unit)}</span></div>
@@ -3719,6 +3730,119 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
       </div>`;
     });
     list.innerHTML = html;
+    // 绑定列表/日历切换
+    document.querySelectorAll(".sched-mode-btn[data-schedmode]").forEach(btn => {
+      btn.onclick = () => {
+        document.querySelectorAll(".sched-mode-btn[data-schedmode]").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        const mode = btn.dataset.schedmode;
+        $("schedList").hidden = mode !== "list";
+        $("schedCalendar").hidden = mode !== "calendar";
+      };
+    });
+    // 绑定国服/日服切换
+    document.querySelectorAll(".sched-mode-btn[data-schedserver]").forEach(btn => {
+      btn.onclick = () => {
+        document.querySelectorAll(".sched-mode-btn[data-schedserver]").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        schedServer = btn.dataset.schedserver;
+        renderSchedCalendar();
+      };
+    });
+    renderSchedCalendar();
+  }
+
+  // —— 排期日历视图 ——
+  let schedCalYear = new Date().getFullYear();
+  let schedCalMonth = new Date().getMonth();
+  let schedServer = "jp";
+
+  function renderSchedCalendar() {
+    const cal = $("schedCalendar");
+    if (!cal) return;
+    const G = window.EsGacha;
+    if (!G) { cal.innerHTML = `<div class="empty2">数据未加载</div>`; return; }
+
+    const y = schedCalYear, m = schedCalMonth;
+    const firstDay = new Date(y, m, 1).getDay();
+    const daysInMonth = new Date(y, m + 1, 0).getDate();
+
+    const events = (G.allSchedule ? G.allSchedule() : []).filter(s => {
+      if (!s.startDate) return false;
+      return s.startDate.getMonth() === m && s.startDate.getFullYear() === y;
+    });
+
+    const eventsByDate = {};
+    events.forEach(s => {
+      const startKey = `${y}-${m}-${s.startDate.getDate()}`;
+      if (!eventsByDate[startKey]) eventsByDate[startKey] = [];
+      eventsByDate[startKey].push({ type: "start", title: s.title, chars: s.chars });
+      if (s.endDate) {
+        const endKey = `${y}-${s.endDate.getMonth()}-${s.endDate.getDate()}`;
+        if (s.endDate.getMonth() === m) {
+          if (!eventsByDate[endKey]) eventsByDate[endKey] = [];
+          eventsByDate[endKey].push({ type: "end", title: s.title, chars: s.chars });
+        }
+      }
+    });
+
+    const birthdays = (G.allSchedule ? G.allSchedule() : []).filter(s => s.type === "生日");
+    birthdays.forEach(b => {
+      if (!b.start) return;
+      const parts = b.start.split("-");
+      const birthMonth = parseInt(parts[1]) - 1;
+      const birthDay = parseInt(parts[2]);
+      if (birthMonth === m) {
+        const key = `${y}-${m}-${birthDay}`;
+        if (!eventsByDate[key]) eventsByDate[key] = [];
+        eventsByDate[key].push({ type: "birthday", title: b.title, chars: b.chars });
+      }
+    });
+
+    let html = `<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+      <button type="button" id="calPrev" style="padding:6px 12px;border:1px solid #ddd;border-radius:6px;background:#fff;cursor:pointer">‹</button>
+      <div style="font-size:18px;font-weight:700;flex:1;text-align:center">${y}年 ${m + 1}月</div>
+      <button type="button" id="calNext" style="padding:6px 12px;border:1px solid #ddd;border-radius:6px;background:#fff;cursor:pointer">›</button>
+    </div>`;
+
+    html += `<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;font-size:11px">`;
+    const weekDays = ["日", "一", "二", "三", "四", "五", "六"];
+    weekDays.forEach(d => { html += `<div style="text-align:center;padding:4px;color:#999;font-weight:600">${d}</div>`; });
+    for (let i = 0; i < firstDay; i++) html += `<div></div>`;
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const key = `${y}-${m}-${d}`;
+      const dayEvents = eventsByDate[key] || [];
+      const hasStart = dayEvents.some(e => e.type === "start");
+      const hasEnd = dayEvents.some(e => e.type === "end");
+      const hasBirthday = dayEvents.some(e => e.type === "birthday");
+      let bg = "#fff";
+      if (hasBirthday) bg = "#fff3e0";
+      else if (hasStart) bg = "#e8f5ee";
+      else if (hasEnd) bg = "#f1f3f7";
+
+      html += `<div style="min-height:50px;padding:4px;border:1px solid #eee;background:${bg};border-radius:4px">
+        <div style="font-weight:700;font-size:12px;margin-bottom:2px">${d}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:2px">`;
+      dayEvents.forEach(e => {
+        let dot = "●", color = "#e5484d";
+        if (e.type === "end") { dot = "○"; color = "#999"; }
+        if (e.type === "birthday") { dot = "🎂"; color = "#f5a623"; }
+        html += `<span style="font-size:10px;color:${color}" title="${esc(e.title)}">${dot}</span>`;
+      });
+      html += `</div></div>`;
+    }
+    html += `</div>`;
+    html += `<div style="margin-top:10px;font-size:11px;color:#999">
+      <span style="color:#e5484d">●</span> 活动开始 &nbsp;
+      <span style="color:#999">○</span> 活动结束 &nbsp;
+      <span>🎂</span> 偶像生日
+    </div>`;
+
+    cal.innerHTML = html;
+    const prev = $("calPrev"), next = $("calNext");
+    if (prev) prev.onclick = () => { schedCalMonth--; if (schedCalMonth < 0) { schedCalMonth = 11; schedCalYear--; } renderSchedCalendar(); };
+    if (next) next.onclick = () => { schedCalMonth++; if (schedCalMonth > 11) { schedCalMonth = 0; schedCalYear++; } renderSchedCalendar(); };
   }
 
   // —— 按偶像选歌 ——
@@ -4976,24 +5100,22 @@ function songCardHtml(s) {
         <li>本资料库所有数据（曲目、卡池、卡面、服装、时间线）均来自官网 ensemble-stars.jp 与官方公告。</li>
       </ul>`;
     CHANGELOG.forEach((v, i) => {
-      const hasDetail = Array.isArray(v.detail) && v.detail.length;
-      const hasUI = Array.isArray(v.ui) && v.ui.length;
-      const hasShots = Array.isArray(v.shots) && v.shots.length;
-      const hasCode = Array.isArray(v.code) && v.code.length;
-      const hasD = hasDetail || hasUI || hasShots || hasCode;
-      const head = hasD
-        ? `<button type="button" class="log-ver-btn" data-logv="${i}">v${esc(v.ver)}<span class="log-caret">▸</span></button><span class="log-date">${esc(v.date)}</span>`
-        : `<span class="log-ver-plain">v${esc(v.ver)}</span><span class="log-date">${esc(v.date)}</span>`;
-      let detailInner = "";
-      if (hasDetail) detailInner += `<ul>${v.detail.map((j) => `<li>${esc(j)}</li>`).join("")}</ul>`;
-      if (hasUI) detailInner += `<div class="log-sec-title">UI 变更存档</div><ul class="log-sec-list">${v.ui.map((j) => `<li>${esc(j)}</li>`).join("")}</ul>`;
-      if (hasCode) detailInner += `<div class="log-sec-title">代码 / 数据位置存档</div><ul class="log-sec-list log-code">${v.code.map((j) => `<li>${esc(j)}</li>`).join("")}</ul>`;
-      if (hasShots) detailInner += `<div class="log-sec-title">界面截图存档（点击缩略图放大）</div><div class="log-shot-grid">${v.shots.map((s) => `<figure class="log-shot" data-logshot="${esc(s.src)}"><img src="${esc(s.src)}" alt="${esc(s.cap || "")}"><figcaption>${esc(s.cap || "")}</figcaption></figure>`).join("")}</div>`;
-      const detailBlock = hasD ? `<div class="log-detail" data-logdetail="${i}" hidden>${detailInner}</div>` : "";
-      html += `<div class="log-ver">${head}</div>
-        <ul class="log-items">${v.items.map((j) => `<li>${esc(j)}</li>`).join("")}</ul>
-        ${detailBlock}`;
+      const open = i === 0; // 最新版本默认展开
+      html += `<div class="log-ver"><button type="button" class="log-ver-btn${open ? " open" : ""}" data-logver="${i}"><span class="log-caret" style="display:inline-block;transition:transform .15s">▸</span><span class="log-ver-plain">v${esc(v.ver)}</span><span class="log-date">${esc(v.date)}</span></button></div>
+        <ul class="log-items"${open ? "" : ' style="display:none"'}>${v.items.map((j) => `<li>${esc(j)}</li>`).join("")}</ul>`;
     });
+    // 开发者模式入口
+    html += `<div id="devZone" style="margin-top:18px;border-top:1px dashed #e0e4ec;padding-top:14px">
+      <div class="set-row" id="devModeRow" role="button" tabindex="0"><span>开发者模式</span><span class="set-go">输入密码查看代码/数据/截图存档 →</span></div>
+      <div id="devLogin" style="display:none;margin-top:10px">
+        <div style="display:flex;gap:8px;align-items:center">
+          <input type="password" id="devPwdInput" placeholder="输入开发者密码" style="flex:1;padding:10px 14px;border:1px solid #ddd;border-radius:8px;font-size:14px">
+          <button type="button" id="devPwdBtn" style="padding:10px 20px;background:#e5484d;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600">解锁</button>
+        </div>
+        <div id="devPwdErr" style="color:#e5484d;font-size:13px;margin-top:6px;display:none">密码错误</div>
+      </div>
+      <div id="devArchive" style="display:none"></div>
+    </div>`;
     body.innerHTML = html;
     const tg = $("accHelpToggle");
     if (tg) tg.onchange = () => { accSetHelp(tg.checked); applyAccTab(); };
@@ -5002,18 +5124,72 @@ function songCardHtml(s) {
     const logTutBtn = $("logTutBtn");
     if (logTutBtn) logTutBtn.onclick = () => showTut("global");
     document.querySelectorAll('input[name="stMode"]').forEach((r) => r.onchange = () => { stSetMode(r.value); renderSongs(); });
-    document.querySelectorAll(".log-ver-btn").forEach((b) => {
-      b.onclick = () => {
-        const d = document.querySelector(`[data-logdetail="${b.dataset.logv}"]`);
-        if (!d) return;
-        const open = d.hidden;
-        b.classList.toggle("open", open);
-        d.hidden = !open;
+    // 折叠版本号
+    document.querySelectorAll(".log-ver-btn[data-logver]").forEach(btn => {
+      btn.onclick = () => {
+        const items = btn.closest(".log-ver").nextElementSibling;
+        const open = btn.classList.toggle("open");
+        if (items) items.style.display = open ? "" : "none";
       };
     });
-    document.querySelectorAll("[data-logshot]").forEach((f) => {
-      f.onclick = () => openZoom(f.dataset.logshot);
-    });
+    // 开发者模式
+    const devRow = $("devModeRow");
+    const devLogin = $("devLogin");
+    const devPwdInput = $("devPwdInput");
+    const devPwdBtn = $("devPwdBtn");
+    const devPwdErr = $("devPwdErr");
+    const devArchive = $("devArchive");
+    // 从 localStorage 恢复解锁状态
+    if (localStorage.getItem("encDevUnlocked") === "1") {
+      devRow.style.display = "none";
+      devLogin.style.display = "none";
+      renderDevArchive();
+    }
+    if (devRow) devRow.onclick = () => { devLogin.style.display = devLogin.style.display === "none" ? "block" : "none"; if (devLogin.style.display === "block") devPwdInput.focus(); };
+    if (devPwdBtn) devPwdBtn.onclick = () => {
+      if (devPwdInput.value.trim() === "137805") {
+        localStorage.setItem("encDevUnlocked", "1");
+        devLogin.style.display = "none";
+        devRow.style.display = "none";
+        renderDevArchive();
+      } else {
+        devPwdErr.style.display = "block";
+      }
+    };
+    if (devPwdInput) devPwdInput.onkeydown = (e) => { if (e.key === "Enter") devPwdBtn.click(); };
+    function renderDevArchive() {
+      let archHtml = '<div style="margin-top:10px"><div style="font-size:15px;font-weight:700;color:#b33;margin-bottom:10px">开发者存档（仅开发者可见）</div>';
+      archHtml += '<div style="font-size:13px;font-weight:600;margin:8px 0 4px;color:#b33">数据红线（禁止编造）</div><ul class="log-items" style="margin-bottom:12px">';
+      archHtml += '<li>花后图缺失时开花按钮禁用，不得用花前冒充花后。</li>';
+      archHtml += '<li>队长未官方核实前显示"队长：待核实"，不臆断人名。</li>';
+      archHtml += '<li>属性未核实前不编造 Da/Vo/Pf 数值。</li>';
+      archHtml += '<li>CN/JP 严格分服，不混排。</li>';
+      archHtml += '<li>archive 旧复刻池不出现在当期，仅纠错留档。</li>';
+      archHtml += '<li>缺标准竖版花前/花后官方图时只显示占位，不拿旧卡、群像预告、聊天截图、低清放大图顶替。</li>';
+      archHtml += '<li>只收金/红框五亮星本人；绿框★4、蓝框★3、多人同框建模图不收。</li>';
+      archHtml += '</ul><div style="border-top:1px solid #e0e4ec;margin:8px 0"></div>';
+      CHANGELOG.forEach((v, i) => {
+        const hasDetail = Array.isArray(v.detail) && v.detail.length;
+        const hasUI = Array.isArray(v.ui) && v.ui.length;
+        const hasCode = Array.isArray(v.code) && v.code.length;
+        const hasShots = Array.isArray(v.shots) && v.shots.length;
+        if (!hasDetail && !hasUI && !hasCode && !hasShots) return;
+        archHtml += `<div class="log-ver" style="color:#b33">v${esc(v.ver)} <span class="log-date">${esc(v.date)}</span></div>`;
+        if (hasDetail) { archHtml += '<div style="font-size:13px;font-weight:600;margin:8px 0 4px">详细变更</div><ul class="log-items">' + v.detail.map((j) => `<li>${esc(j)}</li>`).join("") + "</ul>"; }
+        if (hasUI) { archHtml += '<div style="font-size:13px;font-weight:600;margin:8px 0 4px">UI 变更存档</div><ul class="log-items">' + v.ui.map((j) => `<li>${esc(j)}</li>`).join("") + "</ul>"; }
+        if (hasCode) { archHtml += '<div style="font-size:13px;font-weight:600;margin:8px 0 4px">代码 / 数据位置存档</div><ul class="log-items" style="font-size:12px;color:#666">' + v.code.map((j) => `<li style="word-break:break-all">${esc(j)}</li>`).join("") + "</ul>"; }
+        if (hasShots) {
+          const showShots = v.shots.slice(0, 3);
+          const restCount = v.shots.length - showShots.length;
+          archHtml += '<div style="font-size:13px;font-weight:600;margin:8px 0 4px">界面截图存档（点击放大）</div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin:8px 0">' + showShots.map((s) => `<figure style="margin:0;cursor:pointer" data-logshot="${esc(s.src)}"><img src="${esc(s.src)}" alt="${esc(s.cap || "")}" loading="lazy" style="width:100%;border-radius:8px;border:1px solid #e0e4ec"><figcaption style="font-size:11px;color:#888;margin-top:4px">${esc(s.cap || "")}</figcaption></figure>`).join("") + "</div>";
+          if (restCount > 0) archHtml += `<div style="font-size:12px;color:#999;margin:4px 0 8px">其余 ${restCount} 张截图见本地 changelog-shots/v${v.ver}/ 目录</div>`;
+        }
+      });
+      archHtml += "</div>";
+      devArchive.innerHTML = archHtml;
+      devArchive.style.display = "block";
+      devArchive.querySelectorAll("[data-logshot]").forEach((f) => { f.onclick = () => openZoom(f.dataset.logshot); });
+    }
     applyAccTab();
   }
 
@@ -5349,7 +5525,7 @@ function songCardHtml(s) {
   function duoPic(src,label,c){
     if(src){
       var low=c.lowQuality?'<span class="pv-low">待官方替换</span>':"";
-      return '<div class="pv-pic"><span class="pv-star">★5</span>'+low+'<span class="pv-tag">'+label+'</span><img src="'+pvEsc(PV_ASSET+src)+'" alt="'+pvEsc(label+' · '+(c.card||""))+'"></div>';
+      return '<div class="pv-pic"><span class="pv-star">★5</span>'+low+'<span class="pv-tag">'+label+'</span><img src="'+pvEsc(PV_ASSET+src)+'" alt="'+pvEsc(label+' · '+(c.card||""))+'" loading="lazy" decoding="async"></div>';
     }
     return '<div class="pv-pic"><span class="pv-star">★5</span><span class="pv-tag">'+label+'</span><div class="pv-empty"><span>待补'+label+'图</span></div></div>';
   }
@@ -5379,7 +5555,7 @@ function songCardHtml(s) {
     return '<div class="pv-card">'+cardPic(c)+'<div class="pv-cbody"><div class="pv-char">'+pvEsc(c.char||"—")+'</div><div class="pv-cname">'+pvEsc(c.card||"（卡名待补）")+'</div><div class="pv-src">'+badge+'<span class="pv-date">'+pvEsc(c.dateISO)+'</span></div>'+period+link+'</div></div>';
   }
   function bannerHTML(b){
-    var media=(b.imgReady&&b.img)?'<img src="'+pvEsc(PV_ASSET+b.img)+'" alt="'+pvEsc(b.title)+'">':'<div class="pv-ph">宣传图待补</div>';
+    var media=(b.imgReady&&b.img)?'<img src="'+pvEsc(PV_ASSET+b.img)+'" alt="'+pvEsc(b.title)+'" loading="lazy" decoding="async">':'<div class="pv-ph">宣传图待补</div>';
     var low=b.lowQuality?'<span class="pv-low">待官方替换</span>':"";
     var period=(b.startISO||b.endISO)?(" · "+(b.startISO?pvHM(b.startISO):"")+(b.endISO?"～"+pvHM(b.endISO):"")):"";
     var cd=b.endISO?'<span class="pv-cd" data-end="'+pvEsc(b.endISO)+'"></span>':"";
@@ -5389,7 +5565,7 @@ function songCardHtml(s) {
   function pvEncRecentHTML(r){
     var srv=r.server==="JP"?"日服 JP":"国服 CN";
     var cards=(r.cards||[]).map(function(cd){
-      var media=cd.img?'<img class="pv-rec-img" src="'+pvEsc(cd.img)+'" alt="">':'<div class="pv-rec-ph">待补官方卡面（占位 · 不猜图）</div>';
+      var media=cd.img?'<img class="pv-rec-img" src="'+pvEsc(cd.img)+'" alt="" loading="lazy" decoding="async">':'<div class="pv-rec-ph">待补官方卡面（占位 · 不猜图）</div>';
       return '<div class="pv-rec-item">'+media+'<div class="pv-rec-name">'+pvEsc(cd.name||"")+'</div><div class="pv-rec-star">'+pvEsc(cd.star||"")+'</div>'+(cd.note?'<div class="pv-rec-note">'+pvEsc(cd.note)+'</div>':'')+(cd.link?'<div class="pv-rec-src">来源：'+pvEsc(cd.src||"")+' <a href="'+pvEsc(cd.link)+'" target="_blank" rel="noopener">查看 ↗</a></div>':'')+'</div>';
     }).join("");
     return '<div class="pv-rec"><div class="pv-rec-head"><span class="pv-rec-server '+(r.server==="JP"?"jp":"cn")+'">'+srv+'</span><b>'+pvEsc(r.name)+'</b><span class="pv-rec-date">'+pvEsc(r.dateISO||"")+'</span></div><div class="pv-rec-info">'+pvEsc(r.info||"")+'</div>'+(cards?'<div class="pv-rec-grid">'+cards+'</div>':'<div class="pv-rec-note">暂无卡面记录（待补官方图）</div>')+'</div>';
@@ -5454,8 +5630,10 @@ function songCardHtml(s) {
     renderPreview();
   });
   (function(){
-    var btn=pv$("pvInfoBtn"),panel=pv$("pvInfo");
-    if(btn&&panel){btn.addEventListener("click",function(){var open=panel.hidden;panel.hidden=!open;btn.classList.toggle("open",open);btn.setAttribute("aria-expanded",open?"true":"false");});}
+    var btn=pv$("pvInfoBtn");
+    if(btn){btn.addEventListener("click",function(){openEncDoc();});}
+    var btn2=pv$("encInfoBtn");
+    if(btn2){btn2.addEventListener("click",function(){openEncDoc();});}
   })();
   (function(){
     var si=pv$("pvSearch");
@@ -5514,5 +5692,209 @@ function songCardHtml(s) {
   window.renderPreview=renderPreview;
 })();
 </script>
+
+<!-- 图鉴系统文档弹层 -->
+<style>
+#encDocOverlay{position:fixed;inset:0;background:rgba(20,24,36,.55);z-index:9999;display:none;align-items:flex-start;justify-content:center;overflow-y:auto;padding:24px 16px}
+#encDocOverlay.open{display:flex}
+#encDocBox{background:#fff;border-radius:16px;max-width:780px;width:100%;padding:28px 28px 40px;box-shadow:0 12px 48px rgba(0,0,0,.25);position:relative}
+#encDocClose{position:absolute;top:16px;right:18px;font-size:22px;line-height:1;border:none;background:none;cursor:pointer;color:#888;padding:4px 8px}
+#encDocClose:hover{color:#333}
+#encDocBox h1{font-size:20px;margin:0 0 6px;color:#2b2f3a}
+#encDocBox .enc-doc-sub{font-size:13px;color:#888;margin-bottom:20px}
+#encDocBox h2{font-size:16px;margin:24px 0 10px;padding-left:10px;border-left:3px solid #3f6fb5;color:#2b2f3a}
+#encDocBox h3{font-size:14px;margin:16px 0 6px;color:#444}
+#encDocBox ul{margin:6px 0 10px;padding-left:20px}
+#encDocBox li{font-size:13.5px;line-height:1.7;color:#3a3f4d;margin-bottom:3px}
+#encDocBox .enc-doc-ver{font-size:15px;font-weight:700;color:#3f6fb5;margin:18px 0 6px;padding-bottom:4px;border-bottom:1px solid #e8ecf3}
+#encDocBox .enc-doc-date{font-size:12px;color:#999;font-weight:400;margin-left:8px}
+#encDocBox .enc-doc-redline{background:#fff5f5;border:1px solid #ffd6d6;border-radius:10px;padding:12px 16px;margin:10px 0}
+#encDocBox .enc-doc-redline li{color:#b33}
+#encDocBox .enc-doc-tip{background:#f0f6ff;border:1px solid #d4e4ff;border-radius:10px;padding:12px 16px;margin:10px 0;font-size:13px;line-height:1.7;color:#3a5a8a}
+</style>
+<div id="encDocOverlay">
+  <div id="encDocBox">
+    <button id="encDocClose" type="button">✕</button>
+    <h1>图鉴系统说明</h1>
+    <div class="enc-doc-sub">v2.9.31 · 最后更新 2026-11-03</div>
+
+    <h2>功能概览</h2>
+    <h3>三层结构</h3>
+    <ul>
+      <li><b>一级 · 组合块</b>：按 Star Production / CosPro / 其他分组，每个组合整行展示，含组合名、队长待核实、5★/4★/成员计数、成员最新卡缩略。顶部有快速定位锚点，组合可折叠，★收藏置顶。</li>
+      <li><b>二级 · 角色页</b>：返回组合列表，角色情报，五星卡面与其他星级分区网格，卡面带未开花/开花切换按钮。</li>
+      <li><b>三级 · 单卡详情</b>：左侧主图 + 花前/花后双缩略，右侧角色、组合、星级、属性、卡名、来源、3DMV服装、原文链接、备注。</li>
+    </ul>
+    <h3>活动预览</h3>
+    <ul>
+      <li>顶部横幅实时倒计时（≤24h 标红、到期显示"已结束"），★5 卡片只显示静态起止日期。</li>
+      <li>国服 CN / 日服 JP 严格分服，两服记录互不混排。</li>
+      <li>近40天追加采用图鉴式记录：服务器色标 + 情报行 + 卡面缩略/占位 + 来源链接。</li>
+      <li>当期已在上方展示的角色，在下方近期列表渲染层去重（底层记录不删除）。</li>
+    </ul>
+
+    <h2>更新历史</h2>
+    <div class="enc-doc-ver">v2.9.31 <span class="enc-doc-date">2026-11-03</span></div>
+    <ul>
+      <li>图鉴恢复为老版三层视觉：一级组合块 → 二级角色卡网格 → 三级单卡详情。</li>
+      <li>组合块整行展示，按 Star Production → CosPro → 其他/近期记录分组；成员缩略横向紧凑排列。</li>
+      <li>顶部新增快速定位锚点；组合支持折叠；★收藏置顶（localStorage 持久化）。</li>
+      <li>角色网格与单卡详情新增"未开花/开花"切换按钮；缺花后图时按钮禁用。</li>
+      <li>活动预览横幅承担实时倒计时角标（≤24h 标红），★5 卡片只保留静态档期。</li>
+      <li>近40天追加按 CN/JP 严格分服，采用图鉴式记录（服务器色标 + 情报 + 卡面缩略 + 来源）。</li>
+      <li>近期列表渲染层排除当期角色，底层 ENC_RECENT 数据不删改。</li>
+      <li>布局小样：总览组合块两列紧凑展示；单卡详情左图右表。</li>
+      <li>旧 ENCY 8 人 + ENC_RECENT 9 条合并；旧资产缺失时显示"待补官方图"占位，不裂图。</li>
+    </ul>
+
+    <div class="enc-doc-ver">v2.9.30 <span class="enc-doc-date">2026-11-03</span></div>
+    <ul>
+      <li>补入日服 AREA07「2wink VS 流星隊」MEGASPHERE MATCH：活动★5 高峯翠 + 招募★5 葵裕太。</li>
+      <li>活动条目标"活动"、招募条目标"卡池"标签；活动/招募两条横幅在主区分列。</li>
+      <li>竖版花前/花后图位占位待官方稳定图补齐，不拿群像预告或聊天截图顶替。</li>
+    </ul>
+
+    <div class="enc-doc-ver">v2.9.29 <span class="enc-doc-date">2026-11-03</span></div>
+    <ul>
+      <li>当期卡池/活动加标签（箱活/卡池/特别通告），写明起止日期。</li>
+      <li>实时倒计时叠在最上方活动宣传图横幅角标；★5 卡面卡片只标静态日期。</li>
+      <li>横幅统一等宽显示，不再单独压窄竖版图。</li>
+      <li>图鉴首页新增名称搜索框与国服/日服筛选；窗口扩为近40天追加★5。</li>
+      <li>花前花后双槽保留：日服乱凪砂成对就位，国服两张花后先占位。</li>
+    </ul>
+
+    <div class="enc-doc-ver">v2.9.28 <span class="enc-doc-date">2026-11-03</span></div>
+    <ul>
+      <li>当期★5 卡面增加花前/花后双槽：花前＝开花前未觉醒，花后＝开花后觉醒。</li>
+      <li>日服乱凪砂补齐成对卡面（花前 640×800，花后 wiki 低清带水印，挂待官方替换角标）。</li>
+      <li>国服涟纯、夏目花后暂缺官方成对图，先显示占位，不拿旧卡或别家卡顶替。</li>
+    </ul>
+
+    <div class="enc-doc-ver">v2.9.27 <span class="enc-doc-date">2026-11-03</span></div>
+    <ul>
+      <li>当期★5 卡面与官方宣传横幅预览区并入图鉴首页，国服 CN/日服 JP 双模式切换。</li>
+      <li>卡面、横幅默认缩略显示，点击灯箱放大（支持滚轮缩放、复位、Esc 关闭）。</li>
+      <li>补齐当期素材：国服涟纯/夏目卡面与横幅，日服乱凪砂卡面与横幅。</li>
+      <li>低清首图打"待官方替换"角标，缺图只占位不臆测。</li>
+      <li>界面精简：收录口径与图例收进折叠面板；删除重复说明长文与首页自动教程弹窗。</li>
+      <li>底部导航五个入口图标更直观（首页/服装/选歌/排期/设置）。</li>
+    </ul>
+
+    <div class="enc-doc-tip">
+      <b>待办（下次开工）</b><br>
+      1. 活动预览统一排版，点击活动展开详情卡<br>
+      2. 收藏改成"收藏模式开关"，平时不显示星号<br>
+      3. 补老版角色页下方"卡面清单 / 3D·MV 服装清单"<br>
+      4. 四个事务所全称正确归属<br>
+      5. 可见日语翻译，说明文字收进折叠设置区
+    </div>
+  </div>
+</div>
+<script>
+function openEncDoc(){
+  var o=document.getElementById("encDocOverlay");
+  if(!o)return;
+  o.classList.add("open");
+  document.body.style.overflow="hidden";
+}
+function closeEncDoc(){
+  var o=document.getElementById("encDocOverlay");
+  if(!o)return;
+  o.classList.remove("open");
+  document.body.style.overflow="";
+}
+document.addEventListener("click",function(e){
+  if(e.target&&(e.target.id==="encDocOverlay"||e.target.id==="encDocClose")){closeEncDoc();}
+});
+document.addEventListener("keydown",function(e){
+  if(e.key==="Escape"){closeEncDoc();}
+});
+
+// —— 开发者模式：密码 137805 ——
+var DEV_UNLOCKED = false;
+function askDevPassword(){
+  openEncDoc();
+  renderDevLogin();
+}
+function renderDevLogin(){
+  var box = document.getElementById("encDocBox");
+  if(!box) return;
+  var old = document.getElementById("devLoginSection");
+  if(old) old.remove();
+  if(DEV_UNLOCKED) return;
+  var L = [];
+  L.push('<div id="devLoginSection" style="margin-top:24px;padding-top:18px;border-top:2px dashed #e5484d">');
+  L.push('<h2 style="border-left-color:#e5484d;color:#b33">开发者模式</h2>');
+  L.push('<div style="display:flex;gap:8px;align-items:center;margin:10px 0">');
+  L.push('<input type="password" id="devPwdInput" placeholder="输入开发者密码" style="flex:1;padding:10px 14px;border:1px solid #ddd;border-radius:8px;font-size:14px">');
+  L.push('<button type="button" id="devPwdBtn" style="padding:10px 20px;background:#e5484d;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600">解锁</button>');
+  L.push('</div>');
+  L.push('<div id="devPwdErr" style="color:#e5484d;font-size:13px;display:none">密码错误</div>');
+  L.push('</div>');
+  box.insertAdjacentHTML("beforeend", L.join(""));
+  var inp = document.getElementById("devPwdInput");
+  var btn = document.getElementById("devPwdBtn");
+  if(inp) inp.focus();
+  if(btn) btn.onclick = function(){
+    var v = inp.value.trim();
+    if(v === "137805"){
+      DEV_UNLOCKED = true;
+      var old2 = document.getElementById("devLoginSection");
+      if(old2) old2.remove();
+      renderDevArchive();
+    } else {
+      var err = document.getElementById("devPwdErr");
+      if(err) err.style.display = "block";
+    }
+  };
+  if(inp) inp.onkeydown = function(e){ if(e.key==="Enter") btn.click(); };
+}
+function renderDevArchive(){
+  var box = document.getElementById("encDocBox");
+  if(!box) return;
+  var old = document.getElementById("devArchiveSection");
+  if(old) old.remove();
+  if(!DEV_UNLOCKED) return;
+  var L = [];
+  L.push('<div id="devArchiveSection" style="margin-top:24px;padding-top:18px;border-top:2px solid #e5484d">');
+  L.push('<h2 style="border-left-color:#e5484d;color:#b33">开发者存档（仅开发者可见）</h2>');
+  (window.CHANGELOG||[]).forEach(function(v,i){
+    var hasDetail = Array.isArray(v.detail) && v.detail.length;
+    var hasUI = Array.isArray(v.ui) && v.ui.length;
+    var hasCode = Array.isArray(v.code) && v.code.length;
+    var hasShots = Array.isArray(v.shots) && v.shots.length;
+    if(!hasDetail && !hasUI && !hasCode && !hasShots) return;
+    L.push('<div class="enc-doc-ver" style="color:#b33">v'+v.ver+' <span class="enc-doc-date">'+v.date+'</span></div>');
+    if(hasDetail){
+      L.push('<h3>详细变更</h3><ul>');
+      v.detail.forEach(function(j){L.push('<li>'+esc(j)+'</li>');});
+      L.push('</ul>');
+    }
+    if(hasUI){
+      L.push('<h3>UI 变更存档</h3><ul>');
+      v.ui.forEach(function(j){L.push('<li>'+esc(j)+'</li>');});
+      L.push('</ul>');
+    }
+    if(hasCode){
+      L.push('<h3>代码 / 数据位置存档</h3><ul style="font-size:12px;color:#666">');
+      v.code.forEach(function(j){L.push('<li style="word-break:break-all">'+esc(j)+'</li>');});
+      L.push('</ul>');
+    }
+    if(hasShots){
+      L.push('<h3>界面截图存档（点击放大）</h3><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px">');
+      v.shots.forEach(function(s){
+        L.push('<figure style="margin:0;cursor:pointer" data-devshot="'+esc(s.src)+'"><img src="'+esc(s.src)+'" alt="'+esc(s.cap||"")+'" style="width:100%;border-radius:8px;border:1px solid #e0e4ec"><figcaption style="font-size:11px;color:#888;margin-top:4px">'+esc(s.cap||"")+'</figcaption></figure>');
+      });
+      L.push('</div>');
+    }
+  });
+  L.push('</div>');
+  box.insertAdjacentHTML("beforeend", L.join(""));
+  box.querySelectorAll("[data-devshot]").forEach(function(f){
+    f.onclick = function(){ openZoom(f.dataset.devshot); };
+  });
+}
+</script>
+
 </body>
 </html>
