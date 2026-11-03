@@ -884,7 +884,7 @@ html.es-darkfix canvas {
     <header class="top">
       <div class="top-title">
         <span>偶像梦幻祭 · 资料库</span>
-        <span class="ver" id="libVer">v2.9.48</span>
+        <span class="ver" id="libVer">v2.9.49</span>
       </div>
       <input type="text" class="search" id="libSearch" placeholder="搜索卡名 / 角色 / 卡池…" />
       <span class="top-btns">
@@ -2920,7 +2920,7 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
     {
       id: "nazuna", name: "仁兔成鸣", jp: "仁兎 なずな", unit: "Ra*bits",
       info: "Ra*bits成员，前任队长",
-      cards: [{ name: "［約束の聖歌］仁兎 なずな", star: "★★★★★", img: "", src: "官方活动卡", link: "https://em1.ensemble-stars.jp/app_help/events/14/index.html" }, { name: "［音楽の小人］仁兎 なずな", star: "★★★★★", img: "", src: "官方卡池", link: "https://em1.ensemble-stars.jp/app_help/gachas/34/index.html" }, 
+      cards: [{ name: "［フェスタ巡り］仁兎 なずな", star: "★★★★", img: "", src: "官方活动卡", link: "https://em1.ensemble-stars.jp/app_help/events/51/index.html" }, { name: "［約束の聖歌］仁兎 なずな", star: "★★★★★", img: "", src: "官方活动卡", link: "https://em1.ensemble-stars.jp/app_help/events/14/index.html" }, { name: "［音楽の小人］仁兎 なずな", star: "★★★★★", img: "", src: "官方卡池", link: "https://em1.ensemble-stars.jp/app_help/gachas/34/index.html" }, 
         { name: "［ラブ・ラビッツ］仁兎 なずな", star: "★★★★★", img: "", src: "gamerch 官方卡面", link: "https://gamerch.com/ensemble-star-music/168054" }
       ],
       outfits: []
@@ -3356,6 +3356,7 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 
   // —— 版本日志（与 pet.js / CHANGELOG.md 同步）——
   const CHANGELOG = [
+  { ver: "2.9.49", date: "2026-11-04", notes: "补四星卡：仁兔成鸣［フェスタ巡り］" },
   { ver: "2.9.48", date: "2026-11-04", notes: "补四星卡：鸣上岚［ナイトサンタ］、影片美伽［ビッグベア］" },
   { ver: "2.9.47", date: "2026-11-04", notes: "角色详情五星卡面改为一行三张布局，新卡默认在前" },
   { ver: "2.9.46", date: "2026-11-04", notes: "补五星卡：衣更真绪［日向の幼馴染］" },
@@ -5695,7 +5696,7 @@ function songCardHtml(s) {
         "游戏内站位（像游戏里 42135 那样摆，空位直接放数字）。"
       ] },
       { h: "更新日志", steps: [
-        "从下往上看每个版本改了什么。当前版本 v2.9.48。"
+        "从下往上看每个版本改了什么。当前版本 v2.9.49。"
       ] },
       { h: "使用教程", steps: [
         "就是这份完整说明，随时点开随时看。每个页面右上角也有本页教程。"
@@ -5724,7 +5725,7 @@ function songCardHtml(s) {
   function closeTut() { if (tutMask) { tutMask.remove(); tutMask = null; } }
   function maybeShowFirstTut() { if (localStorage.getItem("es-tut-v2")) return; localStorage.setItem("es-tut-v2", "1"); showTut("global"); }
   function init() {
-    $("libVer").textContent = "v2.9.48";
+    $("libVer").textContent = "v2.9.49";
     buildMobileNav();
     // 手机端「确定搜索」初始位置：右侧列表区域悬浮（用户指定），可拖动
     if (IS_MOBILE) {
