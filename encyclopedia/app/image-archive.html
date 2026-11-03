@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>图鉴图片存档</title>
+<style>
+:root {
+  --acc: #5b8def;
+  --acc2: #4a7bdb;
+  --txt: #1e293b;
+  --txt2: rgba(30,41,59,.72);
+  --bg: #f5f7fb;
+  --bg2: #eef1f8;
+  --line: rgba(30,41,59,.08);
+  --line2: rgba(30,41,59,.16);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+  background: var(--bg);
+  color: var(--txt);
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+h1 { font-size: 24px; margin-bottom: 8px; }
+.subtitle { color: var(--txt2); font-size: 14px; margin-bottom: 24px; }
+.category { margin-bottom: 32px; }
+.category h2 {
+  font-size: 18px;
+  margin-bottom: 12px;
+  padding-left: 10px;
+  border-left: 3px solid var(--acc);
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+.card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform .2s, box-shadow .2s;
+}
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,.1);
+}
+.card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  display: block;
+}
+.card .info {
+  padding: 8px 10px;
+  font-size: 12px;
+  color: var(--txt2);
+}
+.card .info .name {
+  font-weight: 600;
+  color: var(--txt);
+  margin-bottom: 2px;
+}
+.tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  margin-right: 4px;
+}
+.tag-cn { background: #dbeafe; color: #1e40af; }
+.tag-jp { background: #fce7f3; color: #9d174d; }
+.tag-event { background: #d1fae5; color: #065f46; }
+.tag-scout { background: #fef3c7; color: #92400e; }
+/* 灯箱 */
+.lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.85);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  cursor: zoom-out;
+}
+.lightbox.active { display: flex; }
+.lightbox img {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+}
+</style>
+</head>
+<body>
+<h1>图鉴图片存档</h1>
+<p class="subtitle">所有卡面、横幅、参考图、版本截图分类整理 · v2.9.31</p>
+
+<div class="category">
+  <h2>★5 卡面（花前/花后）</h2>
+  <div class="grid" id="cards-grid"></div>
+</div>
+
+<div class="category">
+  <h2>活动横幅</h2>
+  <div class="grid" id="banners-grid"></div>
+</div>
+
+<div class="category">
+  <h2>小红书参考图</h2>
+  <div class="grid" id="xhs-grid"></div>
+</div>
+
+<div class="category">
+  <h2>版本截图</h2>
+  <div class="grid" id="shots-grid"></div>
+</div>
+
+<div class="lightbox" id="lightbox">
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script>
+const data = {
+  cards: [
+    { src: "latest-preview/preview_img/cards/cn-s5-jun.jpg", name: "涟纯 ★5", tags: ["cn","event"] },
+    { src: "latest-preview/preview_img/cards/cn-s5-natsume.jpg", name: "逆先夏目 ★5", tags: ["cn","scout"] },
+    { src: "latest-preview/preview_img/cards/jp-stage-nagisa.png", name: "乱凪砂 ★5（花前）", tags: ["jp","scout"] },
+    { src: "latest-preview/preview_img/cards/jp-stage-nagisa-after.png", name: "乱凪砂 ★5（花后）", tags: ["jp","scout"] },
+    { src: "latest-preview/preview_img/cards/jp-fv-tsukasa.png", name: "朱樱司 ★5（归档）", tags: ["jp","archive"] },
+    { src: "latest-preview/preview_img/cards/jp-basic-mao-20261014.jpg", name: "衣更真绪 ★5", tags: ["jp"] },
+    { src: "latest-preview/preview_img/cards/jp-basic-tsukasa-20261010.jpg", name: "朱樱司 ★5", tags: ["jp"] }
+  ],
+  banners: [
+    { src: "latest-preview/preview_img/banner/bn-cn-1.jpg", name: "国服活动横幅", tags: ["cn","event"] },
+    { src: "latest-preview/preview_img/banner/bn-cn-2.jpg", name: "国服卡池横幅", tags: ["cn","scout"] },
+    { src: "latest-preview/preview_img/banner/bn-cn-night.jpg", name: "国服夜色狂想", tags: ["cn","event"] },
+    { src: "latest-preview/preview_img/banner/jp-stage-nagisa.jpg", name: "日服凪砂横幅", tags: ["jp","scout"] },
+    { src: "latest-preview/preview_img/banner/jp-music-mao-ambassador.jpg", name: "日服衣更真绪", tags: ["jp"] },
+    { src: "latest-preview/preview_img/banner/jp-scout-halloween-box.jpg", name: "日服万圣节（归档）", tags: ["jp","archive"] },
+    { src: "latest-preview/preview_img/banner/jp-scout-tsukasa.jpg", name: "日服朱樱司（归档）", tags: ["jp","archive"] },
+    { src: "latest-preview/preview_img/banner/jp-scout-wata.jpg", name: "日服日日树涉（归档）", tags: ["jp","archive"] }
+  ],
+  xhs: [
+    { src: "latest-preview/preview_img/xhs_ref/xhs-anniv-scout.webp", name: "周年卡池" },
+    { src: "latest-preview/preview_img/xhs_ref/xhs-bonus-scout.webp", name: "福利卡池" },
+    { src: "latest-preview/preview_img/xhs_ref/xhs-cn-act.webp", name: "国服活动" },
+    { src: "latest-preview/preview_img/xhs_ref/xhs-midmonth.webp", name: "月中活动" },
+    { src: "latest-preview/preview_img/xhs_ref/xhs-minehi.webp", name: "美伽相关" },
+    { src: "latest-preview/preview_img/xhs_ref/xhs-yuta.webp", name: "葵裕太" }
+  ],
+  shots: [
+    { src: "changelog-shots/v2.9.31/enc-units.png", name: "图鉴组合总览" },
+    { src: "changelog-shots/v2.9.31/enc-role-grid.png", name: "角色卡网格" },
+    { src: "changelog-shots/v2.9.31/enc-card-detail.png", name: "单卡详情" },
+    { src: "changelog-shots/v2.9.31/enc-bloom-grid-toggle.png", name: "花前花后切换" },
+    { src: "changelog-shots/v2.9.31/enc-bloom-detail-toggle.png", name: "详情切换按钮" },
+    { src: "changelog-shots/v2.9.31/enc-index-nav-collapse.png", name: "定位锚点+折叠" },
+    { src: "changelog-shots/v2.9.31/layout-units-two-col.png", name: "两列布局小样" },
+    { src: "changelog-shots/v2.9.31/layout-detail-two-col.png", name: "详情布局小样" },
+    { src: "changelog-shots/v2.9.31/layout-rows-star-cospro.png", name: "事务所分组小样" },
+    { src: "changelog-shots/v2.9.31/banner-countdown-cn.png", name: "横幅倒计时" },
+    { src: "changelog-shots/v2.9.31/recent-cn.png", name: "国服近期列表" },
+    { src: "changelog-shots/v2.9.31/recent-jp.png", name: "日服近期列表" },
+    { src: "changelog-shots/v2.9.31/recent-dedup-cn.png", name: "国服去重后" },
+    { src: "changelog-shots/v2.9.31/recent-dedup-jp.png", name: "日服去重后" }
+  ]
+};
+
+function renderGrid(id, items) {
+  const grid = document.getElementById(id);
+  grid.innerHTML = items.map(item => `
+    <div class="card" onclick="openLightbox('${item.src}')">
+      <img src="${item.src}" alt="${item.name}" loading="lazy">
+      <div class="info">
+        <div class="name">${item.name}</div>
+        <div>${(item.tags||[]).map(t => `<span class="tag tag-${t}">${t}</span>`).join('')}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openLightbox(src) {
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox').classList.add('active');
+}
+document.getElementById('lightbox').addEventListener('click', () => {
+  document.getElementById('lightbox').classList.remove('active');
+});
+
+renderGrid('cards-grid', data.cards);
+renderGrid('banners-grid', data.banners);
+renderGrid('xhs-grid', data.xhs);
+renderGrid('shots-grid', data.shots);
+</script>
+</body>
+</html>
