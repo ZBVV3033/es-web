@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>图鉴图片存档</title>
+<title>图鉴素材库 · 图片+UI示例+代码</title>
 <style>
 :root {
   --acc: #5b8def;
@@ -26,6 +26,27 @@ body {
 }
 h1 { font-size: 24px; margin-bottom: 8px; }
 .subtitle { color: var(--txt2); font-size: 14px; margin-bottom: 24px; }
+.nav {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.nav button {
+  padding: 8px 16px;
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.nav button.active {
+  background: var(--acc);
+  color: #fff;
+  border-color: var(--acc);
+}
+.tab { display: none; }
+.tab.active { display: block; }
 .category { margin-bottom: 32px; }
 .category h2 {
   font-size: 18px;
@@ -77,6 +98,42 @@ h1 { font-size: 24px; margin-bottom: 8px; }
 .tag-jp { background: #fce7f3; color: #9d174d; }
 .tag-event { background: #d1fae5; color: #065f46; }
 .tag-scout { background: #fef3c7; color: #92400e; }
+.tag-ui { background: #e0e7ff; color: #3730a3; }
+/* 代码块 */
+.code-block {
+  background: #1e293b;
+  color: #e2e8f0;
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+}
+.code-block .code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.code-block .code-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #94a3b8;
+}
+.code-block .copy-btn {
+  background: var(--acc);
+  color: #fff;
+  border: none;
+  padding: 4px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+}
+.code-block pre {
+  font-family: "Consolas", "Monaco", monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre;
+}
 /* 灯箱 */
 .lightbox {
   display: none;
@@ -97,27 +154,127 @@ h1 { font-size: 24px; margin-bottom: 8px; }
 </style>
 </head>
 <body>
-<h1>图鉴图片存档</h1>
-<p class="subtitle">所有卡面、横幅、参考图、版本截图分类整理 · v2.9.31</p>
+<h1>图鉴素材库</h1>
+<p class="subtitle">图片 + UI示例 + 代码片段 · 以后做新功能直接从这里拿</p>
 
-<div class="category">
-  <h2>★5 卡面（花前/花后）</h2>
-  <div class="grid" id="cards-grid"></div>
+<div class="nav">
+  <button class="active" onclick="switchTab('images')">图片素材</button>
+  <button onclick="switchTab('ui')">UI示例</button>
+  <button onclick="switchTab('code')">代码片段</button>
 </div>
 
-<div class="category">
-  <h2>活动横幅</h2>
-  <div class="grid" id="banners-grid"></div>
+<!-- 图片素材 -->
+<div class="tab active" id="tab-images">
+  <div class="category">
+    <h2>★5 卡面（花前/花后）</h2>
+    <div class="grid" id="cards-grid"></div>
+  </div>
+  <div class="category">
+    <h2>活动横幅</h2>
+    <div class="grid" id="banners-grid"></div>
+  </div>
+  <div class="category">
+    <h2>小红书参考图</h2>
+    <div class="grid" id="xhs-grid"></div>
+  </div>
 </div>
 
-<div class="category">
-  <h2>小红书参考图</h2>
-  <div class="grid" id="xhs-grid"></div>
+<!-- UI示例 -->
+<div class="tab" id="tab-ui">
+  <div class="category">
+    <h2>图鉴界面示例</h2>
+    <div class="grid" id="ui-grid"></div>
+  </div>
 </div>
 
-<div class="category">
-  <h2>版本截图</h2>
-  <div class="grid" id="shots-grid"></div>
+<!-- 代码片段 -->
+<div class="tab" id="tab-code">
+  <div class="category">
+    <h2>CSS 配色变量（浅蓝色系）</h2>
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-title">:root CSS 变量</span>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+      <pre>:root {
+  --acc: #5b8def;
+  --acc2: #4a7bdb;
+  --txt: #1e293b;
+  --txt2: rgba(30,41,59,.72);
+  --txt3: rgba(30,41,59,.48);
+  --bg: #f5f7fb;
+  --bg2: #eef1f8;
+  --line: rgba(30,41,59,.08);
+  --line2: rgba(30,41,59,.16);
+}</pre>
+    </div>
+  </div>
+  <div class="category">
+    <h2>按钮样式</h2>
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-title">.enc-main-tab 主按钮样式</span>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+      <pre>.enc-main-tab {
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--txt);
+  border-radius: 10px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.enc-main-tab.active {
+  background: var(--acc);
+  color: #fff;
+  border-color: var(--acc);
+}</pre>
+    </div>
+  </div>
+  <div class="category">
+    <h2>卡片样式</h2>
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-title">.card 卡片样式</span>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+      <pre>.card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform .2s, box-shadow .2s;
+}
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,.1);
+}</pre>
+    </div>
+  </div>
+  <div class="category">
+    <h2>灯箱效果</h2>
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-title">图片灯箱 Lightbox</span>
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+      </div>
+      <pre>&lt;div class="lightbox" id="lightbox"&gt;
+  &lt;img id="lightbox-img" src="" alt=""&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+function openLightbox(src) {
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox').classList.add('active');
+}
+document.getElementById('lightbox').addEventListener('click', () => {
+  document.getElementById('lightbox').classList.remove('active');
+});
+&lt;/script&gt;</pre>
+    </div>
+  </div>
 </div>
 
 <div class="lightbox" id="lightbox">
@@ -153,21 +310,16 @@ const data = {
     { src: "latest-preview/preview_img/xhs_ref/xhs-minehi.webp", name: "美伽相关" },
     { src: "latest-preview/preview_img/xhs_ref/xhs-yuta.webp", name: "葵裕太" }
   ],
-  shots: [
-    { src: "changelog-shots/v2.9.31/enc-units.png", name: "图鉴组合总览" },
-    { src: "changelog-shots/v2.9.31/enc-role-grid.png", name: "角色卡网格" },
-    { src: "changelog-shots/v2.9.31/enc-card-detail.png", name: "单卡详情" },
-    { src: "changelog-shots/v2.9.31/enc-bloom-grid-toggle.png", name: "花前花后切换" },
-    { src: "changelog-shots/v2.9.31/enc-bloom-detail-toggle.png", name: "详情切换按钮" },
-    { src: "changelog-shots/v2.9.31/enc-index-nav-collapse.png", name: "定位锚点+折叠" },
-    { src: "changelog-shots/v2.9.31/layout-units-two-col.png", name: "两列布局小样" },
-    { src: "changelog-shots/v2.9.31/layout-detail-two-col.png", name: "详情布局小样" },
-    { src: "changelog-shots/v2.9.31/layout-rows-star-cospro.png", name: "事务所分组小样" },
-    { src: "changelog-shots/v2.9.31/banner-countdown-cn.png", name: "横幅倒计时" },
-    { src: "changelog-shots/v2.9.31/recent-cn.png", name: "国服近期列表" },
-    { src: "changelog-shots/v2.9.31/recent-jp.png", name: "日服近期列表" },
-    { src: "changelog-shots/v2.9.31/recent-dedup-cn.png", name: "国服去重后" },
-    { src: "changelog-shots/v2.9.31/recent-dedup-jp.png", name: "日服去重后" }
+  ui: [
+    { src: "changelog-shots/v2.9.31/enc-units.png", name: "图鉴组合总览", tags: ["ui"] },
+    { src: "changelog-shots/v2.9.31/enc-role-grid.png", name: "角色卡网格", tags: ["ui"] },
+    { src: "changelog-shots/v2.9.31/enc-card-detail.png", name: "单卡详情", tags: ["ui"] },
+    { src: "changelog-shots/v2.9.31/enc-bloom-grid-toggle.png", name: "花前花后切换", tags: ["ui"] },
+    { src: "changelog-shots/v2.9.31/enc-index-nav-collapse.png", name: "定位锚点+折叠", tags: ["ui"] },
+    { src: "changelog-shots/v2.9.31/layout-units-two-col.png", name: "两列布局", tags: ["ui"] },
+    { src: "changelog-shots/v2.9.31/layout-rows-star-cospro.png", name: "事务所分组", tags: ["ui"] },
+    { src: "changelog-shots/v2.9.31/banner-countdown-cn.png", name: "横幅倒计时", tags: ["ui"] },
+    { src: "changelog-shots/v2.9.31/recent-cn.png", name: "近期列表", tags: ["ui"] }
   ]
 };
 
@@ -184,6 +336,20 @@ function renderGrid(id, items) {
   `).join('');
 }
 
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function copyCode(btn) {
+  const pre = btn.closest('.code-block').querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent);
+  btn.textContent = '已复制';
+  setTimeout(() => btn.textContent = '复制', 2000);
+}
+
 function openLightbox(src) {
   document.getElementById('lightbox-img').src = src;
   document.getElementById('lightbox').classList.add('active');
@@ -195,7 +361,7 @@ document.getElementById('lightbox').addEventListener('click', () => {
 renderGrid('cards-grid', data.cards);
 renderGrid('banners-grid', data.banners);
 renderGrid('xhs-grid', data.xhs);
-renderGrid('shots-grid', data.shots);
+renderGrid('ui-grid', data.ui);
 </script>
 </body>
 </html>
