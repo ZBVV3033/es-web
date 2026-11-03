@@ -884,7 +884,7 @@ html.es-darkfix canvas {
     <header class="top">
       <div class="top-title">
         <span>偶像梦幻祭 · 资料库</span>
-        <span class="ver" id="libVer">v2.9.50</span>
+        <span class="ver" id="libVer">v2.9.51</span>
       </div>
       <input type="text" class="search" id="libSearch" placeholder="搜索卡名 / 角色 / 卡池…" />
       <span class="top-btns">
@@ -2667,7 +2667,8 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
       info: "『噩梦★黑暗与LimeLIEt』活动★5（10-15 开启，日服）",
       cards: [{ name: "［感谢の歌を歌って］ライカ", star: "★★★★★", img: "", src: "gamerch 官方卡面", link: "https://gamerch.com/ensemble-star-music/961152" }, 
         { name: "［魅力の詰め合わせ］ライカ", star: "★★★★★", img: "", src: "gamerch 官方卡面", link: "https://gamerch.com/ensemble-star-music/957030" },
-        { name: "Lyrical White（リリカル・ホワイト）", star: "★★★", img: "assets/cards/raika_lyrical.png", src: "Ensemble Stars Wiki 官方卡面", link: "https://ensemble-stars.fandom.com/wiki/(Lyrical_White)_Raika" }
+        { name: "［无邪気な登场］ライカ", star: "★★★★", img: "", src: "gamerch 官方卡面", link: "https://gamerch.com/ensemble-star-music/882564" },
+        { name: "Lyrical White（リリカル・ホワイト）", star: "★★★", img: "assets/cards/raika_lyrical.png", src: "Ensemble Stars Wiki 官方卡面", link: "https://ensemble-stars.fandom.com/wiki/(Lyrical_White)_Raika" },
       ],
       outfits: [
         { name: "MV衣装＋L2D衣装【Sweet Nightmare】", note: "活动★5 Raika 附赠（原创SPP）", src: "日服情报微博 @EnsembleStars", link: "https://weibo.com/u/5517236683" }
@@ -3355,6 +3356,7 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
   }
 
   // —— 版本日志（与 pet.js / CHANGELOG.md 同步）——
+  { ver: "2.9.51", date: "2026-11-04", notes: "补四星卡：Raika［无邪気な登场］" },
   const CHANGELOG = [
   { ver: "2.9.50", date: "2026-11-04", notes: "gamerch 304首歌曲数据批量注入：时长覆盖从166首增至289首，键位覆盖从17首增至133首，含四档难度键数+属性" },
   { ver: "2.9.49", date: "2026-11-04", notes: "补四星卡：仁兔成鸣［フェスタ巡り］" },
@@ -5697,7 +5699,7 @@ function songCardHtml(s) {
         "游戏内站位（像游戏里 42135 那样摆，空位直接放数字）。"
       ] },
       { h: "更新日志", steps: [
-        "从下往上看每个版本改了什么。当前版本 v2.9.50。"
+        "从下往上看每个版本改了什么。当前版本 v2.9.51。"
       ] },
       { h: "使用教程", steps: [
         "就是这份完整说明，随时点开随时看。每个页面右上角也有本页教程。"
@@ -5726,7 +5728,7 @@ function songCardHtml(s) {
   function closeTut() { if (tutMask) { tutMask.remove(); tutMask = null; } }
   function maybeShowFirstTut() { if (localStorage.getItem("es-tut-v2")) return; localStorage.setItem("es-tut-v2", "1"); showTut("global"); }
   function init() {
-    $("libVer").textContent = "v2.9.50";
+    $("libVer").textContent = "v2.9.51";
     buildMobileNav();
     // 手机端「确定搜索」初始位置：右侧列表区域悬浮（用户指定），可拖动
     if (IS_MOBILE) {
