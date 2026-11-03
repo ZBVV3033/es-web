@@ -884,7 +884,7 @@ html.es-darkfix canvas {
     <header class="top">
       <div class="top-title">
         <span>偶像梦幻祭 · 资料库</span>
-        <span class="ver" id="libVer">v2.9.41</span>
+        <span class="ver" id="libVer">v2.9.42</span>
       </div>
       <input type="text" class="search" id="libSearch" placeholder="搜索卡名 / 角色 / 卡池…" />
       <span class="top-btns">
@@ -2804,7 +2804,7 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
     {
       id: "mika", name: "影片美伽", jp: "影片みか", unit: "Valkyrie",
       info: "Valkyrie组合成员",
-      cards: [{ name: "［Valkyrieの芸術品］影片 みか", star: "★★★★★", img: "", src: "官方活动卡", link: "https://em1.ensemble-stars.jp/app_help/events/110/index.html" }, 
+      cards: [{ name: "［ポイズンアラモード］影片 みか", star: "★★★★★", img: "", src: "官方招募卡", link: "https://em1.ensemble-stars.jp/app_help/gachas/133/index.html" }, { name: "［Valkyrieの芸術品］影片 みか", star: "★★★★★", img: "", src: "官方活动卡", link: "https://em1.ensemble-stars.jp/app_help/events/110/index.html" }, 
         { name: "［車掌の警笛］影片 みか（旧作!）", star: "★★★★★", img: "", src: "gamerch 保管庫", link: "https://gamerch.com/hokan-ensemble-stars/entry/404441" }
       ],
       outfits: [
@@ -2814,7 +2814,7 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
     {
       id: "arashi", name: "鸣上岚", jp: "鳴上嵐", unit: "Knights",
       info: "Knights组合成员",
-      cards: [{ name: "［乙女の花園］鳴上 嵐", star: "★★★★★", img: "", src: "官方招募卡", link: "https://em1.ensemble-stars.jp/app_help/gachas/137/index.html" }, 
+      cards: [{ name: "［愛の花束］鳴上 嵐", star: "★★★★★", img: "", src: "官方招募卡", link: "https://em1.ensemble-stars.jp/app_help/gachas/65/index.html" }, { name: "［乙女の花園］鳴上 嵐", star: "★★★★★", img: "", src: "官方招募卡", link: "https://em1.ensemble-stars.jp/app_help/gachas/137/index.html" }, 
         { name: "［麗しき死神］鳴上 嵐（旧作!）", star: "★★★★★", img: "", src: "gamerch 官方", link: "https://em1.ensemble-stars.jp/app_help/events/84/index.html" }
       ],
       outfits: []
@@ -3356,6 +3356,7 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 
   // —— 版本日志（与 pet.js / CHANGELOG.md 同步）——
   const CHANGELOG = [
+  { ver: "2.9.42", date: "2026-11-04", notes: "补五星卡：影片美伽［ポイズンアラモード］、鸣上岚［愛の花束］" },
   { ver: "2.9.41", date: "2026-11-04", notes: "UNDEAD 17首歌键位数据全部注入成功（含U.S.A.翻唱/SWINGIN' PARONIRIA），keys覆盖从15首增至17首" },
   { ver: "2.9.40", date: "2026-11-04", notes: "Raika补第二张五星卡［感谢の歌を歌って］，所有角色均有2+张五星卡" },
   { ver: "2.9.39", date: "2026-11-04", notes: "补五星卡：影片美伽［Valkyrieの芸術品］、鸣上岚［乙女の花園］" },
@@ -5688,7 +5689,7 @@ function songCardHtml(s) {
         "游戏内站位（像游戏里 42135 那样摆，空位直接放数字）。"
       ] },
       { h: "更新日志", steps: [
-        "从下往上看每个版本改了什么。当前版本 v2.9.41。"
+        "从下往上看每个版本改了什么。当前版本 v2.9.42。"
       ] },
       { h: "使用教程", steps: [
         "就是这份完整说明，随时点开随时看。每个页面右上角也有本页教程。"
@@ -5717,7 +5718,7 @@ function songCardHtml(s) {
   function closeTut() { if (tutMask) { tutMask.remove(); tutMask = null; } }
   function maybeShowFirstTut() { if (localStorage.getItem("es-tut-v2")) return; localStorage.setItem("es-tut-v2", "1"); showTut("global"); }
   function init() {
-    $("libVer").textContent = "v2.9.41";
+    $("libVer").textContent = "v2.9.42";
     buildMobileNav();
     // 手机端「确定搜索」初始位置：右侧列表区域悬浮（用户指定），可拖动
     if (IS_MOBILE) {
