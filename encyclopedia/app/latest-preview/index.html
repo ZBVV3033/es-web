@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>最新五星预览 · 国服 / 日服（小样）</title>
+<style>
+  :root{
+    --bg:#f5f6f8; --card:#fff; --line:#e3e6ec; --text:#2b2f3a; --muted:#7a8194;
+    --acc:#3f6fb5; --bad:#c96a3a; --ok:#3f8f62; --sparkle:#f0a63a;
+    --brilliant:#4aa3e8; --flash:#e85f6d; --glitter:#6bbf78; --none:#b9bfca;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px}
+  .wrap{max-width:1180px;margin:0 auto;padding:18px 16px 48px}
+  header h1{font-size:20px;margin:0 0 6px}
+  .meta{color:var(--muted);font-size:13px;line-height:1.6}
+  .tabs{display:flex;gap:8px;margin:14px 0}
+  .tab{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:10px;padding:9px 18px;cursor:pointer;font-size:15px;font-weight:600}
+  .tab.active{background:var(--acc);border-color:var(--acc);color:#fff}
+  .stats{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0 16px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 14px}
+  .stat b{font-size:18px;color:var(--acc)}
+  .section{margin-top:22px}
+  .section h2{font-size:16px;margin:0 0 10px;padding-left:8px;border-left:3px solid var(--acc)}
+  .banners{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px;align-items:start}
+  .banner{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+  .banner .ph{min-height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--muted);
+    background:repeating-linear-gradient(45deg,#eef0f4,#eef0f4 10px,#f7f8fa 10px,#f7f8fa 20px);text-align:center;padding:14px}
+  .banner .ph .ph-title{font-weight:600;color:var(--text)}
+  .banner .ph a{color:var(--acc);font-size:12px;text-decoration:none}
+  .banner a.b-img{display:block;background:#fafbfd;line-height:0}
+  .banner img{width:100%;height:auto;object-fit:contain;display:block}
+  .banner .body{padding:10px 12px}
+  .banner .t{font-weight:600;font-size:13px;line-height:1.5}
+  .banner .d{color:var(--muted);font-size:12px;margin-top:5px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+  .banner .bnote{color:var(--muted);font-size:12px;margin-top:6px;line-height:1.5}
+  .banner .open{color:var(--acc);text-decoration:none;font-size:12px;white-space:nowrap}
+  .lowtag{font-size:11px;color:#a16207;background:#fef3c7;border-radius:8px;padding:1px 7px;margin-left:6px;white-space:nowrap;font-weight:400}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+  .pic{position:relative;aspect-ratio:4/5;background:#e9edf3}
+  .pic img{width:100%;height:100%;object-fit:cover;display:block}
+  .pic .empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--muted);gap:6px;text-align:center;padding:8px}
+  .star-badge{position:absolute;top:8px;left:8px;background:var(--sparkle);color:#fff;font-weight:700;font-size:13px;border-radius:8px;padding:2px 8px;z-index:2}
+  .type-dot{position:absolute;top:8px;right:8px;width:14px;height:14px;border-radius:50%;z-index:2;border:1px solid #fff}
+  .pending{position:absolute;bottom:8px;right:8px;background:rgba(201,106,58,.92);color:#fff;font-size:11px;border-radius:8px;padding:2px 8px;z-index:2}
+  .cbody{padding:10px 11px;display:flex;flex-direction:column;gap:5px;flex:1}
+  .char{font-weight:700}
+  .cname{font-size:13px;color:#444;line-height:1.4}
+  .src{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:2px}
+  .badge{font-size:11px;border-radius:8px;padding:1px 8px;background:#eef2f8;color:var(--acc)}
+  .badge.event{background:#f3eef9;color:#7a55b8}
+  .date{color:var(--muted);font-size:12px}
+  .note{color:var(--muted);font-size:12px;line-height:1.5}
+  .src-link{font-size:12px;color:var(--acc);text-decoration:none;word-break:break-all}
+  .empty-hint{color:var(--muted);font-size:13px;background:var(--card);border:1px dashed var(--line);border-radius:10px;padding:12px}
+  footer{margin-top:26px;color:var(--muted);font-size:12px;line-height:1.7;border-top:1px solid var(--line);padding-top:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1 id="hdr">最新五星预览（小样）</h1>
+    <div class="meta" id="rule"></div>
+  </header>
+
+  <div class="tabs" role="tablist">
+    <button class="tab active" data-mode="cn">国服 CN</button>
+    <button class="tab" data-mode="jp">日服 JP</button>
+  </div>
+
+  <div class="stats" id="stats"></div>
+
+  <section class="section">
+    <h2>当期宣传横幅（宽图位 · 完整展示不裁切 · 点击看原图）</h2>
+    <div class="banners" id="banners"></div>
+  </section>
+
+  <section class="section">
+    <h2 id="h-current">当期进行中 ★5</h2>
+    <div class="grid" id="grid-current"></div>
+  </section>
+
+  <section class="section">
+    <h2 id="h-recent">近 30 天追加 ★5</h2>
+    <div class="grid" id="grid-recent"></div>
+  </section>
+
+  <footer id="foot"></footer>
+</div>
+
+<script src="./data.js"></script>
+<script>
+let MODE = "cn";
+const TYPE_COLOR = { Sparkle:"var(--sparkle)", Brilliant:"var(--brilliant)", Flash:"var(--flash)", Glitter:"var(--glitter)" };
+
+function esc(s){ return String(s||"").replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+
+function modeLabel(m){ return m==="cn" ? "国服 CN" : "日服 JP"; }
+
+function localISO(d){const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');return y+"-"+m+"-"+day;}
+function shiftISO(iso,n){const d=new Date(iso+"T00:00:00");d.setDate(d.getDate()+n);return localISO(d);}
+const TODAY=localISO(new Date());
+const WIN_START=shiftISO(TODAY,-29); // 含今天最近30个自然日（最近一个月口径）
+
+function cardsOf(mode){
+  return PREVIEW_CARDS.filter(c=>c.mode===mode).sort((a,b)=>b.dateISO.localeCompare(a.dateISO));
+}
+function bannersOf(mode){
+  return PREVIEW_BANNERS.filter(b=>b.mode===mode && (b.group||"current")!=="archive").sort((a,b)=>b.dateISO.localeCompare(a.dateISO));
+}
+
+function cardPic(c){
+  if(c.imgReady && c.img){
+    const lowTag = c.lowQuality
+      ? `<span style="position:absolute;top:8px;right:8px;z-index:2;font-size:10px;color:#a16207;background:#fef3c7;border-radius:8px;padding:1px 6px;white-space:nowrap">待官方替换</span>` : "";
+    return `<div class="pic"><span class="star-badge">★5</span>${typeDot(c)}${lowTag}
+      <img src="${esc(c.img)}" alt="${esc(c.card)}" onerror="this.replaceWith(picFallback())"></div>`;
+  }
+  return `<div class="pic"><span class="star-badge">★5</span>${typeDot(c)}<span class="pending">待补官方图</span>
+    <div class="empty"><span>暂无标准卡面</span><span style="font-size:11px">占位 · 不拿低清顶替</span></div></div>`;
+}
+function picFallback(){
+  const d=document.createElement("div"); d.className="pic"; d.innerHTML=`<div class="empty"><span>图片缺失/未就位</span></div>`; return d;
+}
+function typeDot(c){ return `<span class="type-dot" style="background:${TYPE_COLOR[c.type]||"var(--none)"}" title="${esc(c.type||"类型待核")}"></span>`; }
+
+function cardHTML(c){
+  const srcBadge = c.sourceType==="event"
+    ? `<span class="badge event">活动</span>` : `<span class="badge">卡池</span>`;
+  const link = c.sourceUrl ? `<a class="src-link" href="${esc(c.sourceUrl)}" target="_blank" rel="noopener">来源 ↗</a>` : `<span class="date">来源待补官方链接</span>`;
+  return `<div class="card">
+    ${cardPic(c)}
+    <div class="cbody">
+      <div class="char">${esc(c.char)||"—"}</div>
+      <div class="cname">${esc(c.card)||"（卡名待补）"}</div>
+      <div class="src">${srcBadge}<span class="date">${esc(c.dateISO)}</span></div>
+      <div class="cname" style="color:#666">${esc(c.sourceName)}</div>
+      <div class="note">${esc(c.note)}</div>
+      ${link}
+    </div>
+  </div>`;
+}
+
+function bannerHTML(b){
+  const srcLink = b.sourceUrl
+    ? `<a class="open" href="${esc(b.sourceUrl)}" target="_blank" rel="noopener">公告/来源 ↗</a>`
+    : `<span class="date">来源待补</span>`;
+  const media = b.imgReady && b.img
+    ? `<a class="b-img" href="${esc(b.img)}" target="_blank" rel="noopener" title="点击查看原图"><img src="${esc(b.img)}" alt="${esc(b.title)}" onerror="this.replaceWith(bannerFallback())"></a>`
+    : `<div class="ph"><span class="ph-title">${esc(b.title)}</span>
+        <span>官方宣传图待补 · 占位不挂错图/不拿低清顶替</span>${srcLink}</div>`;
+  const lowTag = b.lowQuality ? `<span class="lowtag">wiki横幅·待官方替换</span>` : "";
+  return `<div class="banner">${media}
+    <div class="body">
+      <div class="t">${esc(b.title)}${lowTag}</div>
+      <div class="d"><span>${esc(b.kind==="event"?"活动":"卡池")}</span><span>·</span><span>${esc(b.dateISO)}</span><span>·</span>${srcLink}</div>
+      <div class="bnote">${esc(b.note)}</div>
+    </div></div>`;
+}
+function bannerFallback(){
+  const d=document.createElement("div"); d.className="ph";
+  d.innerHTML='<span class="ph-title">宣传图缺失/未就位</span><span>文件存在引用但加载失败，待官方替换</span>'; return d;
+}
+
+function render(){
+  const all = cardsOf(MODE);
+  const visible = all.filter(c=>c.group==="current"||c.group==="recent30d");
+  const cur = visible.filter(c=>c.group==="current");
+  const curIds=new Set(cur.map(c=>c.id));
+  const rec = visible.filter(c=>c.group==="recent30d" || (c.dateISO>=WIN_START && c.dateISO<=TODAY && !curIds.has(c.id)));
+  const pending = visible.filter(c=>!c.imgReady).length;
+  const unverified = visible.filter(c=>c.card.indexOf("待核")>=0 || /待核/.test(c.note)).length;
+  const bn = bannersOf(MODE);
+  const bnReady = bn.filter(b=>b.imgReady).length;
+
+  document.getElementById("hdr").textContent = PREVIEW_META.title + " · " + modeLabel(MODE);
+  document.getElementById("rule").textContent = PREVIEW_META.rule + " 基准日 " + TODAY + "（含今天最近30天：" + WIN_START + " ～ " + TODAY + "，年份按本机日期自动生成）。" + PREVIEW_META.fallbackNote;
+  document.getElementById("stats").innerHTML =
+    `<div class="stat">基准日 <b>${TODAY}</b></div>`+
+    `<div class="stat">近30天起 <b>${WIN_START}</b></div>`+
+    `<div class="stat">当期 ★5 <b>${cur.length}</b></div>`+
+    `<div class="stat">近30天 ★5 <b>${rec.length}</b></div>`+
+    `<div class="stat">待补图 <b>${pending}</b></div>`+
+    `<div class="stat">待核条目 <b>${unverified}</b></div>`+
+    `<div class="stat">宣传图就位 <b>${bnReady}/${bn.length}</b></div>`;
+  document.getElementById("h-current").textContent = "当期进行中 ★5（" + cur.length + "）";
+  document.getElementById("h-recent").textContent = "近 30 天追加 ★5（" + rec.length + "）";
+  document.getElementById("grid-current").innerHTML = cur.length? cur.map(cardHTML).join("") : `<div class="empty-hint">当前模式暂无当期 ★5 数据（待官方公告采集）。</div>`;
+  document.getElementById("grid-recent").innerHTML = rec.length? rec.map(cardHTML).join("") : `<div class="empty-hint">当前模式暂无近30天追加 ★5（正式版按系统日期滚动计算；进行中条目只在当期区显示一次）。</div>`;
+  document.getElementById("banners").innerHTML = bn.length? bn.map(bannerHTML).join("") : `<div class="empty-hint">暂无宣传图条目。</div>`;
+  document.getElementById("foot").textContent =
+    "口径：不按角色分组；只收 ★5；不显示三围数值；图缺失用占位不裂图、不挂错人；范围=当期进行中 + 最近30天追加。" +
+    "正式版：按官方公告补全当期+近30天，宣传图下载至 preview_img/banner 并置 imgReady=true。";
+}
+
+document.querySelectorAll(".tab").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    document.querySelectorAll(".tab").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active"); MODE=btn.dataset.mode; render();
+  });
+});
+render();
+</script>
+</body>
+</html>

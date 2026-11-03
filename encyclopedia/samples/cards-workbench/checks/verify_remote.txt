@@ -1,0 +1,7 @@
+ERR  cards-workbench :: Response status code does not indicate success: 404 (Not Found).
+ERR  cards-workbench/sample :: Response status code does not indicate success: 404 (Not Found).
+ERR  cards-workbench/data :: Response status code does not indicate success: 404 (Not Found).
+ERR  cards-workbench/scripts :: Response status code does not indicate success: 404 (Not Found).
+ERR  cards-workbench/README.md :: Response status code does not indicate success: 404 (Not Found).
+ERR  cards-workbench/sample/cards_g5.js :: Response status code does not indicate success: 404 (Not Found).
+ERR  cards-workbench/sample/img/g5/177971_h2.png :: Response status code does not indicate success: 404 (Not Found).

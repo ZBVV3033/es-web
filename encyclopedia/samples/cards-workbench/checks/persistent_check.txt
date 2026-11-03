@@ -1,0 +1,13 @@
+PROBE code= size=23
+DIR count=2
+  - diag.txt
+  - persist_probe.txt
+RECENT_COMMITS=8
+  548dbd20  persist probe[0]
+  3ba19d4b  workbench(images): sample/img/g5/324621_h2.png[0]
+  4def0580  workbench(images): sample/img/g5/299794_h2.png[0]
+  8adcafa9  workbench(images): sample/img/g5/291022_h2.png[0]
+  ff2b64d7  workbench(images): sample/img/g5/264252_h2.png[0]
+  1e37b26f  workbench(images): sample/img/g5/260261_h2.png[0]
+  530d46ce  workbench(images): sample/img/g5/255842_h2.png[0]
+  a02551d9  workbench(images): sample/img/g5/245785_h2.png[0]

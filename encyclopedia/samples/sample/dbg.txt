@@ -1,0 +1,5 @@
+BLOCK_LEN=5917 SEG_COUNT=4
+DEC_OK keyhash=[2g06rH] json={"bucket":"gamerch-img-contents","key":"wiki\/1007\/entry\/ZD2g06rH.png","edits":{"webp":{"quality":85},"toFormat":"webp","resize":{"width":48,"height":60,"fit":"fill"}}}
+DEC_OK keyhash=[2g06rH] json={"bucket":"gamerch-img-contents","key":"wiki\/1007\/entry\/ZD2g06rH.png","edits":{"webp":{"quality":85},"toFormat":"webp","resize":{"width":96,"height":120,"fit":"fill"}}}
+DEC_OK keyhash=[2g06rH] json={"bucket":"gamerch-img-contents","key":"wiki\/1007\/entry\/ZD2g06rH.png","edits":{"webp":{"quality":85},"toFormat":"webp","resize":{"width":144,"height":180,"fit":"fill"}}}
+DEC_OK keyhash=[2g06rH] json={"bucket":"gamerch-img-contents","key":"wiki\/1007\/entry\/ZD2g06rH.png","edits":{"png":{"quality":85},"resize":{"width":48,"height":60,"fit":"fill"}}}

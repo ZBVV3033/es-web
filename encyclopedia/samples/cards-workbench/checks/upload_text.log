@@ -1,0 +1,12 @@
+OK README.md 3108b41
+OK 图鉴重做计划.md 6af7bda
+OK sample/cards_sample.html 9d445a4
+OK sample/cards_g5.js 1a5576b
+OK data/g5_all.tsv 6a562ee
+OK data/g5_focus.tsv 596d703
+OK data/stands_members.tsv ebd7fec
+OK scripts/parse_g5.ps1 597d74d
+OK scripts/download_g5.ps1 b87ebc1
+OK checks/check_report.log 36248e6
+OK checks/g5_parse.log 31bb14a
+OK checks/g5_dl.log 3969eb3

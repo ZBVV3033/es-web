@@ -1,0 +1,8 @@
+DIR cards-workbench entries=1
+    - diag.txt
+HTTP 404  cards-workbench/README.md
+HTTP 404  cards-workbench/sample/cards_sample.html
+HTTP 404  cards-workbench/sample/cards_g5.js
+HTTP 404  cards-workbench/data/g5_focus.tsv
+HTTP 404  cards-workbench/scripts/download_g5.ps1
+HTTP 404  cards-workbench/sample/img/g5/177971_h2.png
