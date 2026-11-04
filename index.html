@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
@@ -893,7 +893,7 @@ html.es-darkfix canvas {
     <header class="top">
       <div class="top-title">
         <span>偶像梦幻祭 · 资料库</span>
-        <span class="ver" id="libVer">v2.9.32</span>
+        <span class="ver" id="libVer">v2.9.33</span>
       </div>
       <input type="text" class="search" id="libSearch" placeholder="搜索卡名 / 角色 / 卡池…" />
       <span class="top-btns">
@@ -3786,7 +3786,8 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 
   // —— 版本日志（与 pet.js / CHANGELOG.md 同步）——
   const CHANGELOG = [
-      { ver: "2.9.32", date: "2026-11-05", items: [
+      { ver: "2.9.33", date: "2026-11-05", note: "修复键位显示bug，支持两种数据格式；夜色狂想活动移到往期" },
+{ ver: "2.9.32", date: "2026-11-05", items: [
       "图鉴四五星卡面数据补齐：mao/jun/himeru/kanata 四角色共追加 64 张卡（五星 24 + 四星 40），含卡名、属性、来源、链接、未开花/开花双图",
       "卡面图片从云盘批量下载到本地 img/g4/ 和 img/g5/ 目录，G4 大部分就位，G5 部分缺失待后续补充",
       "数据来源：cards_g4.js（40张四星）+ cards_g5.js（24张五星），按角色 ID 映射到 ENCY 对应角色"
@@ -4778,6 +4779,7 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
       b.onclick = () => setLibSongCol(b.dataset.col);
     });
   }
+  let libSongDiff = "简单";
   const SONG_COL_NAME = { red: "红", green: "绿", yellow: "黄", blue: "蓝" };
   
 function stItemHtml(name, i, cnt){
@@ -4817,7 +4819,42 @@ function stRowHtml(s){
   }
   return "";
 }
-function songCardHtml(s) {
+function keysTag(s) {
+    if (!s.keys || !s.keys.length) return '';
+    // 难度映射：数字 → 名称
+    const diffMap = {1: "简单", 2: "普通", 3: "困难", 4: "专家", 5: "极难"};
+    let k = null;
+    // 尝试字符串格式（["简单","7","144"]）
+    k = s.keys.find(x => x[0] === libSongDiff);
+    // 尝试数字格式（[1, 135]）
+    if (!k) {
+        const diffNum = { "简单": 1, "普通": 2, "困难": 3, "专家": 4, "极难": 5 }[libSongDiff];
+        if (diffNum) k = s.keys.find(x => x[0] === diffNum);
+    }
+    if (!k) return '';
+    // 统一格式：diff, lv, cnt
+    let diff, lv, cnt;
+    if (typeof k[0] === 'number') {
+        // 数字格式：[1, 135] → 难度=1, 键数=135, 等级未知
+        diff = diffMap[k[0]] || "?";
+        lv = "-";
+        cnt = k[1];
+    } else {
+        // 字符串格式：["简单","7","144"]
+        diff = k[0];
+        lv = k[1];
+        cnt = k[2];
+    }
+    return `<span class="song-keys" style="background:#fff3cd;padding:2px 6px;border-radius:4px;margin-left:4px;font-size:12px;"><i style="font-style:normal;color:#6b7280;margin-right:2px;">${diff}</i><b style="font-weight:600;margin-right:2px;">Lv${lv}</b><em style="font-style:normal;color:#3b82f6;">${cnt}键</em></span>`;
+  }
+  function setLibSongDiff(f) {
+    libSongDiff = f;
+    document.querySelectorAll('#libSongDiffFilters .diff-btn').forEach(btn => {
+      btn.classList.toggle('on', btn.dataset.diff === f);
+    });
+    renderSongList();
+  }
+  function songCardHtml(s) {
     const idols = s.i.map((id) => esc(normIdol(id))).join(" · ");
     const yyy = s.yyy ? `<a href="${escAttr(s.yyy)}" target="_blank" rel="noopener">网易云试听 →</a>` : "";
     const people = s.i.length === 1 ? "solo（1人）" : (s.i.length ? `（${s.i.length}人）` : "");
@@ -4826,11 +4863,12 @@ function songCardHtml(s) {
       ? `<span class="song-mvtag game">游戏内</span>`
       : `<span class="song-mvtag nomv">2D/其他</span>`;
     const durTag = s.dur ? `<span class="song-dur">${esc(s.dur)}</span>` : "";
+    const keysTagHtml = keysTag(s);
     const colNameTag = s.col && SONG_COL_NAME[s.col] ? `<span class="song-col-name ${esc(s.col)}">（${SONG_COL_NAME[s.col]}）</span>` : "";
     return `<div class="song-card${s.img ? " song-hascover" : ""}">
       ${img}
       <div class="song-card-body">
-        <div class="song-name" data-song="${escAttr(s.n)}">${esc(s.n)}${colNameTag}${mvTag}${durTag}${people ? ` <span class="song-cn">${people}</span>` : ""}${s.cn ? ` <span class="song-cn">${esc(s.cn)}</span>` : ""}</div>
+        <div class="song-name" data-song="${escAttr(s.n)}">${esc(s.n)}${colNameTag}${mvTag}${durTag}${keysTagHtml}${people ? ` <span class="song-cn">${people}</span>` : ""}${s.cn ? ` <span class="song-cn">${esc(s.cn)}</span>` : ""}</div>
         <div class="song-unit2">${s.u && s.u !== s.n ? esc(s.u) : ""}</div>
         ${stRowHtml(s)}
         <div class="song-tags">${idols}</div>
@@ -5881,7 +5919,7 @@ function songCardHtml(s) {
         "游戏内站位（像游戏里 42135 那样摆，空位直接放数字）。"
       ] },
       { h: "更新日志", steps: [
-        "从下往上看每个版本改了什么。当前版本 v2.9.32。"
+        "从下往上看每个版本改了什么。当前版本 v2.9.33。"
       ] },
       { h: "使用教程", steps: [
         "就是这份完整说明，随时点开随时看。每个页面右上角也有本页教程。"
@@ -5910,7 +5948,7 @@ function songCardHtml(s) {
   function closeTut() { if (tutMask) { tutMask.remove(); tutMask = null; } }
   function maybeShowFirstTut() { if (localStorage.getItem("es-tut-v2")) return; localStorage.setItem("es-tut-v2", "1"); showTut("global"); }
   function init() {
-    $("libVer").textContent = "v2.9.32";
+    $("libVer").textContent = "v2.9.33";
     buildMobileNav();
     // 手机端「确定搜索」初始位置：右侧列表区域悬浮（用户指定），可拖动
     if (IS_MOBILE) {
