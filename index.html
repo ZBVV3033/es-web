@@ -984,15 +984,19 @@ html.es-darkfix canvas {
           #view-preview .pv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
           /* 新模式：分类卡片，横向滑动一排 */
           #view-preview .pv-new-grid{display:flex;gap:10px;overflow-x:auto;padding-bottom:8px;-webkit-overflow-scrolling:touch}
-          #view-preview .pv-new-card{background:#fff;border:1px solid var(--line,#e3e6ec);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;min-width:200px;max-width:200px;flex-shrink:0}
+          #view-preview .pv-new-card{background:#fff;border:1px solid var(--line,#e3e6ec);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;flex-shrink:0}
+          #view-preview .pv-new-card.preview{min-width:160px;max-width:160px}
+          #view-preview .pv-new-card.current{min-width:260px;max-width:260px}
           #view-preview .pv-new-img{position:relative;aspect-ratio:16/9;background:#e9edf3}
           #view-preview .pv-new-img img{width:100%;height:100%;object-fit:cover;display:block}
           #view-preview .pv-new-img .pv-empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted,#7a8194);font-size:11px;text-align:center;padding:8px}
+          /* 倒计时放在图片上面 */
+          #view-preview .pv-new-img .pv-cd{position:absolute;bottom:4px;left:4px;background:rgba(0,0,0,0.6);color:#fff;font-size:10px;font-weight:600;padding:2px 6px;border-radius:4px;line-height:1.2}
           #view-preview .pv-new-body{padding:6px 8px;display:flex;flex-direction:column;gap:3px}
           #view-preview .pv-new-tag{font-size:10px;color:#6b7280;background:#f3f4f6;border-radius:6px;padding:1px 5px;align-self:flex-start}
-          #view-preview .pv-new-title{font-size:13px;font-weight:600;line-height:1.3}
+          #view-preview .pv-new-title{font-size:12px;font-weight:600;line-height:1.3}
+          #view-preview .pv-new-card.current .pv-new-title{font-size:14px}
           #view-preview .pv-new-time{font-size:11px;color:#6b7280}
-          #view-preview .pv-new-body .pv-cd{font-size:11px;color:#e5484d;font-weight:600}
           #view-preview .pv-card{background:#fff;border:1px solid var(--line,#e3e6ec);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
           #view-preview .pv-pic{position:relative;aspect-ratio:4/5;background:#e9edf3}
           #view-preview .pv-pic img{width:100%;height:100%;object-fit:cover;display:block}
@@ -6388,19 +6392,17 @@ function keysTag(s) {
     if(pvLayoutMode==="new"){
       // === 新模式：分类卡片，横向滑动一排 ===
       try {
-      // 分类：预告 / 进行中卡池 / 进行中活动 / 次要活动
+      // 分类：预告 / 进行中活动（合并卡池和活动）/ 次要活动
       var today=new Date(); today.setHours(0,0,0,0);
-      var previewBns=[],curScout=[],curEvent=[],minor=[];
+      var previewBns=[],curBns=[],minor=[];
       bn.forEach(function(b){
         var startD=b.startISO?new Date(b.startISO):null;
         var isPreview=startD&&startD>today; // 未开始的是预告
         var hasStar=(b.title||"").indexOf("★5")>=0; // 有没有五星
         if(isPreview){
           previewBns.push(b);
-        }else if(b.kind==="scout"&&hasStar){
-          curScout.push(b);
-        }else if(b.kind==="event"&&hasStar){
-          curEvent.push(b);
+        }else if(hasStar){
+          curBns.push(b); // 进行中活动（有五星的，合并卡池和活动）
         }else{
           minor.push(b); // 次要活动（无五星的）
         }
@@ -6412,21 +6414,25 @@ function keysTag(s) {
         if(aIsScout!==bIsScout) return aIsScout-bIsScout;
         return (a.startISO||"").localeCompare(b.startISO||"");
       });
+      // 缩短标题
+      function shortTitle(t){
+        // 去掉★5和UP等字样，缩短标题
+        return t.replace(/★5\s*/g,"").replace(/UP/g,"").trim();
+      }
       // 渲染函数
-      function newBannerCard(b){
+      function newBannerCard(b, type){
         var cd=b.endISO?'<span class="pv-cd" data-start="'+(b.startISO||"")+'" data-end="'+b.endISO+'"></span>':"";
         var img=b.imgReady?'<img src="'+PV_ASSET+b.img+'" alt="">':'<div class="pv-empty"><span>宣传图待补</span></div>';
-        return '<div class="pv-new-card"><div class="pv-new-img">'+img+'</div><div class="pv-new-body"><div class="pv-new-tag">'+(b.tag||"活动")+'</div><div class="pv-new-title">'+b.title+'</div><div class="pv-new-time">'+(b.startISO?pvHM(b.startISO):"?")+' ~ '+(b.endISO?pvHM(b.endISO):"?")+'</div>'+cd+'</div></div>';
+        // 倒计时放在图片上面
+        return '<div class="pv-new-card '+type+'"><div class="pv-new-img">'+img+cd+'</div><div class="pv-new-body"><div class="pv-new-tag">'+(b.tag||"活动")+'</div><div class="pv-new-title">'+shortTitle(b.title)+'</div></div></div>';
       }
-      function sectionHtml(title,list){
+      function sectionHtml(title,list,type){
         if(!list.length)return "";
-        return '<div class="pv-sec"><h2>'+title+'（'+list.length+'）</h2><div class="pv-new-grid">'+list.map(newBannerCard).join("")+'</div></div>';
+        return '<div class="pv-sec"><h2>'+title+'（'+list.length+'）</h2><div class="pv-new-grid">'+list.map(function(b){return newBannerCard(b,type);}).join("")+'</div></div>';
       }
       var html="";
-      html+=sectionHtml("活动预告",previewBns);
-      html+=sectionHtml("进行中卡池（★5）",curScout);
-      html+=sectionHtml("进行中活动（★5）",curEvent);
-      html+=sectionHtml("次要活动（无★5）",minor);
+      html+=sectionHtml("活动预告",previewBns,"preview");
+      html+=sectionHtml("进行中活动",curBns,"current");
       // 隐藏旧模式的区域
       var pvBannersEl=pv$("pvBanners"); if(pvBannersEl){var sec1=pvBannersEl.closest(".pv-sec"); if(sec1)sec1.hidden=true;}
       var sec2=pv$("pvOldBannersSec"); if(sec2)sec2.hidden=true;
