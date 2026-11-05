@@ -893,7 +893,7 @@ html.es-darkfix canvas {
     <header class="top">
       <div class="top-title">
         <span>偶像梦幻祭 · 资料库</span>
-        <span class="ver" id="libVer">v2.9.33</span>
+        <span class="ver" id="libVer">v2.9.34</span>
       </div>
       <input type="text" class="search" id="libSearch" placeholder="搜索卡名 / 角色 / 卡池…" />
       <span class="top-btns">
@@ -5919,7 +5919,7 @@ function keysTag(s) {
         "游戏内站位（像游戏里 42135 那样摆，空位直接放数字）。"
       ] },
       { h: "更新日志", steps: [
-        "从下往上看每个版本改了什么。当前版本 v2.9.33。"
+        "从下往上看每个版本改了什么。当前版本 v2.9.34。"
       ] },
       { h: "使用教程", steps: [
         "就是这份完整说明，随时点开随时看。每个页面右上角也有本页教程。"
@@ -5948,7 +5948,7 @@ function keysTag(s) {
   function closeTut() { if (tutMask) { tutMask.remove(); tutMask = null; } }
   function maybeShowFirstTut() { if (localStorage.getItem("es-tut-v2")) return; localStorage.setItem("es-tut-v2", "1"); showTut("global"); }
   function init() {
-    $("libVer").textContent = "v2.9.33";
+    $("libVer").textContent = "v2.9.34";
     buildMobileNav();
     // 手机端「确定搜索」初始位置：右侧列表区域悬浮（用户指定），可拖动
     if (IS_MOBILE) {
