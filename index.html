@@ -6414,14 +6414,29 @@ function keysTag(s) {
         if(aIsScout!==bIsScout) return aIsScout-bIsScout;
         return (a.startISO||"").localeCompare(b.startISO||"");
       });
-      // 缩短标题
+      // 缩短标题：只保留活动中文名，去掉所有细节
       function shortTitle(t){
-        // 去掉★5和UP等字样，缩短标题
-        return t.replace(/★5\s*/g,"").replace(/UP/g,"").trim();
+        // 去掉[预告]前缀
+        t = t.replace(/^\[预告\]\s*/g,"");
+        // 去掉括号及里面的内容（角色、时间、奖励等）
+        t = t.replace(/[（(].*?[)）]/g,"");
+        // 去掉★5、UP等字样
+        t = t.replace(/★5\s*/g,"").replace(/UP/g,"");
+        // 去掉多余空格和标点
+        t = t.replace(/[：:]\s*$/,"").trim();
+        return t;
       }
       // 渲染函数
       function newBannerCard(b, type){
-        var cd=b.endISO?'<span class="pv-cd" data-start="'+(b.startISO||"")+'" data-end="'+b.endISO+'"></span>':"";
+        var cd = "";
+        // 只有未结束的活动才显示倒计时
+        if(b.endISO){
+          var endD = new Date(b.endISO);
+          var now = new Date();
+          if(now < endD){
+            cd = '<span class="pv-cd" data-start="'+(b.startISO||"")+'" data-end="'+b.endISO+'"></span>';
+          }
+        }
         var img=b.imgReady?'<img src="'+PV_ASSET+b.img+'" alt="">':'<div class="pv-empty"><span>宣传图待补</span></div>';
         // 倒计时放在图片上面
         return '<div class="pv-new-card '+type+'"><div class="pv-new-img">'+img+cd+'</div><div class="pv-new-body"><div class="pv-new-tag">'+(b.tag||"活动")+'</div><div class="pv-new-title">'+shortTitle(b.title)+'</div></div></div>';
