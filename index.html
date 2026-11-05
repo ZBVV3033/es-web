@@ -6183,7 +6183,7 @@ function keysTag(s) {
     return L.join("");
   }
   function pvCdTick(){
-    document.querySelectorAll("#view-preview .pv-cd[data-end]").forEach(function(el){
+    document.querySelectorAll(".pv-cd[data-end]").forEach(function(el){
       var t=new Date(el.getAttribute("data-end")).getTime()-Date.now();
       if(isNaN(t)){el.removeAttribute("data-end");return;}
       if(t<=0){el.classList.add("done");el.textContent="已结束";return;}
@@ -6217,8 +6217,6 @@ function keysTag(s) {
     pv$("pvBanners").innerHTML=bnCur.length?bnCur.map(bannerHTML).join(""):'<div class="pv-hint">暂无当期宣传图</div>';
     var oldSec=pv$("pvOldBannersSec");
     if(oldSec){oldSec.hidden=!bnOld.length;pv$("pvRecentBanners").innerHTML=bnOld.length?bnOld.map(bannerHTML).join(""):'';}
-    if(window.__pvCdTimer){clearInterval(window.__pvCdTimer);}
-    window.__pvCdTimer=setInterval(pvCdTick,1000);pvCdTick();
   }
   document.addEventListener("click",function(e){
     var b=e.target&&e.target.closest?e.target.closest("[data-pvmode]"):null;
@@ -6309,6 +6307,65 @@ function keysTag(s) {
     if(im){ e.preventDefault(); pvOpenLightbox(im.currentSrc||im.src, im.alt||""); }
   });
   window.renderPreview=renderPreview;
+
+  // === 活动文字一览表（设置页） ===
+  function renderEventList() {
+    try {
+      var body = document.getElementById("logBody");
+      if (!body) return;
+      // 避免重复添加
+      if (document.getElementById("eventListSection")) return;
+      var all = (typeof PREVIEW_BANNERS !== "undefined") ? PREVIEW_BANNERS : [];
+      var cn = [], jp = [];
+      for (var i = 0; i < all.length; i++) {
+        var b = all[i];
+        if (b.group === "archive") continue;
+        if (b.mode === "cn") cn.push(b);
+        else if (b.mode === "jp") jp.push(b);
+      }
+      function fmtD(iso) {
+        if (!iso) return "";
+        var d = new Date(iso);
+        if (isNaN(d)) return "";
+        var mm = String(d.getMonth() + 1);
+        var dd = String(d.getDate());
+        var hh = String(d.getHours());
+        var mi = String(d.getMinutes());
+        if (mm.length < 2) mm = "0" + mm;
+        if (dd.length < 2) dd = "0" + dd;
+        if (hh.length < 2) hh = "0" + hh;
+        if (mi.length < 2) mi = "0" + mi;
+        return mm + "-" + dd + " " + hh + ":" + mi;
+      }
+      function rowHtml(b) {
+        var period = "";
+        if (b.startISO || b.endISO) {
+          period = "（" + (b.startISO ? fmtD(b.startISO) : "?") + " ~ " + (b.endISO ? fmtD(b.endISO) : "?") + "）";
+        }
+        var cd = b.endISO ? ' <span class="pv-cd" data-end="' + b.endISO + '"></span>' : "";
+        return "<li><b>" + (b.tag || "活动") + "</b> · " + (b.title || "") + " " + period + cd + "</li>";
+      }
+      var html = '<div id="eventListSection"><div class="log-ver">活动一览表（文字版 · 带倒计时）</div><ul class="log-items">';
+      html += "<li><b>国服 CN（" + cn.length + "个活动）</b></li>";
+      for (var j = 0; j < cn.length; j++) html += rowHtml(cn[j]);
+      html += "<li><b>日服 JP（" + jp.length + "个活动）</b></li>";
+      for (var k = 0; k < jp.length; k++) html += rowHtml(jp[k]);
+      html += "</ul></div>";
+      body.insertAdjacentHTML("beforeend", html);
+    } catch (e) { console.log("活动一览表错误:", e); }
+  }
+  // 延迟执行，确保设置页已渲染
+  setTimeout(renderEventList, 500);
+  // 监听设置页切换
+  document.addEventListener("click", function(e) {
+    var btn = e.target && e.target.closest ? e.target.closest("button") : null;
+    if (btn && btn.textContent && btn.textContent.indexOf("设置") >= 0) {
+      setTimeout(renderEventList, 100);
+    }
+  });
+  // 倒计时全局启动（不管在哪个页面都更新）
+  if(window.__pvCdTimer){clearInterval(window.__pvCdTimer);}
+  window.__pvCdTimer=setInterval(pvCdTick,1000);pvCdTick();
 })();
 </script>
 </body>
