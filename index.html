@@ -982,6 +982,17 @@ html.es-darkfix canvas {
           #view-preview .pv-banner .pv-t{font-weight:600;font-size:13px}
           #view-preview .pv-d{color:var(--muted,#7a8194);font-size:12px;margin-top:4px;line-height:1.5}
           #view-preview .pv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+          /* 新模式：分类卡片，一行两个 */
+          #view-preview .pv-new-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+          #view-preview .pv-new-card{background:#fff;border:1px solid var(--line,#e3e6ec);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+          #view-preview .pv-new-img{position:relative;aspect-ratio:16/9;background:#e9edf3}
+          #view-preview .pv-new-img img{width:100%;height:100%;object-fit:cover;display:block}
+          #view-preview .pv-new-img .pv-empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted,#7a8194);font-size:12px;text-align:center;padding:8px}
+          #view-preview .pv-new-body{padding:8px 10px;display:flex;flex-direction:column;gap:4px}
+          #view-preview .pv-new-tag{font-size:11px;color:#6b7280;background:#f3f4f6;border-radius:6px;padding:1px 6px;align-self:flex-start}
+          #view-preview .pv-new-title{font-size:13px;font-weight:600;line-height:1.3}
+          #view-preview .pv-new-time{font-size:11px;color:#6b7280}
+          #view-preview .pv-new-body .pv-cd{font-size:11px;color:#e5484d;font-weight:600}
           #view-preview .pv-card{background:#fff;border:1px solid var(--line,#e3e6ec);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
           #view-preview .pv-pic{position:relative;aspect-ratio:4/5;background:#e9edf3}
           #view-preview .pv-pic img{width:100%;height:100%;object-fit:cover;display:block}
@@ -5749,6 +5760,11 @@ function keysTag(s) {
         <label class="set-opt"><input type="radio" name="stMode" value="order" ${stModeGame() ? "" : "checked"} /> 按号位顺序（中1·左2·右1·左1·右2）</label>
         <label class="set-opt"><input type="radio" name="stMode" value="game" ${stModeGame() ? "checked" : ""} /> 游戏内站位（4·2·1·3·5，空位显示数字）</label>
       </div>
+      <div class="set-row">
+        <span>活动预览模式</span>
+        <label class="set-opt"><input type="radio" name="pvLayoutMode" value="new" ${(typeof pvLayoutMode !== "undefined" && pvLayoutMode === "old") ? "" : "checked"} /> 新模式（分类卡片，一行两个）</label>
+        <label class="set-opt"><input type="radio" name="pvLayoutMode" value="old" ${(typeof pvLayoutMode !== "undefined" && pvLayoutMode === "old") ? "checked" : ""} /> 旧模式（横幅+卡片）</label>
+      </div>
       <ul class="log-items">
         <li>开启后，偶像梦幻祭页签将显示「账号」，记录各账号与所持卡（仅保存在本机浏览器）。</li>
         <li>本资料库所有数据（曲目、卡池、卡面、服装、时间线）均来自官网 ensemble-stars.jp 与官方公告。</li>
@@ -5780,6 +5796,7 @@ function keysTag(s) {
     const logTutBtn = $("logTutBtn");
     if (logTutBtn) logTutBtn.onclick = () => showTut("global");
     document.querySelectorAll('input[name="stMode"]').forEach((r) => r.onchange = () => { stSetMode(r.value); renderSongs(); });
+    document.querySelectorAll('input[name="pvLayoutMode"]').forEach((r) => r.onchange = () => { if(window.renderPreview){ window.pvLayoutMode=r.value; window.renderPreview(); } });
     document.querySelectorAll(".log-ver-btn").forEach((b) => {
       b.onclick = () => {
         const d = document.querySelector(`[data-logdetail="${b.dataset.logv}"]`);
@@ -6116,6 +6133,7 @@ function keysTag(s) {
 (function(){
   var PV_ASSET="latest-preview/";
   var MODE="cn";
+  var pvLayoutMode="new"; // 默认新模式（分类卡片，一行两个）；"old" 为旧模式（横幅+卡片）
   function pv$(id){return document.getElementById(id);}
   function pvEsc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
   function pvISO(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
@@ -6205,18 +6223,79 @@ function keysTag(s) {
     encRec=encRec.filter(function(r){return !curChars.has(r.name);});
     if(pvQ){encRec=encRec.filter(function(r){var hay=((r.name||"")+" "+(r.info||"")+" "+((r.cards||[]).map(function(c){return c.name||"";}).join(" "))).toLowerCase();return hay.indexOf(pvQ)>=0;});}
     var bn=bannersOf(MODE),bnReady=bn.filter(function(b){return b.imgReady;}).length;
-    var bnCur=bn.filter(function(b){return b.group==="current";});
-    var bnOld=bn.filter(function(b){return b.group!=="current";});
     var serverLabel=MODE==="jp"?"日服 JP":"国服 CN";
     pv$("pvStats").innerHTML='<span class="pv-stat">基准日 <b>'+TODAY+'</b></span><span class="pv-stat">当期 ★5 <b>'+cur.length+'</b></span><span class="pv-stat">近40天 '+serverLabel+' ★5 <b>'+encRec.length+'</b></span><span class="pv-stat">宣传图就位 <b>'+bnReady+'/'+bn.length+'</b></span>';
     pv$("pvInfo").innerHTML=pvInfoHTML(meta);
-    pv$("pvHCurrent").textContent="当期进行中 "+serverLabel+" ★5（"+cur.length+"）";
-    pv$("pvHRecent").textContent="近 40 天追加 "+serverLabel+" ★5（"+encRec.length+"）";
-    pv$("pvCurrent").innerHTML=cur.length?cur.map(cardHTML).join(""):'<div class="pv-hint">本服暂无当期 ★5</div>';
-    pv$("pvRecent").innerHTML=encRec.length?encRec.map(pvEncRecentHTML).join(""):'<div class="pv-hint">本服暂无符合条件的近40天追加 ★5 记录</div>';
-    pv$("pvBanners").innerHTML=bnCur.length?bnCur.map(bannerHTML).join(""):'<div class="pv-hint">暂无当期宣传图</div>';
-    var oldSec=pv$("pvOldBannersSec");
-    if(oldSec){oldSec.hidden=!bnOld.length;pv$("pvRecentBanners").innerHTML=bnOld.length?bnOld.map(bannerHTML).join(""):'';}
+
+    if(pvLayoutMode==="new"){
+      // === 新模式：分类卡片，一行两个 ===
+      try {
+      // 分类：预告 / 进行中卡池 / 进行中活动 / 次要活动
+      var today=new Date(); today.setHours(0,0,0,0);
+      var previewBns=[],curScout=[],curEvent=[],minor=[];
+      bn.forEach(function(b){
+        var startD=b.startISO?new Date(b.startISO):null;
+        var isPreview=startD&&startD>today; // 未开始的是预告
+        var hasStar=(b.title||"").indexOf("★5")>=0; // 有没有五星
+        if(isPreview){
+          previewBns.push(b);
+        }else if(b.kind==="scout"&&hasStar){
+          curScout.push(b);
+        }else if(b.kind==="event"&&hasStar){
+          curEvent.push(b);
+        }else{
+          minor.push(b); // 次要活动（无五星的）
+        }
+      });
+      // 渲染函数
+      function newBannerCard(b){
+        var cd=b.endISO?'<span class="pv-cd" data-end="'+b.endISO+'"></span>':"";
+        var img=b.imgReady?'<img src="'+PV_ASSET+b.img+'" alt="">':'<div class="pv-empty"><span>宣传图待补</span></div>';
+        return '<div class="pv-new-card"><div class="pv-new-img">'+img+'</div><div class="pv-new-body"><div class="pv-new-tag">'+(b.tag||"活动")+'</div><div class="pv-new-title">'+b.title+'</div><div class="pv-new-time">'+(b.startISO?pvHM(b.startISO):"?")+' ~ '+(b.endISO?pvHM(b.endISO):"?")+'</div>'+cd+'</div></div>';
+      }
+      function sectionHtml(title,list){
+        if(!list.length)return "";
+        return '<div class="pv-sec"><h2>'+title+'（'+list.length+'）</h2><div class="pv-new-grid">'+list.map(newBannerCard).join("")+'</div></div>';
+      }
+      var html="";
+      html+=sectionHtml("活动预告",previewBns);
+      html+=sectionHtml("进行中卡池（★5）",curScout);
+      html+=sectionHtml("进行中活动（★5）",curEvent);
+      html+=sectionHtml("次要活动（无★5）",minor);
+      // 隐藏旧模式的区域
+      var pvBannersEl=pv$("pvBanners"); if(pvBannersEl){var sec1=pvBannersEl.closest(".pv-sec"); if(sec1)sec1.hidden=true;}
+      var sec2=pv$("pvOldBannersSec"); if(sec2)sec2.hidden=true;
+      var pvHCurrentEl=pv$("pvHCurrent"); if(pvHCurrentEl){var sec3=pvHCurrentEl.closest(".pv-sec"); if(sec3)sec3.hidden=true;}
+      var pvHRecentEl=pv$("pvHRecent"); if(pvHRecentEl){var sec4=pvHRecentEl.closest(".pv-sec"); if(sec4)sec4.hidden=true;}
+      // 插入新模式内容
+      var oldNew=document.getElementById("pvNewLayout");
+      if(oldNew)oldNew.remove();
+      var div=document.createElement("div"); div.id="pvNewLayout"; div.innerHTML=html;
+      var pvStatsEl=pv$("pvStats");
+      if(pvStatsEl){
+        pvStatsEl.insertAdjacentHTML("afterend", div);
+      }
+      } catch(e) { console.log("新模式渲染错误:", e); }
+    }else{
+      // === 旧模式：横幅+卡片 ===
+      var bnCur=bn.filter(function(b){return b.group==="current";});
+      var bnOld=bn.filter(function(b){return b.group!=="current";});
+      pv$("pvHCurrent").textContent="当期进行中 "+serverLabel+" ★5（"+cur.length+"）";
+      pv$("pvHRecent").textContent="近 40 天追加 "+serverLabel+" ★5（"+encRec.length+"）";
+      pv$("pvCurrent").innerHTML=cur.length?cur.map(cardHTML).join(""):'<div class="pv-hint">本服暂无当期 ★5</div>';
+      pv$("pvRecent").innerHTML=encRec.length?encRec.map(pvEncRecentHTML).join(""):'<div class="pv-hint">本服暂无符合条件的近40天追加 ★5 记录</div>';
+      pv$("pvBanners").innerHTML=bnCur.length?bnCur.map(bannerHTML).join(""):'<div class="pv-hint">暂无当期宣传图</div>';
+      var oldSec=pv$("pvOldBannersSec");
+      if(oldSec){oldSec.hidden=!bnOld.length;pv$("pvRecentBanners").innerHTML=bnOld.length?bnOld.map(bannerHTML).join(""):'';}
+      // 显示旧模式的区域
+      var sec1=pv$("pvBanners").closest(".pv-sec"); if(sec1)sec1.hidden=false;
+      var sec2=pv$("pvOldBannersSec"); if(sec2)sec2.hidden=!bnOld.length;
+      var sec3=pv$("pvHCurrent").closest(".pv-sec"); if(sec3)sec3.hidden=false;
+      var sec4=pv$("pvHRecent").closest(".pv-sec"); if(sec4)sec4.hidden=false;
+      // 移除新模式内容
+      var oldNew=document.getElementById("pvNewLayout");
+      if(oldNew)oldNew.remove();
+    }
   }
   document.addEventListener("click",function(e){
     var b=e.target&&e.target.closest?e.target.closest("[data-pvmode]"):null;
@@ -6307,6 +6386,7 @@ function keysTag(s) {
     if(im){ e.preventDefault(); pvOpenLightbox(im.currentSrc||im.src, im.alt||""); }
   });
   window.renderPreview=renderPreview;
+  window.pvLayoutMode=pvLayoutMode;
 
   // === 活动文字一览表（设置页） ===
   function renderEventList() {
