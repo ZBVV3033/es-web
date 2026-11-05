@@ -6346,9 +6346,23 @@ function keysTag(s) {
   }
   function pvCdTick(){
     document.querySelectorAll(".pv-cd[data-end]").forEach(function(el){
-      var t=new Date(el.getAttribute("data-end")).getTime()-Date.now();
-      if(isNaN(t)){el.removeAttribute("data-end");return;}
-      if(t<=0){el.classList.add("done");el.textContent="已结束";return;}
+      var now=Date.now();
+      var endT=new Date(el.getAttribute("data-end")).getTime();
+      var startT=el.getAttribute("data-start")?new Date(el.getAttribute("data-start")).getTime():null;
+      if(isNaN(endT)){el.removeAttribute("data-end");return;}
+      // 活动已结束
+      if(now>=endT){el.classList.add("done");el.textContent="已结束";return;}
+      // 活动未开始：显示距离开启时间
+      if(startT&&now<startT){
+        var t=startT-now;
+        el.classList.toggle("urgent",t<24*3600*1000);
+        var d=Math.floor(t/864e5),h=Math.floor(t%864e5/36e5),m=Math.floor(t%36e5/6e4),s=Math.floor(t%6e4/1e3);
+        var txt=d>0?d+"天 "+String(h).padStart(2,"0")+":"+String(m).padStart(2,"0")+":"+String(s).padStart(2,"0"):String(h).padStart(2,"0")+":"+String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+        el.textContent="距离开启 "+txt;
+        return;
+      }
+      // 活动进行中：显示剩余时间
+      var t=endT-now;
       el.classList.toggle("urgent",t<24*3600*1000);
       var d=Math.floor(t/864e5),h=Math.floor(t%864e5/36e5),m=Math.floor(t%36e5/6e4),s=Math.floor(t%6e4/1e3);
       var txt=d>0?d+"天 "+String(h).padStart(2,"0")+":"+String(m).padStart(2,"0")+":"+String(s).padStart(2,"0"):String(h).padStart(2,"0")+":"+String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
@@ -6393,7 +6407,7 @@ function keysTag(s) {
       });
       // 渲染函数
       function newBannerCard(b){
-        var cd=b.endISO?'<span class="pv-cd" data-end="'+b.endISO+'"></span>':"";
+        var cd=b.endISO?'<span class="pv-cd" data-start="'+(b.startISO||"")+'" data-end="'+b.endISO+'"></span>':"";
         var img=b.imgReady?'<img src="'+PV_ASSET+b.img+'" alt="">':'<div class="pv-empty"><span>宣传图待补</span></div>';
         return '<div class="pv-new-card"><div class="pv-new-img">'+img+'</div><div class="pv-new-body"><div class="pv-new-tag">'+(b.tag||"活动")+'</div><div class="pv-new-title">'+b.title+'</div><div class="pv-new-time">'+(b.startISO?pvHM(b.startISO):"?")+' ~ '+(b.endISO?pvHM(b.endISO):"?")+'</div>'+cd+'</div></div>';
       }
