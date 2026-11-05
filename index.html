@@ -4559,14 +4559,14 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
     const S = window.ES_SONGS || [];
     const listEl = $("songList");
     if (!listEl) return;
-    // 按上架时间倒序（新→旧）
+    // 按上架时间倒序（新→旧），包含所有歌曲（全员曲+非全员曲）
     let list = S.slice();
     list.sort((a, b) => {
       const da = a.rel || "";
       const db = b.rel || "";
       return db.localeCompare(da);
     });
-    // 应用颜色、难度、排序筛选
+    // 应用颜色筛选
     if (libSongCol !== "all") list = list.filter((s) => s.col === libSongCol);
     // 排序
     if (libSortMode !== "default") {
