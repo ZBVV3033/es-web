@@ -996,7 +996,8 @@ html.es-darkfix canvas {
           #view-preview .pv-new-tag{font-size:10px;color:#6b7280;background:#f3f4f6;border-radius:6px;padding:1px 5px;align-self:flex-start}
           #view-preview .pv-new-title{font-size:12px;font-weight:600;line-height:1.3}
           #view-preview .pv-new-card.current .pv-new-title{font-size:14px}
-          #view-preview .pv-new-time{font-size:11px;color:#6b7280}
+          #view-preview .pv-new-time{font-size:10px;color:#6b7280;line-height:1.2}
+          #view-preview .pv-new-star{font-size:10px;color:#e5484d;font-weight:600;line-height:1.2}
           #view-preview .pv-card{background:#fff;border:1px solid var(--line,#e3e6ec);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
           #view-preview .pv-pic{position:relative;aspect-ratio:4/5;background:#e9edf3}
           #view-preview .pv-pic img{width:100%;height:100%;object-fit:cover;display:block}
@@ -6438,8 +6439,15 @@ function keysTag(s) {
           }
         }
         var img=b.imgReady?'<img src="'+PV_ASSET+b.img+'" alt="">':'<div class="pv-empty"><span>宣传图待补</span></div>';
-        // 倒计时放在图片上面
-        return '<div class="pv-new-card '+type+'"><div class="pv-new-img">'+img+cd+'</div><div class="pv-new-body"><div class="pv-new-tag">'+(b.tag||"活动")+'</div><div class="pv-new-title">'+shortTitle(b.title)+'</div></div></div>';
+        // 时间显示
+        var timeStr = (b.startISO?pvHM(b.startISO):"?") + " ~ " + (b.endISO?pvHM(b.endISO):"?");
+        // 卡池显示五星是谁
+        var starStr = "";
+        if(b.kind === "scout" && b.up5){
+          starStr = '<div class="pv-new-star">★5 ' + b.up5 + '</div>';
+        }
+        // 倒计时放在图片上面，下面显示时间和五星
+        return '<div class="pv-new-card '+type+'"><div class="pv-new-img">'+img+cd+'</div><div class="pv-new-body"><div class="pv-new-tag">'+(b.tag||"活动")+'</div><div class="pv-new-title">'+shortTitle(b.title)+'</div><div class="pv-new-time">'+timeStr+'</div>'+starStr+'</div></div>';
       }
       function sectionHtml(title,list,type){
         if(!list.length)return "";
