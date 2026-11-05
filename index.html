@@ -1177,6 +1177,7 @@ html.es-darkfix canvas {
               <button type="button" class="sm-btn on" data-sm="simple">简单模式</button>
               <button type="button" class="sm-btn" data-sm="advanced">高级模式</button>
               <button type="button" class="sm-btn" data-sm="list">列表选人</button>
+              <button type="button" class="sm-btn" data-sm="timeline">按时间</button>
             </span>
           </div>
           <div class="song-hint">输入偶像名或点选（可多选，多选=共同出演），选完点「确定搜索」。站位数据来源：小红书 5311066953，歌曲数据来源官网 Discography。</div>
@@ -1205,12 +1206,10 @@ html.es-darkfix canvas {
               <button type="button" class="sf-btn mv-btn" data-mv="game">游戏内可选</button>
               <button type="button" class="sf-btn mv-btn" data-mv="nomv">2D/其他</button>
             </span>
-            <span class="sf-row lib-sf lib-sf2" id="libSongColFilters">
-              <button type="button" class="sf-btn col-btn on" data-col="all">全部颜色</button>
-              <button type="button" class="sf-btn col-btn" data-col="red">红</button>
-              <button type="button" class="sf-btn col-btn" data-col="green">绿</button>
-              <button type="button" class="sf-btn col-btn" data-col="yellow">黄</button>
-              <button type="button" class="sf-btn col-btn" data-col="blue">蓝</button>
+            <span class="sf-row lib-sf lib-sf2">
+              <button type="button" class="sf-btn" id="colorCycleBtn" title="点击切换颜色筛选">颜色：全部</button>
+              <button type="button" class="sf-btn" id="diffCycleBtn" title="点击切换难度">难度：简单</button>
+              <button type="button" class="sf-btn" id="sortCycleBtn" title="点击切换排序方式">排序：默认</button>
             </span>
             <span class="song-count" id="songCount"></span>
             <button type="button" class="song-rel-btn" id="songRelBtn" hidden>关系网</button>
@@ -4478,6 +4477,36 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
   let libSongCol = "all"; // 颜色筛选：all / red / green / yellow / blue
   let libSongMode = "list"; // 默认大列表选人模式
   let libPosQuery = ""; // 站位搜索，如 "2-4" = 2号位和4号位贴贴
+  let libSortMode = "default"; // 排序模式：default / dur-asc / dur-desc / keys-asc / keys-desc
+
+  // 颜色循环切换
+  const colorCycleList = ["all", "red", "green", "yellow", "blue"];
+  const colorNames = { all: "全部", red: "红", green: "绿", yellow: "黄", blue: "蓝" };
+  function cycleColor() {
+    const idx = colorCycleList.indexOf(libSongCol);
+    libSongCol = colorCycleList[(idx + 1) % colorCycleList.length];
+    document.getElementById("colorCycleBtn").textContent = "颜色：" + colorNames[libSongCol];
+    renderSongList();
+  }
+
+  // 难度循环切换
+  const diffCycleList = ["简单", "普通", "困难", "专家", "极难"];
+  function cycleDiff() {
+    const idx = diffCycleList.indexOf(libSongDiff);
+    libSongDiff = diffCycleList[(idx + 1) % diffCycleList.length];
+    document.getElementById("diffCycleBtn").textContent = "难度：" + libSongDiff;
+    renderSongList();
+  }
+
+  // 排序循环切换
+  const sortCycleList = ["default", "dur-asc", "dur-desc", "keys-asc", "keys-desc"];
+  const sortNames = { default: "默认", "dur-asc": "时长↑", "dur-desc": "时长↓", "keys-asc": "键位↑", "keys-desc": "键位↓" };
+  function cycleSort() {
+    const idx = sortCycleList.indexOf(libSortMode);
+    libSortMode = sortCycleList[(idx + 1) % sortCycleList.length];
+    document.getElementById("sortCycleBtn").textContent = "排序：" + sortNames[libSortMode];
+    renderSongList();
+  }
   // 解析站位字符串为贴贴对集合：如 "1-3/2-4/1-2-3" → {"1-3","2-4","1-2","2-3"}
   function posPairsOf(posStr) {
     const pairs = new Set();
@@ -4512,12 +4541,68 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
     const filters = $("libSongFilters");
     if (filters) filters.hidden = m !== "advanced";
     const chips = $("songIdols");
-    if (chips) chips.hidden = m === "list";
+    if (chips) chips.hidden = m === "list" || m === "timeline";
     const listBox = $("libSongIdolsList");
     if (listBox) listBox.hidden = m !== "list";
     if (m === "list") renderLibIdolList();
-    if (m === "simple" && libSongFilter !== "all") setLibSongFilter("all");
-    else renderSongList();
+    if (m === "timeline") {
+      // 按时间模式：直接按上架时间新→旧显示所有歌曲
+      renderSongListByTime();
+    } else {
+      if (m === "simple" && libSongFilter !== "all") setLibSongFilter("all");
+      else renderSongList();
+    }
+  }
+
+  // 按时间模式：按上架时间新→旧显示所有歌曲
+  function renderSongListByTime() {
+    const S = window.ES_SONGS || [];
+    const listEl = $("songList");
+    if (!listEl) return;
+    // 按上架时间倒序（新→旧）
+    let list = S.slice();
+    list.sort((a, b) => {
+      const da = a.rel || "";
+      const db = b.rel || "";
+      return db.localeCompare(da);
+    });
+    // 应用颜色、难度、排序筛选
+    if (libSongCol !== "all") list = list.filter((s) => s.col === libSongCol);
+    // 排序
+    if (libSortMode !== "default") {
+      const parseDur = (durStr) => {
+        if (!durStr) return 999;
+        const parts = durStr.split(":");
+        if (parts.length === 2) return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+        return 999;
+      };
+      const getKeys = (s) => {
+        if (!s.keys || !s.keys.length) return 999;
+        let k = s.keys.find(x => x[0] === libSongDiff);
+        if (!k) {
+          const diffNum = { "简单": 1, "普通": 2, "困难": 3, "专家": 4, "极难": 5 }[libSongDiff];
+          if (diffNum) k = s.keys.find(x => parseInt(x[0]) === diffNum);
+        }
+        if (!k) return 999;
+        const k0num = parseInt(k[0]);
+        if (!isNaN(k0num) && k0num >= 1 && k0num <= 5) {
+          return k[1] || 999;
+        } else {
+          return k[2] || 999;
+        }
+      };
+      if (libSortMode === "dur-asc") list.sort((a, b) => parseDur(a.dur) - parseDur(b.dur));
+      else if (libSortMode === "dur-desc") list.sort((a, b) => parseDur(b.dur) - parseDur(a.dur));
+      else if (libSortMode === "keys-asc") list.sort((a, b) => getKeys(a) - getKeys(b));
+      else if (libSortMode === "keys-desc") list.sort((a, b) => getKeys(b) - getKeys(a));
+    }
+    $("songCount").textContent = `按时间 · 共 ${list.length} 首`;
+    if (!list.length) {
+      listEl.innerHTML = `<div class="empty2">没有符合条件的曲目</div>`;
+      return;
+    }
+    // 渲染歌曲卡片（复用现有卡片HTML）
+    listEl.innerHTML = list.map(songCardHtml).join("");
   }
   // 手机端双击确认：记录上次双击搜索的偶像（第三次点击同一偶像 = 取消选中）
   let songDblIdol = null;
@@ -4732,6 +4817,37 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
     else if (libSongMV === "nomv") list = list.filter((s) => s.mv !== "game");
     // 颜色筛选（乐曲颜色：red/green/yellow/blue）
     if (libSongCol !== "all") list = list.filter((s) => s.col === libSongCol);
+    // 排序
+    if (libSortMode !== "default") {
+      // 解析时长为秒数
+      const parseDur = (durStr) => {
+        if (!durStr) return 999;
+        const parts = durStr.split(":");
+        if (parts.length === 2) return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+        return 999;
+      };
+      // 获取当前难度的键数
+      const getKeys = (s) => {
+        if (!s.keys || !s.keys.length) return 999;
+        const diffMap = {1: "简单", 2: "普通", 3: "困难", 4: "专家", 5: "极难"};
+        let k = s.keys.find(x => x[0] === libSongDiff);
+        if (!k) {
+          const diffNum = { "简单": 1, "普通": 2, "困难": 3, "专家": 4, "极难": 5 }[libSongDiff];
+          if (diffNum) k = s.keys.find(x => parseInt(x[0]) === diffNum);
+        }
+        if (!k) return 999;
+        const k0num = parseInt(k[0]);
+        if (!isNaN(k0num) && k0num >= 1 && k0num <= 5) {
+          return k[1] || 999;
+        } else {
+          return k[2] || 999;
+        }
+      };
+      if (libSortMode === "dur-asc") list.sort((a, b) => parseDur(a.dur) - parseDur(b.dur));
+      else if (libSortMode === "dur-desc") list.sort((a, b) => parseDur(b.dur) - parseDur(a.dur));
+      else if (libSortMode === "keys-asc") list.sort((a, b) => getKeys(a) - getKeys(b));
+      else if (libSortMode === "keys-desc") list.sort((a, b) => getKeys(b) - getKeys(a));
+    }
     // 站位搜索：如 "2-4" 查 2号位和4号位贴贴的曲目
     if (libPosQuery) {
       const want = posQueryNorm(libPosQuery);
@@ -4793,9 +4909,15 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
     document.querySelectorAll(".lib-sf .mv-btn").forEach((b) => {
       b.onclick = () => setLibSongMV(b.dataset.mv);
     });
-    document.querySelectorAll(".lib-sf .col-btn").forEach((b) => {
-      b.onclick = () => setLibSongCol(b.dataset.col);
-    });
+    // 颜色循环按钮
+    const colorBtn = $("colorCycleBtn");
+    if (colorBtn) colorBtn.onclick = cycleColor;
+    // 难度循环按钮
+    const diffBtn = $("diffCycleBtn");
+    if (diffBtn) diffBtn.onclick = cycleDiff;
+    // 排序循环按钮
+    const sortBtn = $("sortCycleBtn");
+    if (sortBtn) sortBtn.onclick = cycleSort;
   }
   let libSongDiff = "简单";
   const SONG_COL_NAME = { red: "红", green: "绿", yellow: "黄", blue: "蓝" };
