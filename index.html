@@ -893,7 +893,7 @@ html.es-darkfix canvas {
     <header class="top">
       <div class="top-title">
         <span>偶像梦幻祭 · 资料库</span>
-        <span class="ver" id="libVer">v2.9.34</span>
+        <span class="ver" id="libVer">v2.9.35</span>
       </div>
       <input type="text" class="search" id="libSearch" placeholder="搜索卡名 / 角色 / 卡池…" />
       <span class="top-btns">
@@ -995,6 +995,13 @@ html.es-darkfix canvas {
           #view-preview .pv-tag{position:absolute;left:5px;bottom:5px;z-index:2;font-size:10px;color:#fff;background:rgba(0,0,0,.52);border-radius:8px;padding:1px 6px;line-height:1.3}
           #view-preview .pv-duo .pv-star{font-size:10px;top:5px;left:5px;padding:1px 6px}
           #view-preview .pv-duo .pv-low{top:5px;right:5px;font-size:9px;padding:1px 5px}
+          /* 单卡模式（参考图鉴，可切换开花） */
+          #view-preview .pv-single-pic{position:relative;aspect-ratio:3/4;background:#e9edf3;border-radius:8px;overflow:hidden;margin:8px}
+          #view-preview .pv-single-pic img{width:100%;height:100%;object-fit:cover;display:block;cursor:zoom-in}
+          #view-preview .pv-single-pic .pv-empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--muted,#7a8194);gap:6px;text-align:center;padding:8px;font-size:12px}
+          #view-preview .pv-single-pic .pv-star{position:absolute;top:8px;left:8px;z-index:2;font-size:11px;color:#fff;background:linear-gradient(135deg,#f59e0b,#d97706);border-radius:8px;padding:2px 8px;font-weight:700}
+          #view-preview .pv-single-pic .pv-flip-btn{position:absolute;bottom:8px;right:8px;z-index:3;font-size:11px;color:#fff;background:rgba(0,0,0,.6);border:none;border-radius:8px;padding:4px 10px;cursor:pointer;backdrop-filter:blur(4px)}
+          #view-preview .pv-single-pic .pv-flip-btn:hover{background:rgba(0,0,0,.8)}
           #view-preview .pv-cbody{padding:10px 11px;display:flex;flex-direction:column;gap:5px;flex:1}
           #view-preview .pv-char{font-weight:700;font-size:13px}
           #view-preview .pv-cname{font-size:12px;color:#444;line-height:1.4}
@@ -5919,7 +5926,7 @@ function keysTag(s) {
         "游戏内站位（像游戏里 42135 那样摆，空位直接放数字）。"
       ] },
       { h: "更新日志", steps: [
-        "从下往上看每个版本改了什么。当前版本 v2.9.34。"
+        "从下往上看每个版本改了什么。当前版本 v2.9.35。"
       ] },
       { h: "使用教程", steps: [
         "就是这份完整说明，随时点开随时看。每个页面右上角也有本页教程。"
@@ -5948,7 +5955,7 @@ function keysTag(s) {
   function closeTut() { if (tutMask) { tutMask.remove(); tutMask = null; } }
   function maybeShowFirstTut() { if (localStorage.getItem("es-tut-v2")) return; localStorage.setItem("es-tut-v2", "1"); showTut("global"); }
   function init() {
-    $("libVer").textContent = "v2.9.34";
+    $("libVer").textContent = "v2.9.35";
     buildMobileNav();
     // 手机端「确定搜索」初始位置：右侧列表区域悬浮（用户指定），可拖动
     if (IS_MOBILE) {
@@ -6117,20 +6124,16 @@ function keysTag(s) {
   var pvQ="", pvFilter="all";
   function cardsOf(m){return (typeof PREVIEW_CARDS!=="undefined"?PREVIEW_CARDS:[]).filter(function(c){return c.mode===m;}).sort(function(a,b){return b.dateISO.localeCompare(a.dateISO);});}
   function bannersOf(m){return (typeof PREVIEW_BANNERS!=="undefined"?PREVIEW_BANNERS:[]).filter(function(b){return b.mode===m&&(b.group||"current")!=="archive";}).sort(function(a,b){return b.dateISO.localeCompare(a.dateISO);});}
-  function duoPic(src,label,c){
-    if(src){
-      var low=c.lowQuality?'<span class="pv-low">待官方替换</span>':"";
-      return '<div class="pv-pic"><span class="pv-star">★5</span>'+low+'<span class="pv-tag">'+label+'</span><img src="'+pvEsc(PV_ASSET+src)+'" alt="'+pvEsc(label+' · '+(c.card||""))+'"></div>';
-    }
-    return '<div class="pv-pic"><span class="pv-star">★5</span><span class="pv-tag">'+label+'</span><div class="pv-empty"><span>待补'+label+'图</span></div></div>';
+  function singleCardPic(c){
+    var low=c.lowQuality?'<span class="pv-low">待官方替换</span>':"";
+    var hasAfter=!!(c.imgReady&&c.after);
+    var toggleBtn=hasAfter?'<button class="pv-flip-btn" data-card-id="'+pvEsc(c.id)+'" title="切换花前/花后">切换开花</button>':"";
+    var curImg=c.img?(c.img):"";
+    var imgHtml=c.imgReady?'<img src="'+pvEsc(PV_ASSET+curImg)+'" alt="'+pvEsc(c.card||"")+'" class="pv-card-img" id="pv-img-'+pvEsc(c.id)+'">':'<div class="pv-empty"><span>待补卡面</span></div>';
+    return '<div class="pv-single-pic"><span class="pv-star">★5</span>'+low+toggleBtn+imgHtml+'</div>';
   }
   function cardPic(c){
-    if(!c.imgReady){
-      return '<div class="pv-duo">'+duoPic("","花前",c)+duoPic("","花后",c)+'</div>';
-    }
-    var b=c.before||c.img||"";
-    var a=c.after||"";
-    return '<div class="pv-duo">'+duoPic(b,"花前",c)+duoPic(a,"花后",c)+'</div>';
+    return singleCardPic(c);
   }
   function pvHM(iso){
     if(!iso)return ""; var d=new Date(iso); if(isNaN(d))return "";
@@ -6245,6 +6248,29 @@ function keysTag(s) {
       eb.setAttribute("aria-expanded",String(!open));
       eb.textContent=open?"角色图鉴 ▾":"角色图鉴 ▴";
     });}
+  })();
+  // 切换花前/花后
+  (function(){
+    document.addEventListener("click",function(e){
+      var btn=e.target&&e.target.closest?e.target.closest(".pv-flip-btn"):null;
+      if(!btn)return;
+      var cardId=btn.getAttribute("data-card-id");
+      var imgEl=document.getElementById("pv-img-"+cardId);
+      if(!imgEl)return;
+      var all=(typeof PREVIEW_CARDS!=="undefined"?PREVIEW_CARDS:[]);
+      var card=all.find(function(c){return c.id===cardId;});
+      if(!card)return;
+      var cur=imgEl.src.split("/").pop();
+      var before=(card.before||card.img||"").split("/").pop();
+      var after=(card.after||"").split("/").pop();
+      if(cur===before&&after){
+        imgEl.src=PV_ASSET+card.after;
+        btn.textContent="切换花前";
+      }else{
+        imgEl.src=PV_ASSET+(card.before||card.img);
+        btn.textContent="切换开花";
+      }
+    });
   })();
   document.addEventListener("error",function(e){
     var t=e.target;if(t&&t.tagName==="IMG"&&t.closest&&t.closest("#view-preview")){var w=t.parentNode;if(w)w.innerHTML='<div class="pv-empty"><span>图片缺失/未就位</span></div>';}
