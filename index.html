@@ -5019,7 +5019,20 @@ function keysTag(s) {
     const colTag = s.col && colName[s.col] ? `<span class="song-detail-tag col-${esc(s.col)}">${colName[s.col]}</span>` : "";
     const colTitle = s.col && colName[s.col] ? `（${colName[s.col]}）` : "";
     const durRow = s.dur ? `<div class="song-detail-row"><span class="k">时长</span><span>${esc(s.dur)}</span></div>` : "";
-    const keysRow = s.keys && s.keys.length ? `<div class="song-detail-row"><span class="k">键位</span><span class="song-detail-keys">${s.keys.map((k) => `<span class="sk"><i>${esc(k[0])}</i><b>${esc(k[1])}</b><em>${esc(k[2])}</em></span>`).join("")}</span></div>` : "";
+    const keysRow = s.keys && s.keys.length ? `<div class="song-detail-row"><span class="k">键位</span><span class="song-detail-keys">${s.keys.map((k) => {
+      const diffMap = {1: "简单", 2: "普通", 3: "困难", 4: "专家", 5: "极难"};
+      let diff, lv, cnt;
+      if (typeof k[0] === 'number') {
+        diff = diffMap[k[0]] || "?";
+        lv = "-";
+        cnt = k[1];
+      } else {
+        diff = k[0];
+        lv = k[1];
+        cnt = k[2];
+      }
+      return `<span class="sk"><i>${esc(diff)}</i><b>Lv${esc(lv)}</b><em>${esc(cnt)}键</em></span>`;
+    }).join("")}</span></div>` : "";
     const cover = s.img ? `<img class="song-detail-cover" src="${escAttr(imgThumb(s.img, 900))}" alt="" data-big="${escAttr(s.img)}" title="点击放大封面">` : "";
     const members = (s.i && s.i.length)
       ? `<div class="song-detail-row"><span class="k">成员</span><span class="song-detail-mem">${s.i.map(nm).join("")}</span></div>`
