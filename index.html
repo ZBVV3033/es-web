@@ -6417,7 +6417,7 @@ function keysTag(s) {
       bn.forEach(function(b){
         var startD=b.startISO?new Date(b.startISO):null;
         var isPreview=startD&&startD>today; // 未开始的是预告
-        var hasStar=(b.title||"").indexOf("★5")>=0; // 有没有五星
+        var hasStar=!!b.up5; // 有没有五星
         if(isPreview){
           previewBns.push(b);
         }else if(hasStar){
