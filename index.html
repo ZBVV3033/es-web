@@ -939,6 +939,13 @@ html.es-darkfix canvas {
                   <button type="button" class="pv-info-btn" id="pvInfoBtn" aria-expanded="false">说明 / 设置 ⓘ</button>
                 </div>
                 <div class="pv-stats" id="pvStats"></div>
+                <div class="pv-quick-nav" id="pvQuickNav" style="display:flex;flex-wrap:wrap;gap:6px;margin:8px 0;font-size:12px">
+                  <b style="align-self:center;color:#6b7280">快速定位：</b>
+                  <button type="button" onclick="pvJump('pvSecPreview')" style="border:1px solid #e3e6ec;background:#fff;border-radius:8px;padding:4px 10px;cursor:pointer">活动预告</button>
+                  <button type="button" onclick="pvJump('pvSecCurrent')" style="border:1px solid #e3e6ec;background:#fff;border-radius:8px;padding:4px 10px;cursor:pointer">进行中活动</button>
+                  <button type="button" onclick="pvJump('pvHCurrent')" style="border:1px solid #e3e6ec;background:#fff;border-radius:8px;padding:4px 10px;cursor:pointer">当期★5</button>
+                  <button type="button" onclick="pvJump('pvHRecent')" style="border:1px solid #e3e6ec;background:#fff;border-radius:8px;padding:4px 10px;cursor:pointer">近40天★5</button>
+                </div>
                 <div class="pv-info" id="pvInfo" hidden></div>
                 <div class="pv-sec"><h2>当期卡池 / 活动宣传图</h2><div class="pv-banners" id="pvBanners"></div></div>
                 <div class="pv-sec" id="pvOldBannersSec" hidden><h2>往期 / 次要活动（横向滑动查看更多）</h2><div class="pv-banner-strip" id="pvRecentBanners"></div></div>
@@ -6449,13 +6456,13 @@ function keysTag(s) {
         // 倒计时放在图片上面，下面显示时间和五星
         return '<div class="pv-new-card '+type+'"><div class="pv-new-img">'+img+cd+'</div><div class="pv-new-body"><div class="pv-new-tag">'+(b.tag||"活动")+'</div><div class="pv-new-title">'+shortTitle(b.title)+'</div><div class="pv-new-time">'+timeStr+'</div>'+starStr+'</div></div>';
       }
-      function sectionHtml(title,list,type){
+      function sectionHtml(title,list,type,id){
         if(!list.length)return "";
-        return '<div class="pv-sec"><h2>'+title+'（'+list.length+'）</h2><div class="pv-new-grid">'+list.map(function(b){return newBannerCard(b,type);}).join("")+'</div></div>';
+        return '<div class="pv-sec" id="'+id+'"><h2>'+title+'（'+list.length+'）</h2><div class="pv-new-grid">'+list.map(function(b){return newBannerCard(b,type);}).join("")+'</div></div>';
       }
       var html="";
-      html+=sectionHtml("活动预告",previewBns,"preview");
-      html+=sectionHtml("进行中活动",curBns,"current");
+      html+=sectionHtml("活动预告",previewBns,"preview","pvSecPreview");
+      html+=sectionHtml("进行中活动",curBns,"current","pvSecCurrent");
       // 隐藏旧模式的横幅区域
       var pvBannersEl=pv$("pvBanners"); if(pvBannersEl){var sec1=pvBannersEl.closest(".pv-sec"); if(sec1)sec1.hidden=true;}
       var sec2=pv$("pvOldBannersSec"); if(sec2)sec2.hidden=true;
@@ -6468,7 +6475,16 @@ function keysTag(s) {
         pvStatsEl.parentNode.insertBefore(div, pvStatsEl.nextSibling);
       }
       } catch(e) { console.log("新模式渲染错误:", e); }
-    }else{
+    }
+
+    // 快速定位跳转函数
+    function pvJump(id){
+      var el = document.getElementById(id);
+      if(el){
+        el.scrollIntoView({behavior:"smooth", block:"start"});
+      }
+    }
+    window.pvJump = pvJump;else{
       // === 旧模式：横幅+卡片 ===
       var bnCur=bn.filter(function(b){return b.group==="current";});
       var bnOld=bn.filter(function(b){return b.group!=="current";});
