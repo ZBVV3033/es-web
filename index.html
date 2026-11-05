@@ -6448,11 +6448,9 @@ function keysTag(s) {
       var html="";
       html+=sectionHtml("活动预告",previewBns,"preview");
       html+=sectionHtml("进行中活动",curBns,"current");
-      // 隐藏旧模式的区域
+      // 隐藏旧模式的横幅区域
       var pvBannersEl=pv$("pvBanners"); if(pvBannersEl){var sec1=pvBannersEl.closest(".pv-sec"); if(sec1)sec1.hidden=true;}
       var sec2=pv$("pvOldBannersSec"); if(sec2)sec2.hidden=true;
-      var pvHCurrentEl=pv$("pvHCurrent"); if(pvHCurrentEl){var sec3=pvHCurrentEl.closest(".pv-sec"); if(sec3)sec3.hidden=true;}
-      var pvHRecentEl=pv$("pvHRecent"); if(pvHRecentEl){var sec4=pvHRecentEl.closest(".pv-sec"); if(sec4)sec4.hidden=true;}
       // 插入新模式内容
       var oldNew=document.getElementById("pvNewLayout");
       if(oldNew)oldNew.remove();
