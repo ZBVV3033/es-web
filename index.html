@@ -981,7 +981,7 @@ html.es-darkfix canvas {
           #view-preview .pv-banner .pv-body{padding:10px 12px}
           #view-preview .pv-banner .pv-t{font-weight:600;font-size:13px}
           #view-preview .pv-d{color:var(--muted,#7a8194);font-size:12px;margin-top:4px;line-height:1.5}
-          #view-preview .pv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+          #view-preview .pv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
           /* 新模式：分类卡片，一行两个 */
           #view-preview .pv-new-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
           #view-preview .pv-new-card{background:#fff;border:1px solid var(--line,#e3e6ec);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
@@ -6273,7 +6273,7 @@ function keysTag(s) {
       var div=document.createElement("div"); div.id="pvNewLayout"; div.innerHTML=html;
       var pvStatsEl=pv$("pvStats");
       if(pvStatsEl){
-        pvStatsEl.insertAdjacentHTML("afterend", div);
+        pvStatsEl.parentNode.insertBefore(div, pvStatsEl.nextSibling);
       }
       } catch(e) { console.log("新模式渲染错误:", e); }
     }else{
