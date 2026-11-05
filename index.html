@@ -4463,23 +4463,12 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 
   // —— 卡池排期（国服） ——
   function renderSched() {
-    const G = window.EsGacha;
-    if (!G) { $("schedList").innerHTML = `<div class="empty2">数据未加载</div>`; return; }
     const list = $("schedList");
-    let html = `<div class="empty2" style="margin-bottom:10px">国服近期卡池与活动排期（来源：官方公告；未来条目为日服进度推测）</div>`;
-    (G.allSchedule ? G.allSchedule() : []).forEach((s) => {
-      const y = s.startDate ? s.startDate.getFullYear() : "";
-      const ey = s.endDate ? s.endDate.getFullYear() : y;
-      const dateTxt = s.end
-        ? `${y}.${esc(s.startLabel)} → ${ey !== y ? ey + "." : ""}${esc(s.endLabel)}`
-        : `${y}.${esc(s.startLabel)}`;
-      html += `<div class="sched-card">
-        <div class="jp-type">${esc(s.typeName ? s.typeName : (G.typeNameOf ? G.typeNameOf(s.type) : "卡池"))}${s.predict ? " <span style='color:#d15b3c;font-weight:700'>· 日服推测</span>" : ""}</div>
-        <div class="jp-title">${esc(s.title)}${s.chars && s.chars.length ? " · " + esc(s.chars.join("/")) : ""}</div>
-        <div class="jp-note">${dateTxt} 开启${s.note ? " · " + esc(s.note) : ""}</div>
-      </div>`;
-    });
-    list.innerHTML = html;
+    // 暂时隐藏旧版排期内容，只保留提示
+    list.innerHTML = `<div class="empty2" style="text-align:center;padding:40px 20px">
+      <div style="font-size:18px;margin-bottom:10px">📅 活动预览已迁移到首页</div>
+      <div style="color:#666;font-size:14px">请点击底部「首页」查看最新的活动预告、进行中活动、当期★5、近40天★5</div>
+    </div>`;
   }
 
   // —— 按偶像选歌 ——
