@@ -6392,7 +6392,29 @@ function keysTag(s) {
     var curChars=new Set(cur.map(function(c){return c.char;}));
     encRec=encRec.filter(function(r){return !curChars.has(r.name);});
     if(pvQ){encRec=encRec.filter(function(r){var hay=((r.name||"")+" "+(r.info||"")+" "+((r.cards||[]).map(function(c){return c.name||"";}).join(" "))).toLowerCase();return hay.indexOf(pvQ)>=0;});}
-    var bn=bannersOf(MODE),bnReady=bn.filter(function(b){return b.imgReady;}).length;
+    // 从 SCHEDULE 数组生成活动预览数据
+    var year = new Date().getFullYear();
+    var bn = SCHEDULE.map(function(s){
+      var startISO = year + "-" + s.start + "T12:00:00";
+      var endISO = year + "-" + s.end + "T22:00:00";
+      var kind = (s.type === "bright" || s.type === "recruit") ? "scout" : "event";
+      var tag = (s.type === "bright") ? "卡池" : (s.type === "recruit" ? "卡池" : "活动");
+      return {
+        id: s.id,
+        title: s.title,
+        startISO: startISO,
+        endISO: endISO,
+        kind: kind,
+        tag: tag,
+        up5: s.up5,
+        chars: s.chars,
+        note: s.note,
+        predict: s.predict,
+        imgReady: false,
+        img: ""
+      };
+    });
+    var bnReady=bn.filter(function(b){return b.imgReady;}).length;
     var serverLabel=MODE==="jp"?"日服 JP":"国服 CN";
     pv$("pvStats").innerHTML='<span class="pv-stat">基准日 <b>'+TODAY+'</b></span><span class="pv-stat">当期 ★5 <b>'+cur.length+'</b></span><span class="pv-stat">近40天 '+serverLabel+' ★5 <b>'+encRec.length+'</b></span><span class="pv-stat">宣传图就位 <b>'+bnReady+'/'+bn.length+'</b></span>';
     pv$("pvInfo").innerHTML=pvInfoHTML(meta);
@@ -6422,6 +6444,10 @@ function keysTag(s) {
         if(aIsScout!==bIsScout) return aIsScout-bIsScout;
         return (a.startISO||"").localeCompare(b.startISO||"");
       });
+      // 测试代码：打印数据
+      console.log("previewBns:", previewBns);
+      console.log("curBns:", curBns);
+      console.log("bn:", bn);
       // 缩短标题：只保留活动中文名，去掉所有细节
       function shortTitle(t){
         // 去掉[预告]前缀
