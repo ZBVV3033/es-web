@@ -1177,7 +1177,7 @@ html.es-darkfix canvas {
               <button type="button" class="sm-btn on" data-sm="simple">简单模式</button>
               <button type="button" class="sm-btn" data-sm="advanced">高级模式</button>
               <button type="button" class="sm-btn" data-sm="list">列表选人</button>
-              <button type="button" class="sm-btn" data-sm="timeline">按时间</button>
+              <button type="button" class="sm-btn" data-sm="timeline">选歌一览</button>
             </span>
           </div>
           <div class="song-hint">输入偶像名或点选（可多选，多选=共同出演），选完点「确定搜索」。站位数据来源：小红书 5311066953，歌曲数据来源官网 Discography。</div>
@@ -4596,7 +4596,7 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
       else if (libSortMode === "keys-asc") list.sort((a, b) => getKeys(a) - getKeys(b));
       else if (libSortMode === "keys-desc") list.sort((a, b) => getKeys(b) - getKeys(a));
     }
-    $("songCount").textContent = `按时间 · 共 ${list.length} 首`;
+    $("songCount").textContent = `选歌一览 · 共 ${list.length} 首`;
     if (!list.length) {
       listEl.innerHTML = `<div class="empty2">没有符合条件的曲目</div>`;
       return;
