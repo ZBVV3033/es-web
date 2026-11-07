@@ -897,6 +897,8 @@ html.es-darkfix canvas {
       </div>
       <input type="text" class="search" id="libSearch" placeholder="搜索卡名 / 角色 / 卡池…" />
       <span class="top-btns">
+        <button type="button" id="topHomeBtn">首页</button>
+        <button type="button" id="topMvBtn">服装</button>
         <button type="button" id="topSongBtn">选歌</button>
         <button type="button" id="topSchedBtn">排期</button>
         <button type="button" id="topSetBtn">设置</button>
@@ -6356,7 +6358,11 @@ function keysTag(s) {
         }
       }
     });
-    // 顶栏快捷按钮（网页版）：选歌 → 选歌页；排期 → 偶像梦幻祭·卡池排期；设置 → 版本日志
+    // 顶栏快捷按钮（网页版）：首页 → 图鉴；服装 → MV服装；选歌 → 选歌页；排期 → 偶像梦幻祭·卡池排期；设置 → 版本日志
+    const topHome = $("topHomeBtn");
+    if (topHome) topHome.onclick = () => { switchPage("es"); switchEsView("enc"); };
+    const topMv = $("topMvBtn");
+    if (topMv) topMv.onclick = () => { switchPage("es"); switchEsView("mv"); };
     const topSong = $("topSongBtn");
     if (topSong) topSong.onclick = () => { switchPage("songs"); setLibSongMode("list"); };
     const topSched = $("topSchedBtn");
