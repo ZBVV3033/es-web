@@ -806,6 +806,9 @@ html.es-darkfix canvas {
 .tut-head h3 { margin: 0; font-size: 16px; color: #171a30; }
 .tut-close { border: none; background: rgba(23,26,48,.06); width: 28px; height: 28px; border-radius: 50%; font-size: 14px; color: #3c4257; cursor: pointer; line-height: 1; }
 .tut-body { padding: 6px 18px 18px; }
+.tut-quick { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 6px; padding: 10px; background: #f8f9fc; border-radius: 10px; }
+.tut-quick-btn { flex: 1; min-width: 80px; padding: 8px 6px; border: 1px solid #e2e6f0; border-radius: 8px; background: #fff; font-size: 13px; cursor: pointer; transition: all .15s; }
+.tut-quick-btn:hover { background: #fdf0f7; border-color: rgba(240,0,160,.3); color: #d60a7b; }
 .tut-sec { margin: 14px 0 0; }
 .tut-sec h4 { font-size: 14px; color: #d60a7b; margin: 0 0 6px; font-weight: 600; }
 .tut-step { font-size: 13.5px; color: #3c4257; line-height: 1.65; margin: 5px 0; padding-left: 16px; position: relative; }
@@ -6204,6 +6207,14 @@ function keysTag(s) {
   function tutHtml(key) {
     const d = ES_TUTS[key] || ES_TUTS.global;
     let h = `<div class="tut-head"><h3>${esc(d.t)}</h3><button type="button" class="tut-close" data-tut-close="1" aria-label="关闭">✕</button></div><div class="tut-body">`;
+    // 快捷跳转按钮
+    h += `<div class="tut-quick">
+      <button type="button" class="tut-quick-btn" data-quick="home">🏠 首页</button>
+      <button type="button" class="tut-quick-btn" data-quick="mv">👗 服装</button>
+      <button type="button" class="tut-quick-btn" data-quick="songs">🎵 选歌</button>
+      <button type="button" class="tut-quick-btn" data-quick="sched">📅 排期</button>
+      <button type="button" class="tut-quick-btn" data-quick="log">⚙️ 设置</button>
+    </div>`;
     (d.s || []).forEach((g) => {
       h += `<div class="tut-sec"><h4>${esc(g.h)}</h4>` + (g.steps || []).map((x) => `<p class="tut-step">${esc(x)}</p>`).join("") + `</div>`;
     });
@@ -6215,7 +6226,20 @@ function keysTag(s) {
     const mask = document.createElement("div");
     mask.className = "tut-mask";
     mask.innerHTML = `<div class="tut-box">${tutHtml(key)}</div>`;
-    mask.addEventListener("click", (e) => { if (e.target === mask || e.target.closest("[data-tut-close]")) closeTut(); });
+    mask.addEventListener("click", (e) => {
+      if (e.target === mask || e.target.closest("[data-tut-close]")) { closeTut(); return; }
+      // 快捷跳转按钮
+      const qb = e.target.closest("[data-quick]");
+      if (qb) {
+        const q = qb.dataset.quick;
+        closeTut();
+        if (q === "home") { switchPage("es"); switchEsView("enc"); }
+        else if (q === "mv") { switchPage("es"); switchEsView("mv"); }
+        else if (q === "songs") { switchPage("songs"); setLibSongMode("list"); }
+        else if (q === "sched") { switchPage("es"); switchEsView("sched"); }
+        else if (q === "log") { switchPage("log"); }
+      }
+    });
     document.body.appendChild(mask);
     tutMask = mask;
   }
