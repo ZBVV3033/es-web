@@ -932,10 +932,10 @@ html.es-darkfix canvas {
           </div>
           <div class="es-view" id="view-enc">
             <div class="enc-main-switch" role="tablist">
-              <button type="button" class="enc-main-tab active" data-encmain="enc">角色图鉴</button>
-              <button type="button" class="enc-main-tab" data-encmain="pv">活动预览（卡池/活动 ★5 · 倒计时）</button>
+              <button type="button" class="enc-main-tab" data-encmain="enc">角色图鉴</button>
+              <button type="button" class="enc-main-tab active" data-encmain="pv">活动预览（卡池/活动 ★5 · 倒计时）</button>
             </div>
-            <div id="view-preview" hidden>
+            <div id="view-preview">
               <div id="pvRoot" class="pv-root">
                 <div class="pv-mode-row" role="tablist">
                   <button type="button" class="pv-mode active" data-pvmode="cn">国服 CN</button>
@@ -957,8 +957,8 @@ html.es-darkfix canvas {
                 </div>
               </div>
             </div>
-            <div class="enc-intro" id="encIntro">收录图鉴（主视图）：左列先列「收录图鉴 · 8」旧收录角色（Raika、衣更真绪、HiMERU、涟纯、Kanna、深海奏汰、明星昴流、影片美伽/鸣上岚），下方「近期 ★5」为近期待补/新收录角色；点选任一角色，右侧查看其卡面（花前/花后双槽，点卡灯箱放大）与 3D / MV 服装档案。顶部「活动预览」切换到当期卡池 / 活动横幅、★5 卡片；实时倒计时显示在最上方活动宣传图横幅上（剩余 ≤24h 标红、到期「已结束」）。</div>
-            <div class="enc-wrap" id="encWrap">
+            <div class="enc-intro" id="encIntro" hidden>收录图鉴（主视图）：左列先列「收录图鉴 · 8」旧收录角色（Raika、衣更真绪、HiMERU、涟纯、Kanna、深海奏汰、明星昴流、影片美伽/鸣上岚），下方「近期 ★5」为近期待补/新收录角色；点选任一角色，右侧查看其卡面（花前/花后双槽，点卡灯箱放大）与 3D / MV 服装档案。顶部「活动预览」切换到当期卡池 / 活动横幅、★5 卡片；实时倒计时显示在最上方活动宣传图横幅上（剩余 ≤24h 标红、到期「已结束」）。</div>
+            <div class="enc-wrap" id="encWrap" hidden>
               <div class="enc-side" id="encCharList"></div>
               <div class="enc-detail" id="encDetail"></div>
             </div>
