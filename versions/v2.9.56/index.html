@@ -6369,6 +6369,11 @@ function keysTag(s) {
     if (topSched) topSched.onclick = () => { switchPage("es"); switchEsView("sched"); };
     const topSet = $("topSetBtn");
     if (topSet) topSet.onclick = () => switchPage("log");
+    
+    // 清空选择按钮（确保init里绑定，不被覆盖）
+    const clearBtnInit = $("songClear");
+    if (clearBtnInit) clearBtnInit.onclick = () => { songSel.clear(); songDblIdol = null; renderSongs(); };
+    
     switchPage("songs");
     setLibSongMode("list");
     document.querySelectorAll(".tut-btn").forEach((b) => { b.onclick = () => showTut(b.dataset.tut); });
