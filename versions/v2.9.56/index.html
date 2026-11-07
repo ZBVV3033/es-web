@@ -6478,10 +6478,10 @@ function keysTag(s) {
     // 花前/花后切换按钮（参考图鉴样式）
     var hasAfter=!!(c.imgReady&&c.after);
     var bloomSwitch='<div class="pv-bloom-switch">'+
-      '<button type="button" class="active" data-mode="before" data-card-id="'+pvEsc(c.id)+'">未开花</button>'+
-      '<button type="button" data-mode="after" data-card-id="'+pvEsc(c.id)+'"'+(hasAfter?'':' disabled')+'>开花</button>'+
+      '<button type="button" class="active" data-mode="before" data-card-id="'+pvEsc(c.id)+'" onclick="event.stopPropagation();pvToggleBloom(this,\'before\')">未开花</button>'+
+      '<button type="button" data-mode="after" data-card-id="'+pvEsc(c.id)+'"'+(hasAfter?'':' disabled')+' onclick="event.stopPropagation();pvToggleBloom(this,\'after\')">开花</button>'+
       '</div>';
-    return '<div class="pv-card" onclick="pvShowStarDetail('+JSON.stringify(c).replace(/"/g,'&quot;')+')">'+cardPic(c)+bloomSwitch+'<div class="pv-cbody"><div class="pv-char">'+pvEsc(c.char||"—")+'</div><div class="pv-cname">'+pvEsc(c.card||"（卡名待补）")+'</div><div class="pv-src">'+badge+'<span class="pv-date">'+pvEsc(c.dateISO)+'</span></div>'+period+link+'</div></div>';
+    return '<div class="pv-card" onclick="pvShowStarDetail(event, '+JSON.stringify(c).replace(/"/g,'&quot;')+')">'+cardPic(c)+bloomSwitch+'<div class="pv-cbody"><div class="pv-char">'+pvEsc(c.char||"—")+'</div><div class="pv-cname">'+pvEsc(c.card||"（卡名待补）")+'</div><div class="pv-src">'+badge+'<span class="pv-date">'+pvEsc(c.dateISO)+'</span></div>'+period+link+'</div></div>';
   }
   function bannerHTML(b){
     var media=(b.imgReady&&b.img)?'<img src="'+pvEsc(PV_ASSET+b.img)+'" alt="'+pvEsc(b.title)+'">':'<div class="pv-ph">宣传图待补</div>';
@@ -6599,7 +6599,11 @@ function keysTag(s) {
     document.body.appendChild(mask);
   }
   // 五星卡面详情弹窗
-  function pvShowStarDetail(c){
+  function pvShowStarDetail(event, c){
+    // 如果点击的是bloom-switch按钮，不弹出详情窗口
+    if(event && event.target && event.target.closest && event.target.closest(".pv-bloom-switch")){
+      return;
+    }
     var img=c.img?'<img src="'+pvEsc(c.img)+'" alt="" style="max-width:100%;border-radius:8px">':'<div style="padding:20px;text-align:center;color:#6b7280">卡面图待补</div>';
     var html='<div style="max-width:400px;margin:0 auto;background:#fff;border-radius:12px;padding:16px;box-shadow:0 4px 12px rgba(0,0,0,.15)">'
       +'<div style="font-size:16px;font-weight:700;margin-bottom:8px">'+pvEsc(c.char||"—")+' · '+pvEsc(c.card||"卡名待补")+'</div>'
@@ -6990,33 +6994,28 @@ function keysTag(s) {
     });}
   })();
   // 切换花前/花后（未开花/开花双按钮，参考图鉴样式）
-  (function(){
-    document.addEventListener("click",function(e){
-      var btn=e.target&&e.target.closest?e.target.closest(".pv-bloom-switch button"):null;
-      if(!btn)return;
-      e.stopPropagation();
-      var mode=btn.getAttribute("data-mode");
-      var cardId=btn.getAttribute("data-card-id");
-      var imgEl=document.getElementById("pv-img-"+cardId);
-      if(!imgEl)return;
-      var all=(typeof PREVIEW_CARDS!=="undefined"?PREVIEW_CARDS:[]);
-      var card=all.find(function(c){return c.id===cardId;});
-      if(!card)return;
-      // 切换图片
-      if(mode==="before"){
-        imgEl.src=PV_ASSET+(card.before||card.img);
-      }else if(mode==="after"&&card.after){
-        imgEl.src=PV_ASSET+card.after;
-      }
-      // 更新active状态
-      var switchEl=btn.closest(".pv-bloom-switch");
-      if(switchEl){
-        switchEl.querySelectorAll("button").forEach(function(b){
-          b.classList.toggle("active",b===btn);
-        });
-      }
-    });
-  })();
+  function pvToggleBloom(btn, mode){
+    var cardId=btn.getAttribute("data-card-id");
+    var imgEl=document.getElementById("pv-img-"+cardId);
+    if(!imgEl)return;
+    var all=(typeof PREVIEW_CARDS!=="undefined"?PREVIEW_CARDS:[]);
+    var card=all.find(function(c){return c.id===cardId;});
+    if(!card)return;
+    // 切换图片
+    if(mode==="before"){
+      imgEl.src=PV_ASSET+(card.before||card.img);
+    }else if(mode==="after"&&card.after){
+      imgEl.src=PV_ASSET+card.after;
+    }
+    // 更新active状态
+    var switchEl=btn.closest(".pv-bloom-switch");
+    if(switchEl){
+      switchEl.querySelectorAll("button").forEach(function(b){
+        b.classList.toggle("active",b===btn);
+      });
+    }
+  }
+  window.pvToggleBloom = pvToggleBloom;
   document.addEventListener("error",function(e){
     var t=e.target;if(t&&t.tagName==="IMG"&&t.closest&&t.closest("#view-preview")){var w=t.parentNode;if(w)w.innerHTML='<div class="pv-empty"><span>图片缺失/未就位</span></div>';}
   },true);
