@@ -2656,7 +2656,7 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
       ]
     },
     {
-      id: "mao", name: "衣更真绪", jp: "衣更真緒", unit: "trickstar",
+      id: "mao", name: "衣更真绪", jp: "衣更真緒", unit: "Trickstar",
       info: "『招募！Ambassador／食道乐』★5（10-14 开启，日服）",
       cards: [
 { name: "宵の宴♪バンドアンサンブル（开花）", star: "★★★★★", img: "", src: "官方卡面（堆糖图库搬运）", link: "https://m.duitang.com/blogs/tag/?name=%E5%BC%80%E8%8A%B1" },
@@ -3497,7 +3497,7 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
       ]
     },
     {
-      id: "subaru", name: "明星昴流", jp: "明星スバル", unit: "trickstar",
+      id: "subaru", name: "明星昴流", jp: "明星スバル", unit: "Trickstar",
       info: "『爛漫スプリング』★5 卡池",
       cards: [
       { name: "［ONLY STAR］明星 スバル", star: "★★★★★", img: "latest-preview/preview_img/cards/jp-subaru-onlystar-after.png", imgAfter: "latest-preview/preview_img/cards/jp-subaru-onlystar-after.png", before: "latest-preview/preview_img/cards/jp-subaru-onlystar-before.png", src: "gamerch", link: "https://gamerch.com/ensemble-star-music/982140" }
@@ -3675,7 +3675,7 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
       outfits: []
     },
     {
-      id: "keito", name: "莲巳敬人", jp: "蓮巳敬人", unit: "红月",
+      id: "keito", name: "莲巳敬人", jp: "蓮巳敬人", unit: "紅月",
       info: "红月 队长，严格的和风青年",
       cards: [
       { name: "［まだ知らない自分］蓮巳 敬人", star: "★★★★★", img: "latest-preview/preview_img/cards/jp-keito-jibun-after.png", imgAfter: "latest-preview/preview_img/cards/jp-keito-jibun-after.png", src: "gamerch", link: "" }
@@ -3687,7 +3687,7 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
       outfits: []
     },
     {
-      id: "kuro", name: "鬼龙红郎", jp: "鬼龍紅郎", unit: "红月",
+      id: "kuro", name: "鬼龙红郎", jp: "鬼龍紅郎", unit: "紅月",
       info: "红月 成员，不良少年气质的武士",
       cards: [
       { name: "［向かい合う信念］鬼龍 紅郎", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" },
@@ -4616,7 +4616,7 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
   function encStarNum(s) { const m = String(s || "").match(/★/g); return m ? m.length : 0; }
   function encRoles() {
     const G = window.EsGacha; if (!G) return [];
-    const fix = { mao: "Trickstar", kanata: "流星隊", subaru: "Trickstar", mikanaru: "2wink", kanna: "Special for Princess!" };
+    const fix = {};
     const old = G.ENCY.map((r) => ({
       id: r.id, name: r.name, jp: r.jp || "", unit: fix[r.id] || r.unit || "其他", info: r.info || "", kind: "old",
       cards: (r.cards || []).map((c) => ({ ...c, before: c.before || c.img || "", after: c.after || "", stars: encStarNum(c.star) })),
