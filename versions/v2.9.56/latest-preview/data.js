@@ -399,7 +399,6 @@ const PREVIEW_META = {
  *       2020 旧复刻池（司193443/BOX194659/涉199178）禁止出现在此清单。
  * ============================================================ */
 const ENC_RECENT = [
-  // ---------- 日服 JP（2026 已核年份；Basic/Music 分别标注） ----------
   { id:"en-jp-nagisa-20261025", server:"JP", dateISO:"2026-10-25", name:"乱凪砂", jp:"乱凪砂", unit:"JP · 2026-10-25",
     info:"Music 当期 Bright me up!!スカウト Stage：凪砂 ★5［追いかける熱］（10-25 15:00~11-10 15:00，已核2026；卡面就位、低清待官方替换）",
     cards:[
@@ -409,34 +408,6 @@ const ENC_RECENT = [
         link:"https://gamerch.com/ensemble-star-music/1026378",
         note:"五红星框+本人目视确认；同池★4円果望見、★3遊木真，不得混入★5" }
     ], outfits:[] },
-  { id:"en-jp-tsukasa-20261010", server:"JP", dateISO:"2026-10-10", name:"朱樱司", jp:"朱桜司", unit:"JP · 2026-10-10",
-    info:"Basic Bright me up!!スカウト Stage：司 ☆5［自信を武器に］（2026-10-10 追加，已核年份；与归档2020旧司卡193430不是同一张；wiki五亮星觉醒竖版就位、低清待官方替换）",
-    cards:[
-      { name:"［自信を武器に］朱桜司（Basic ☆5 觉醒）", star:"★★★★★",
-        img:"latest-preview/preview_img/cards/jp-basic-tsukasa-20261010.jpg",
-        src:"Gamerch Basic 1021078（2026-10-10 追加，レアリティ☆5 Lv60；第三方低清觉醒竖版，待官方高清替换）",
-        link:"https://gamerch.com/ensemble-star-basic/1021078",
-        note:"五亮星框+朱樱司本人目视确认；Basic 体系；禁止与 archive 的2020旧司卡193430混用" }
-    ], outfits:[] },
-  { id:"en-jp-mao-20261014", server:"JP", dateISO:"2026-10-14", name:"衣更真绪", jp:"衣更真緒", unit:"JP · 2026-10-14",
-    info:"Basic スカウト！Ambassador／ショクドウラク ☆5［食への探求］（2026-10-14 追加，已核年份；wiki五亮星觉醒竖版就位、低清待官方替换）",
-    cards:[
-      { name:"［食への探求］衣更真緒（Basic ☆5 觉醒）", star:"★★★★★",
-        img:"latest-preview/preview_img/cards/jp-basic-mao-20261014.jpg",
-        src:"Gamerch Basic 1021904（2026-10-14 追加，レアリティ☆5 Lv60；第三方低清觉醒竖版，待官方高清替换）",
-        link:"https://gamerch.com/ensemble-star-basic/1021904",
-        note:"五亮星框+衣更真绪本人目视确认；Basic 体系" }
-    ], outfits:[] },
-  { id:"en-jp-raika-20261015", server:"JP", dateISO:"2026-10-15", name:"Raika", jp:"ライカ", unit:"JP · 2026-10-15",
-    info:"Basic 活动『悪夢★暗闇とらいむLIEト』☆5［SWEET LIE］（10-15 15:00~10-24 22:00，已核2026；卡面已就位）",
-    cards:[
-      { name:"［SWEET LIE］ライカ（Basic 活动 ☆5）", star:"★★★★★", img:"latest-preview/preview_img/cards/jp-raika-sweetlie.jpg",
-        src:"Gamerch Basic 1022639（追加日2026-10-15）",
-        link:"https://gamerch.com/ensemble-star-basic/1022639",
-        note:"Special for Princess!；Basic 活动卡；第三方低清待官方替换" }
-    ], outfits:[] },
-
-  // ---------- 国服 CN（官方微博/官方记录核实名称档期；卡面待补，占位不猜图） ----------
   { id:"en-cn-jun-20261031", server:"CN", dateISO:"2026-10-31", name:"涟纯", jp:"漣ジュン", unit:"CN · 2026-10-31",
     info:"国服活动『试炼！追寻属于自己的Golden Dream』唯一★5【觉醒的试炼】涟纯（活动10-31 12:00~11-08 22:00；名称档期官方微博核实，卡面已就位）",
     cards:[
@@ -492,13 +463,5 @@ const ENC_RECENT = [
         src:"Gamerch 964957［想いを繋ぐ絆］",
         link:"https://gamerch.com/ensemble-star-music/964957",
         note:"招募 pickup ★5；同池★4南雲鉄虎、★3仙石忍；第三方低清待官方替换" }
-    ], outfits:[] },
-  { id:"en-jp-subaru-20260830", server:"JP", dateISO:"2026-08-30", name:"明星昴流", jp:"明星スバル", unit:"JP · 2026-08-30",
-    info:"旧作! スカウト！鬼火 ★5［橙色の赤鬼］明星 スバル（08-30 15:00~09-14 15:00，已过近30天窗口，仅作9月活动留档）",
-    cards:[
-      { name:"［橙色の赤鬼］明星 スバル（旧作! ★5）", star:"★★★★★", img:"latest-preview/preview_img/cards/jp-subaru-onlystar-before.png",
-        src:"Gamerch 982140［ONLY STAR］",
-        link:"https://gamerch.com/ensemble-star-music/982140",
-        note:"旧作! 体系；2026-09-14 结束；近30天外留档，不入当期网格；替代卡面待官方替换" }
     ], outfits:[] }
 ];
