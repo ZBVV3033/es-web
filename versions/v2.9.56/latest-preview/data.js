@@ -435,7 +435,7 @@ const ENC_RECENT = [
   { id:"en-cn-makoto-20261016", server:"CN", dateISO:"2026-10-16", name:"游木真", jp:"遊木真", unit:"CN · 2026-10-16",
     info:"国服卡池『招募！好战骑士与奇策之星』★5《星星的谋略》（既有时间线记录；卡面已就位）",
     cards:[
-      { name:"星星的谋略 · 游木真（卡池 ★5）", star:"★★★★★", img:"",
+      { name:"星星的谋略 · 游木真（卡池 ★5）", star:"★★★★★", img:"latest-preview/preview_img/cards/jp-makoto-knights.png",
         src:"Gamerch 987976［星の駆け引き］",
         link:"https://gamerch.com/ensemble-star-music/987976",
         note:"卡池 ★5；同池★4仙石忍、★3天满光；第三方低清待官方替换" }
@@ -443,7 +443,7 @@ const ENC_RECENT = [
   { id:"en-cn-souma-20261012", server:"CN", dateISO:"2026-10-12", name:"神崎飒马", jp:"神崎颯馬", unit:"CN · 2026-10-12",
     info:"国服 Bright me up!!招募 Stage：飒马 ★5《锦簇花路》（近30天窗口内已结束往期；仅作最近月填充，卡面已就位）",
     cards:[
-      { name:"锦簇花路 · 神崎飒马（Stage ★5）", star:"★★★★★", img:"",
+      { name:"锦簇花路 · 神崎飒马（Stage ★5）", star:"★★★★★", img:"latest-preview/preview_img/cards/jp-souma-michisuji.png",
         src:"Gamerch 987172［彩られる道筋］",
         link:"https://gamerch.com/ensemble-star-music/987172",
         note:"Stage ★5；金色边框+五颗星已验证；第三方低清待官方替换" }
@@ -451,7 +451,7 @@ const ENC_RECENT = [
   { id:"en-jp-midori-20261031", server:"JP", dateISO:"2026-10-31", name:"高峯翠", jp:"高峯翠", unit:"JP · 2026-10-31",
     info:"Music World Tour 篇 AREA07「2wink VS 流星隊」EVENT 活动奖励 ★5 高峯翠（10-31 15:00~11-08 22:00，已核2026；卡面已就位）",
     cards:[
-      { name:"AREA07 流星隊側 EVENT報酬 ★5 高峯翠（Music ★5）", star:"★★★★★", img:"",
+      { name:"AREA07 流星隊側 EVENT報酬 ★5 高峯翠（Music ★5）", star:"★★★★★", img:"latest-preview/preview_img/cards/jp-midori.png",
         src:"Gamerch 964926［感謝は実感と共に］",
         link:"https://gamerch.com/ensemble-star-music/964926",
         note:"活动奖励 ★5；同奖 ★4葵ひなた、★3守沢千秋/深海奏汰；第三方低清待官方替换" }
@@ -459,7 +459,7 @@ const ENC_RECENT = [
   { id:"en-jp-yuta-20261030", server:"JP", dateISO:"2026-10-30", name:"葵裕太", jp:"葵ゆうた", unit:"JP · 2026-10-30",
     info:"Music AREA07 同時開催 SCOUT ★5 葵ゆうた（10-30 15:00~11-14 15:00，已核2026；卡面已就位）",
     cards:[
-      { name:"AREA07 SCOUT ★5 葵ゆうた（Music ★5）", star:"★★★★★", img:"",
+      { name:"AREA07 SCOUT ★5 葵ゆうた（Music ★5）", star:"★★★★★", img:"latest-preview/preview_img/cards/jp-yuta.png",
         src:"Gamerch 964957［想いを繋ぐ絆］",
         link:"https://gamerch.com/ensemble-star-music/964957",
         note:"招募 pickup ★5；同池★4南雲鉄虎、★3仙石忍；第三方低清待官方替换" }
