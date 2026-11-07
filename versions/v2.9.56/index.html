@@ -6401,6 +6401,7 @@ function keysTag(s) {
     if (clearBtnInit) clearBtnInit.onclick = () => { songSel.clear(); songDblIdol = null; renderSongs(); };
     
     switchPage("es");
+    setEncMain("pv");
     document.querySelectorAll(".tut-btn").forEach((b) => { b.onclick = () => showTut(b.dataset.tut); });
     
     // 首次访问显示引导弹窗
