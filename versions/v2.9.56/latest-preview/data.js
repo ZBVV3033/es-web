@@ -403,7 +403,7 @@ const ENC_RECENT = [
     info:"Music 当期 Bright me up!!スカウト Stage：凪砂 ★5［追いかける熱］（10-25 15:00~11-10 15:00，已核2026；卡面就位、低清待官方替换）",
     cards:[
       { name:"［追いかける熱］乱凪砂（Music ★5）", star:"★★★★★",
-        img:"",
+        img:"latest-preview/preview_img/cards/jp-stage-nagisa.png",
         src:"Gamerch 单卡1026378（第三方低清，待官方高清替换）",
         link:"https://gamerch.com/ensemble-star-music/1026378",
         note:"五红星框+本人目视确认；同池★4円果望見、★3遊木真，不得混入★5" }
