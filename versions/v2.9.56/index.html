@@ -6209,11 +6209,11 @@ function keysTag(s) {
     let h = `<div class="tut-head"><h3>${esc(d.t)}</h3><button type="button" class="tut-close" data-tut-close="1" aria-label="关闭">✕</button></div><div class="tut-body">`;
     // 快捷跳转按钮
     h += `<div class="tut-quick">
-      <button type="button" class="tut-quick-btn" data-quick="home">🏠 首页</button>
-      <button type="button" class="tut-quick-btn" data-quick="mv">👗 服装</button>
-      <button type="button" class="tut-quick-btn" data-quick="songs">🎵 选歌</button>
-      <button type="button" class="tut-quick-btn" data-quick="sched">📅 排期</button>
-      <button type="button" class="tut-quick-btn" data-quick="log">⚙️ 设置</button>
+      <button type="button" class="tut-quick-btn" data-quick="home">首页</button>
+      <button type="button" class="tut-quick-btn" data-quick="mv">服装</button>
+      <button type="button" class="tut-quick-btn" data-quick="songs">选歌</button>
+      <button type="button" class="tut-quick-btn" data-quick="sched">排期</button>
+      <button type="button" class="tut-quick-btn" data-quick="log">设置</button>
     </div>`;
     (d.s || []).forEach((g) => {
       h += `<div class="tut-sec"><h4>${esc(g.h)}</h4>` + (g.steps || []).map((x) => `<p class="tut-step">${esc(x)}</p>`).join("") + `</div>`;
