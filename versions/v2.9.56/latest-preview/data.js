@@ -471,7 +471,7 @@ const ENC_RECENT = [
     info:"Basic Bright me up!!スカウト Stage：司 ☆5［自信を武器に］（2026-10-10 追加，已核年份；与归档2020旧司卡193430不是同一张；wiki五亮星觉醒竖版就位、低清待官方替换）",
     cards:[
       { name:"［自信を武器に］朱桜司（Basic ☆5 觉醒）", star:"★★★★★",
-        img:"latest-preview/preview_img/cards/jp-basic-tsukasa-20261010.jpg",
+        img:"latest-preview/preview_img/cards/jp-tsukasa.jpg",
         src:"Gamerch Basic 1021078（2026-10-10 追加，レアリティ☆5 Lv60；第三方低清觉醒竖版，待官方高清替换）",
         link:"https://gamerch.com/ensemble-star-basic/1021078",
         note:"五亮星框+朱樱司本人目视确认；Basic 体系；禁止与 archive 的2020旧司卡193430混用" }
@@ -480,7 +480,7 @@ const ENC_RECENT = [
     info:"Basic スカウト！Ambassador／ショクドウラク ☆5［食への探求］（2026-10-14 追加，已核年份；wiki五亮星觉醒竖版就位、低清待官方替换）",
     cards:[
       { name:"［食への探求］衣更真緒（Basic ☆5 觉醒）", star:"★★★★★",
-        img:"latest-preview/preview_img/cards/jp-basic-mao-20261014.jpg",
+        img:"latest-preview/preview_img/cards/jp-mao.jpg",
         src:"Gamerch Basic 1021904（2026-10-14 追加，レアリティ☆5 Lv60；第三方低清觉醒竖版，待官方高清替换）",
         link:"https://gamerch.com/ensemble-star-basic/1021904",
         note:"五亮星框+衣更真绪本人目视确认；Basic 体系" }
@@ -488,7 +488,7 @@ const ENC_RECENT = [
   { id:"en-jp-raika-20261015", server:"JP", dateISO:"2026-10-15", name:"Raika", jp:"ライカ", unit:"JP · 2026-10-15",
     info:"Basic 活动『悪夢★暗闇とらいむLIEト』☆5［SWEET LIE］（10-15 15:00~10-24 22:00，已核2026；卡面已就位）",
     cards:[
-      { name:"［SWEET LIE］ライカ（Basic 活动 ☆5）", star:"★★★★★", img:"latest-preview/preview_img/cards/jp-raika-sweetlie.jpg",
+      { name:"［SWEET LIE］ライカ（Basic 活动 ☆5）", star:"★★★★★", img:"latest-preview/preview_img/cards/jp-raika.png",
         src:"Gamerch Basic 1022639（追加日2026-10-15）",
         link:"https://gamerch.com/ensemble-star-basic/1022639",
         note:"Special for Princess!；Basic 活动卡；第三方低清待官方替换" }
