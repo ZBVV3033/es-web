@@ -6400,8 +6400,7 @@ function keysTag(s) {
     const clearBtnInit = $("songClear");
     if (clearBtnInit) clearBtnInit.onclick = () => { songSel.clear(); songDblIdol = null; renderSongs(); };
     
-    switchPage("songs");
-    setLibSongMode("list");
+    switchPage("es");
     document.querySelectorAll(".tut-btn").forEach((b) => { b.onclick = () => showTut(b.dataset.tut); });
     
     // 首次访问显示引导弹窗
