@@ -4014,6 +4014,8 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
   // 封面缩略图：microcms 支持 imgix 风格参数，缩到目标宽度大幅加快加载（放大时仍用原图 data-big）
   function imgThumb(url, w) {
     if (!url) return url;
+    // 相对路径加前缀（从versions/v2.9.56/回到根目录）
+    if (url.startsWith("assets/") || url.startsWith("img/")) url = "../../" + url;
     return url + (url.indexOf("?") < 0 ? "?" : "&") + "w=" + w + "&q=75";
   }
 
@@ -6377,6 +6379,9 @@ function keysTag(s) {
     switchPage("songs");
     setLibSongMode("list");
     document.querySelectorAll(".tut-btn").forEach((b) => { b.onclick = () => showTut(b.dataset.tut); });
+    
+    // 首次访问显示引导弹窗
+    maybeShowFirstTut();
   }
 
   document.addEventListener("DOMContentLoaded", init);
