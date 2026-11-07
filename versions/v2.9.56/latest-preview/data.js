@@ -411,26 +411,26 @@ const ENC_RECENT = [
   { id:"en-cn-jun-20261031", server:"CN", dateISO:"2026-10-31", name:"涟纯", jp:"漣ジュン", unit:"CN · 2026-10-31",
     info:"国服活动『试炼！追寻属于自己的Golden Dream』唯一★5【觉醒的试炼】涟纯（活动10-31 12:00~11-08 22:00；名称档期官方微博核实，卡面已就位）",
     cards:[
-      { name:"【觉醒的试炼】涟纯（活动 ★5）", star:"★★★★★", img:"",
-        src:"国服官方微博 5359324940993658",
-        link:"https://m.weibo.cn/detail/5359324940993658",
-        note:"同池★4巴日和、★3乱凪砂、★3七种茨；官方宣传图" }
+      { name:"【觉醒的试炼】涟纯（活动 ★5）", star:"★★★★★", img:"preview_img/cards/jp-jun-before.png", after:"preview_img/cards/jp-jun-after.png",
+        src:"gamerch 991466",
+        link:"https://gamerch.com/ensemble-star-music/991466",
+        note:"日服gamerch验证：H1［覚醒の試練］漣 ジュン；花前/花后成对图已就位" }
     ], outfits:[] },
   { id:"en-cn-natsume-20261030", server:"CN", dateISO:"2026-10-30", name:"逆先夏目", jp:"逆先夏目", unit:"CN · 2026-10-30",
     info:"国服限定卡池『招募！夏至夜风』★5【一起悠然度过的夏天】逆先夏目（卡池10-30 12:00~11-13 12:00；名称档期官方微博核实，卡面已就位）",
     cards:[
-      { name:"【一起悠然度过的夏天】逆先夏目（卡池 ★5）", star:"★★★★★", img:"",
-        src:"国服官方微博 5358962552604799",
-        link:"https://m.weibo.cn/detail/5358962552604799",
-        note:"同池★4鬼龙红郎等；官方宣传图" }
+      { name:"【一起悠然度过的夏天】逆先夏目（卡池 ★5）", star:"★★★★★", img:"preview_img/cards/jp-natsume-before.png", after:"preview_img/cards/jp-natsume-after.png",
+        src:"gamerch 991279",
+        link:"https://gamerch.com/ensemble-star-music/991279",
+        note:"日服gamerch验证：H1［一緒に過ごす夏］逆先 夏目；花前/花后成对图已就位" }
     ], outfits:[] },
   { id:"en-cn-leo-20261017", server:"CN", dateISO:"2026-10-17", name:"月永雷欧", jp:"月永レオ", unit:"CN · 2026-10-17",
     info:"国服巡演活动 世界巡演篇 Knights VS Trickstar ★5《骑士的本心》（既有时间线记录；卡面已就位）",
     cards:[
-      { name:"骑士的本心 · 月永雷欧（巡演活动 ★5）", star:"★★★★★", img:"",
-        src:"官方微博 5353887864718344",
-        link:"https://m.weibo.cn/detail/5353887864718344",
-        note:"时间线记录条目；官方宣传图" }
+      { name:"骑士的本心 · 月永雷欧（巡演活动 ★5）", star:"★★★★★", img:"preview_img/cards/jp-leo-before.png", after:"preview_img/cards/jp-leo-after.png",
+        src:"gamerch 988116",
+        link:"https://gamerch.com/ensemble-star-music/988116",
+        note:"日服gamerch验证：H1［騎士の本気］月永 レオ；花前/花后成对图已就位" }
     ], outfits:[] },
   { id:"en-cn-makoto-20261016", server:"CN", dateISO:"2026-10-16", name:"游木真", jp:"遊木真", unit:"CN · 2026-10-16",
     info:"国服卡池『招募！好战骑士与奇策之星』★5《星星的谋略》（既有时间线记录；卡面已就位）",
