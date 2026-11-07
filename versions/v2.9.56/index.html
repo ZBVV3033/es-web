@@ -1056,8 +1056,11 @@ html.es-darkfix canvas {
           #view-preview .pv-single-pic .pv-empty::before{content:"🎴";font-size:32px;opacity:.6}
           #view-preview .pv-single-pic .pv-empty::after{content:"待补官方卡面 · 占位";font-size:10px;opacity:.7}
           #view-preview .pv-single-pic .pv-star{position:absolute;top:8px;left:8px;z-index:2;font-size:11px;color:#fff;background:linear-gradient(135deg,#f59e0b,#d97706);border-radius:8px;padding:2px 8px;font-weight:700}
-          #view-preview .pv-single-pic .pv-flip-btn{position:absolute;bottom:8px;right:8px;z-index:3;font-size:11px;color:#fff;background:rgba(0,0,0,.6);border:none;border-radius:8px;padding:4px 10px;cursor:pointer;backdrop-filter:blur(4px)}
-          #view-preview .pv-single-pic .pv-flip-btn:hover{background:rgba(0,0,0,.8)}
+          /* 花前/花后切换按钮（参考图鉴样式） */
+          #view-preview .pv-bloom-switch{display:flex;gap:6px;justify-content:center;padding:6px 4px 8px;background:#fff}
+          #view-preview .pv-bloom-switch button{border:1px solid var(--line,#d9dde6);background:rgba(255,255,255,.92);color:var(--txt2,#444);font-size:11px;border-radius:999px;padding:3px 9px;cursor:pointer}
+          #view-preview .pv-bloom-switch button.active{background:#3f6fb5;color:#fff;border-color:#3f6fb5}
+          #view-preview .pv-bloom-switch button:disabled{opacity:.42;cursor:not-allowed}
           #view-preview .pv-cbody{padding:10px 11px;display:flex;flex-direction:column;gap:5px;flex:1}
           #view-preview .pv-char{font-weight:700;font-size:13px}
           #view-preview .pv-cname{font-size:12px;color:#444;line-height:1.4}
@@ -2644,28 +2647,23 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
       id: "raika", name: "Raika", jp: "ライカ", unit: "Special for Princess!",
       info: "『噩梦★黑暗与LimeLIEt』活动★5（10-15 开启，日服）",
       cards: [
-        { name: "Lyrical White（リリカル・ホワイト）", star: "★★★", img: "", src: "Ensemble Stars Wiki 官方卡面", link: "https://ensemble-stars.fandom.com/wiki/(Lyrical_White)_Raika" }
-      ,{ name: "［感謝の歌を歌って］ライカ", star: "★★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［魅力の詰め合わせ］ライカ", star: "★★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［SWEET LIE］ライカ", star: "★★★★★", img: "", imgAfter: """", src: "gamerch", link: "https://gamerch.com/ensemble-star-music/107726" }
-      ,{ name: "［変わる信念］ライカ", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［王子の尽力］ライカ", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-    ],
+        { name: "Lyrical White（リリカル・ホワイト）", star: "★★★", img: "assets/cards/raika_lyrical.png", src: "Ensemble Stars Wiki 官方卡面", link: "https://ensemble-stars.fandom.com/wiki/(Lyrical_White)_Raika" }
+      ],
       outfits: [
         { name: "MV衣装＋L2D衣装【Sweet Nightmare】", note: "活动★5 Raika 附赠（原创SPP）", src: "日服情报微博 @EnsembleStars", link: "https://weibo.com/u/5517236683" }
       ]
     },
     {
-      id: "mao", name: "衣更真绪", jp: "衣更真緒", unit: "Trickstar",
+      id: "mao", name: "衣更真绪", jp: "衣更真緒", unit: "MaM",
       info: "『招募！Ambassador／食道乐』★5（10-14 开启，日服）",
       cards: [
-{ name: "宵の宴♪バンドアンサンブル（开花）", star: "★★★★★", img: "", src: "官方卡面（堆糖图库搬运）", link: "https://m.duitang.com/blogs/tag/?name=%E5%BC%80%E8%8A%B1" },
+{ name: "宵の宴♪バンドアンサンブル（开花）", star: "★★★★★", img: "assets/cards/mao_banquet.png", src: "官方卡面（堆糖图库搬运）", link: "https://m.duitang.com/blogs/tag/?name=%E5%BC%80%E8%8A%B1" },
 {
         name: "平凡中的特别",
         star: "★★★★★",
-        img: "img/g5/166751_h2.jpg",
-        before: "img/g5/166751_h1.jpg",
-        after: "img/g5/166751_h2.jpg",
+        img: "img/g5/166751_h2.png",
+        before: "img/g5/166751_h1.png",
+        after: "img/g5/166751_h2.png",
         src: "フィーチャースカウト 真緒編",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/166751",
@@ -2674,9 +2672,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "心意花束",
         star: "★★★★★",
-        img: "img/g5/264252_h2.jpg",
-        before: "img/g5/264252_h1.jpg",
-        after: "img/g5/264252_h2.jpg",
+        img: "img/g5/264252_h2.png",
+        before: "img/g5/264252_h1.png",
+        after: "img/g5/264252_h2.png",
         src: "スカウト！Ring.A.Bell",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/264252",
@@ -2685,9 +2683,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "回首四季",
         star: "★★★★★",
-        img: "img/g5/324621_h2.jpg",
-        before: "img/g5/324621_h1.jpg",
-        after: "img/g5/324621_h2.jpg",
+        img: "img/g5/324621_h2.png",
+        before: "img/g5/324621_h1.png",
+        after: "img/g5/324621_h2.png",
         src: "Focus＊ファインダー越しの四季",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/324621",
@@ -2696,9 +2694,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "自然交汇的视线",
         star: "★★★★★",
-        img: "img/g5/390047_h2.jpg",
-        before: "img/g5/390047_h1.jpg",
-        after: "img/g5/390047_h2.jpg",
+        img: "img/g5/390047_h2.png",
+        before: "img/g5/390047_h1.png",
+        after: "img/g5/390047_h2.png",
         src: "フィーチャースカウト 真緒編2",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/390047",
@@ -2707,9 +2705,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "与漫画相伴的回忆",
         star: "★★★★★",
-        img: "img/g5/764027_h2.jpg",
-        before: "img/g5/764027_h1.jpg",
-        after: "img/g5/764027_h2.jpg",
+        img: "img/g5/764027_h2.png",
+        before: "img/g5/764027_h1.png",
+        after: "img/g5/764027_h2.png",
         src: "スカウト！漫画会",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/764027",
@@ -2728,9 +2726,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "热心张罗的督导",
         star: "★★★★",
-        img: "img/g4/140540_h2.jpg",
-        before: "img/g4/140540_h1.jpg",
-        after: "img/g4/140540_h2.jpg",
+        img: "img/g4/140540_h2.png",
+        before: "img/g4/140540_h1.png",
+        after: "img/g4/140540_h2.png",
         src: "Music初期実装カード（2020年03月15日実装）",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/140540",
@@ -2739,9 +2737,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "新星的立场",
         star: "★★★★",
-        img: "img/g4/141020_h2.jpg",
-        before: "img/g4/141020_h1.jpg",
-        after: "img/g4/141020_h2.jpg",
+        img: "img/g4/141020_h2.png",
+        before: "img/g4/141020_h1.png",
+        after: "img/g4/141020_h2.png",
         src: "新星団★輝きのBIGBANG！",
         srcType: "event",
         link: "https://gamerch.com/ensemble-star-music/141020",
@@ -2750,9 +2748,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "甜点射手",
         star: "★★★★",
-        img: "img/g4/224576_h2.jpg",
-        before: "img/g4/224576_h1.jpg",
-        after: "img/g4/224576_h2.jpg",
+        img: "img/g4/224576_h2.png",
+        before: "img/g4/224576_h1.png",
+        after: "img/g4/224576_h2.png",
         src: "スカウト！スイートハント",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/224576",
@@ -2761,9 +2759,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "轻松玩摇滚",
         star: "★★★★",
-        img: "img/g4/258990_h2.jpg",
-        before: "img/g4/258990_h1.jpg",
-        after: "img/g4/258990_h2.jpg",
+        img: "img/g4/258990_h2.png",
+        before: "img/g4/258990_h1.png",
+        after: "img/g4/258990_h2.png",
         src: "6周年記念スカウト LOVE編 グループE",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/258990",
@@ -2772,9 +2770,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "智谋武将",
         star: "★★★★",
-        img: "img/g4/287621_h2.jpg",
-        before: "img/g4/287621_h1.jpg",
-        after: "img/g4/287621_h2.jpg",
+        img: "img/g4/287621_h2.png",
+        before: "img/g4/287621_h1.png",
+        after: "img/g4/287621_h2.png",
         src: "スカウト！一騎当千",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/287621",
@@ -2783,9 +2781,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "伴手礼与闲谈",
         star: "★★★★",
-        img: "img/g4/344830_h2.jpg",
-        before: "img/g4/344830_h1.jpg",
-        after: "img/g4/344830_h2.jpg",
+        img: "img/g4/344830_h2.png",
+        before: "img/g4/344830_h1.png",
+        after: "img/g4/344830_h2.png",
         src: "フィーチャースカウト 英智編",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/344830",
@@ -2794,9 +2792,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "挑战与惊喜",
         star: "★★★★",
-        img: "img/g4/353130_h2.jpg",
-        before: "img/g4/353130_h1.jpg",
-        after: "img/g4/353130_h2.jpg",
+        img: "img/g4/353130_h2.png",
+        before: "img/g4/353130_h1.png",
+        after: "img/g4/353130_h2.png",
         src: "7周年記念スカウト HEADS編 グループC",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/353130",
@@ -2805,32 +2803,14 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "梦想彼端的信赖",
         star: "★★★★",
-        img: "img/g4/703818_h2.jpg",
-        before: "img/g4/703818_h1.jpg",
-        after: "img/g4/703818_h2.jpg",
+        img: "img/g4/703818_h2.png",
+        before: "img/g4/703818_h1.png",
+        after: "img/g4/703818_h2.png",
         src: "波乱の夢の先／君と立つグラデュエーション",
         srcType: "event",
         link: "https://gamerch.com/ensemble-star-music/703818",
         note: "中文为意译（非官方，待国服官方译名校准）；h1=未开花 h2=开花；归属以 ROLE_META 为准"
       }
-      ,{ name: "平凡中的特别", star: "★★★★★", img: "../img/g5/166751_h1.jpg", imgAfter: "../img/g5/166751_h2.jpg", src: "フィーチャースカウト 真緒編", link: "https://gamerch.com/ensemble-star-music/166751" }
-      ,{ name: "心意花束", star: "★★★★★", img: "../img/g5/264252_h1.jpg", imgAfter: "../img/g5/264252_h2.jpg", src: "スカウト！Ring.A.Bell", link: "https://gamerch.com/ensemble-star-music/264252" }
-      ,{ name: "回首四季", star: "★★★★★", img: "../img/g5/324621_h1.jpg", imgAfter: "../img/g5/324621_h2.jpg", src: "Focus＊ファインダー越しの四季", link: "https://gamerch.com/ensemble-star-music/324621" }
-      ,{ name: "自然交汇的视线", star: "★★★★★", img: "../img/g5/390047_h1.jpg", imgAfter: "../img/g5/390047_h2.jpg", src: "フィーチャースカウト 真緒編2", link: "https://gamerch.com/ensemble-star-music/390047" }
-      ,{ name: "与漫画相伴的回忆", star: "★★★★★", img: "../img/g5/764027_h1.jpg", imgAfter: "../img/g5/764027_h2.jpg", src: "スカウト！漫画会", link: "https://gamerch.com/ensemble-star-music/764027" }
-      ,{ name: "舞步翩翩的舞会", star: "★★★★★", img: "", imgAfter: "../img/g5/850866_h2.jpg", src: "オーディション VS PRINCESS -First piece-", link: "https://gamerch.com/ensemble-star-music/850866" }
-      ,{ name: "热心张罗的督导", star: "★★★★", img: "../img/g4/140540_h1.jpg", imgAfter: "../img/g4/140540_h2.jpg", src: "Music初期実装カード（2020年03月15日実装）", link: "https://gamerch.com/ensemble-star-music/140540" }
-      ,{ name: "新星的立场", star: "★★★★", img: "../img/g4/141020_h1.jpg", imgAfter: "../img/g4/141020_h2.jpg", src: "新星団★輝きのBIGBANG！", link: "https://gamerch.com/ensemble-star-music/141020" }
-      ,{ name: "甜点射手", star: "★★★★", img: "../img/g4/224576_h1.jpg", imgAfter: "../img/g4/224576_h2.jpg", src: "スカウト！スイートハント", link: "https://gamerch.com/ensemble-star-music/224576" }
-      ,{ name: "轻松玩摇滚", star: "★★★★", img: "../img/g4/258990_h1.jpg", imgAfter: "../img/g4/258990_h2.jpg", src: "6周年記念スカウト LOVE編 グループE", link: "https://gamerch.com/ensemble-star-music/258990" }
-      ,{ name: "智谋武将", star: "★★★★", img: "../img/g4/287621_h1.jpg", imgAfter: "../img/g4/287621_h2.jpg", src: "スカウト！一騎当千", link: "https://gamerch.com/ensemble-star-music/287621" }
-      ,{ name: "伴手礼与闲谈", star: "★★★★", img: "../img/g4/344830_h1.jpg", imgAfter: "../img/g4/344830_h2.jpg", src: "フィーチャースカウト 英智編", link: "https://gamerch.com/ensemble-star-music/344830" }
-      ,{ name: "挑战与惊喜", star: "★★★★", img: "../img/g4/353130_h1.jpg", imgAfter: "../img/g4/353130_h2.jpg", src: "7周年記念スカウト HEADS編 グループC", link: "https://gamerch.com/ensemble-star-music/353130" }
-      ,{ name: "梦想彼端的信赖", star: "★★★★", img: "../img/g4/703818_h1.jpg", imgAfter: "../img/g4/703818_h2.jpg", src: "波乱の夢の先／君と立つグラデュエーション", link: "https://gamerch.com/ensemble-star-music/703818" }
-      ,{ name: "［食への探求］衣更 真緒", star: "★★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［オルゴールの螺子］衣更 真緒", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［星の境界線］衣更 真緒", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［運命の瞬間］衣更 真緒", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
     ],
       outfits: [
         { name: "MV衣装＋原创SPP『ワチャガナドゥ？』＋L2D食道乐衣装", note: "Ambassador ★5 附赠", src: "日服情报微博 @EnsembleStars", link: "https://weibo.com/u/5517236683" }
@@ -2840,13 +2820,13 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
       id: "himeru", name: "HiMERU", jp: "ひめる", unit: "Crazy:B",
       info: "虹色开花卡面情报（09-25，日服）",
       cards: [
-{ name: "裏表アンビバレンス（开花）", star: "★★★★★", img: "", src: "Ensemble Stars Wiki 官方卡面", link: "https://ensemble-stars.fandom.com/wiki/(Front-Back_Ambivalence)_HiMERU" },
+{ name: "裏表アンビバレンス（开花）", star: "★★★★★", img: "assets/cards/himeru_fba.png", src: "Ensemble Stars Wiki 官方卡面", link: "https://ensemble-stars.fandom.com/wiki/(Front-Back_Ambivalence)_HiMERU" },
 {
         name: "藏于心底",
         star: "★★★★★",
-        img: "img/g5/177971_h2.jpg",
-        before: "img/g5/177971_h1.jpg",
-        after: "img/g5/177971_h2.jpg",
+        img: "img/g5/177971_h2.png",
+        before: "img/g5/177971_h1.png",
+        after: "img/g5/177971_h2.png",
         src: "フィーチャースカウト HiMERU編",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/177971",
@@ -2855,9 +2835,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "联结的阿里阿德涅",
         star: "★★★★★",
-        img: "img/g5/255842_h2.jpg",
-        before: "img/g5/255842_h1.jpg",
-        after: "img/g5/255842_h2.jpg",
+        img: "img/g5/255842_h2.png",
+        before: "img/g5/255842_h1.png",
+        after: "img/g5/255842_h2.png",
         src: "攻略！迷宮結ぶアリアドネの糸",
         srcType: "event",
         link: "https://gamerch.com/ensemble-star-music/255842",
@@ -2866,9 +2846,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "不甜的话语",
         star: "★★★★★",
-        img: "img/g5/332130_h2.jpg",
-        before: "img/g5/332130_h1.jpg",
-        after: "img/g5/332130_h2.jpg",
+        img: "img/g5/332130_h2.png",
+        before: "img/g5/332130_h1.png",
+        after: "img/g5/332130_h2.png",
         src: "スカウト！ロマンチック？デイト",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/332130",
@@ -2877,9 +2857,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "追寻的光辉碎片",
         star: "★★★★★",
-        img: "img/g5/349949_h2.jpg",
-        before: "img/g5/349949_h1.jpg",
-        after: "img/g5/349949_h2.jpg",
+        img: "img/g5/349949_h2.png",
+        before: "img/g5/349949_h1.png",
+        after: "img/g5/349949_h2.png",
         src: "追憶＊遊色が奏でるオブリガート",
         srcType: "event",
         link: "https://gamerch.com/ensemble-star-music/349949",
@@ -2888,9 +2868,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "幸运小兔",
         star: "★★★★★",
-        img: "img/g5/565767_h2.jpg",
-        before: "img/g5/565767_h1.jpg",
-        after: "img/g5/565767_h2.jpg",
+        img: "img/g5/565767_h2.png",
+        before: "img/g5/565767_h1.png",
+        after: "img/g5/565767_h2.png",
         src: "スカウト！強運SCRAMBLE",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/565767",
@@ -2899,9 +2879,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "以感谢为名的诚挚",
         star: "★★★★★",
-        img: "img/g5/964929_h2.jpg",
-        before: "img/g5/964929_h1.jpg",
-        after: "img/g5/964929_h2.jpg",
+        img: "img/g5/964929_h2.png",
+        before: "img/g5/964929_h1.png",
+        after: "img/g5/964929_h2.png",
         src: "ありがとう10周年！！Ensemble FES SCOUT！！ 第四弾 グループD",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/964929",
@@ -2910,9 +2890,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "倾注的热忱",
         star: "★★★★★",
-        img: "img/g5/1017184_h2.jpg",
-        before: "img/g5/1017184_h1.jpg",
-        after: "img/g5/1017184_h2.jpg",
+        img: "img/g5/1017184_h2.png",
+        before: "img/g5/1017184_h1.png",
+        after: "img/g5/1017184_h2.png",
         src: "Bright me up!!スカウト Stage：HiMERU",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/1017184",
@@ -2921,8 +2901,8 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "蜕变的飞行蜂",
         star: "★★★★★",
-        img: "img/g5/983815_h2.jpg",
-        after: "img/g5/983815_h2.jpg",
+        img: "img/g5/983815_h2.png",
+        after: "img/g5/983815_h2.png",
         src: "スカウト！赤き月夜と飛行蜂",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/983815",
@@ -2931,9 +2911,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "隐藏的偶像身份",
         star: "★★★★",
-        img: "img/g4/140605_h2.jpg",
-        before: "img/g4/140605_h1.jpg",
-        after: "img/g4/140605_h2.jpg",
+        img: "img/g4/140605_h2.png",
+        before: "img/g4/140605_h1.png",
+        after: "img/g4/140605_h2.png",
         src: "Music初期実装カード（2020年03月15日実装）",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/140605",
@@ -2942,9 +2922,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "真实与夜游乐趣",
         star: "★★★★",
-        img: "img/g4/164083_h2.jpg",
-        before: "img/g4/164083_h1.jpg",
-        after: "img/g4/164083_h2.jpg",
+        img: "img/g4/164083_h2.png",
+        before: "img/g4/164083_h1.png",
+        after: "img/g4/164083_h2.png",
         src: "召しませ／ナイトクラブ",
         srcType: "event",
         link: "https://gamerch.com/ensemble-star-music/164083",
@@ -2953,9 +2933,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "制作所的秘密",
         star: "★★★★",
-        img: "img/g4/167355_h2.jpg",
-        before: "img/g4/167355_h1.jpg",
-        after: "img/g4/167355_h2.jpg",
+        img: "img/g4/167355_h2.png",
+        before: "img/g4/167355_h1.png",
+        after: "img/g4/167355_h2.png",
         src: "5周年記念スカウト コズプロ編 グループA",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/167355",
@@ -2964,9 +2944,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "善意的表里",
         star: "★★★★",
-        img: "img/g4/210638_h2.jpg",
-        before: "img/g4/210638_h1.jpg",
-        after: "img/g4/210638_h2.jpg",
+        img: "img/g4/210638_h2.png",
+        before: "img/g4/210638_h1.png",
+        after: "img/g4/210638_h2.png",
         src: "フィーチャースカウト つむぎ編",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/210638",
@@ -2975,9 +2955,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "潮声中的风向",
         star: "★★★★",
-        img: "img/g4/280449_h2.jpg",
-        before: "img/g4/280449_h1.jpg",
-        after: "img/g4/280449_h2.jpg",
+        img: "img/g4/280449_h2.png",
+        before: "img/g4/280449_h1.png",
+        after: "img/g4/280449_h2.png",
         src: "スカウト！潮騒マリーナ",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/280449",
@@ -2986,9 +2966,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "贯彻的摇滚",
         star: "★★★★",
-        img: "img/g4/292171_h2.jpg",
-        before: "img/g4/292171_h1.jpg",
-        after: "img/g4/292171_h2.jpg",
+        img: "img/g4/292171_h2.png",
+        before: "img/g4/292171_h1.png",
+        after: "img/g4/292171_h2.png",
         src: "6周年記念スカウト SOUL編 グループB",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/292171",
@@ -2997,9 +2977,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "轮番交替",
         star: "★★★★",
-        img: "img/g4/382347_h2.jpg",
-        before: "img/g4/382347_h1.jpg",
-        after: "img/g4/382347_h2.jpg",
+        img: "img/g4/382347_h2.png",
+        before: "img/g4/382347_h1.png",
+        after: "img/g4/382347_h2.png",
         src: "フィーチャースカウト 茨編2",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/382347",
@@ -3008,9 +2988,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "秘密与惊喜",
         star: "★★★★",
-        img: "img/g4/396107_h2.jpg",
-        before: "img/g4/396107_h1.jpg",
-        after: "img/g4/396107_h2.jpg",
+        img: "img/g4/396107_h2.png",
+        before: "img/g4/396107_h1.png",
+        after: "img/g4/396107_h2.png",
         src: "7周年記念スカウト TAILS編 グループB",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/396107",
@@ -3019,9 +2999,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "即兴点歌",
         star: "★★★★",
-        img: "img/g4/769345_h2.jpg",
-        before: "img/g4/769345_h1.jpg",
-        after: "img/g4/769345_h2.jpg",
+        img: "img/g4/769345_h2.png",
+        before: "img/g4/769345_h1.png",
+        after: "img/g4/769345_h2.png",
         src: "スゴロク旅！BGMはナンバーエイト",
         srcType: "event",
         link: "https://gamerch.com/ensemble-star-music/769345",
@@ -3030,9 +3010,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "雨滴街道",
         star: "★★★★",
-        img: "img/g4/773999_h2.jpg",
-        before: "img/g4/773999_h1.jpg",
-        after: "img/g4/773999_h2.jpg",
+        img: "img/g4/773999_h2.png",
+        before: "img/g4/773999_h1.png",
+        after: "img/g4/773999_h2.png",
         src: "スカウト！雨垂れショーウィンドウ",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/773999",
@@ -3042,36 +3022,13 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
         name: "三点钟的执事",
         star: "★★★★",
         img: "img/g4/203894_h2.jpg",
-        before: "img/g4/203894_h1.jpg",
+        before: "img/g4/203894_h1.png",
         after: "img/g4/203894_h2.jpg",
         src: "SHUFFLE×夜の帳とバトラー",
         srcType: "event",
         link: "https://gamerch.com/ensemble-star-music/203894",
         note: "中文为意译（非官方，待国服官方译名校准）；h1=未开花 h2=开花；洗牌活动；MV衣装「XXVeil衣装」（页面MV衣装あり，已核对）"
       }
-      ,{ name: "藏于心底", star: "★★★★★", img: "../img/g5/177971_h1.jpg", imgAfter: "../img/g5/177971_h2.jpg", src: "フィーチャースカウト HiMERU編", link: "https://gamerch.com/ensemble-star-music/177971" }
-      ,{ name: "联结的阿里阿德涅", star: "★★★★★", img: "../img/g5/255842_h1.jpg", imgAfter: "../img/g5/255842_h2.jpg", src: "攻略！迷宮結ぶアリアドネの糸", link: "https://gamerch.com/ensemble-star-music/255842" }
-      ,{ name: "不甜的话语", star: "★★★★★", img: "../img/g5/332130_h1.jpg", imgAfter: "../img/g5/332130_h2.jpg", src: "スカウト！ロマンチック？デイト", link: "https://gamerch.com/ensemble-star-music/332130" }
-      ,{ name: "追寻的光辉碎片", star: "★★★★★", img: "../img/g5/349949_h1.jpg", imgAfter: "../img/g5/349949_h2.jpg", src: "追憶＊遊色が奏でるオブリガート", link: "https://gamerch.com/ensemble-star-music/349949" }
-      ,{ name: "幸运小兔", star: "★★★★★", img: "../img/g5/565767_h1.jpg", imgAfter: "../img/g5/565767_h2.jpg", src: "スカウト！強運SCRAMBLE", link: "https://gamerch.com/ensemble-star-music/565767" }
-      ,{ name: "以感谢为名的诚挚", star: "★★★★★", img: "../img/g5/964929_h1.jpg", imgAfter: "../img/g5/964929_h2.jpg", src: "ありがとう10周年！！Ensemble FES SCOUT！！ 第四弾 グループD", link: "https://gamerch.com/ensemble-star-music/964929" }
-      ,{ name: "倾注的热忱", star: "★★★★★", img: "../img/g5/1017184_h1.jpg", imgAfter: "../img/g5/1017184_h2.jpg", src: "Bright me up!!スカウト Stage：HiMERU", link: "https://gamerch.com/ensemble-star-music/1017184" }
-      ,{ name: "蜕变的飞行蜂", star: "★★★★★", img: "", imgAfter: "../img/g5/983815_h2.jpg", src: "スカウト！赤き月夜と飛行蜂", link: "https://gamerch.com/ensemble-star-music/983815" }
-      ,{ name: "隐藏的偶像身份", star: "★★★★", img: "../img/g4/140605_h1.jpg", imgAfter: "../img/g4/140605_h2.jpg", src: "Music初期実装カード（2020年03月15日実装）", link: "https://gamerch.com/ensemble-star-music/140605" }
-      ,{ name: "真实与夜游乐趣", star: "★★★★", img: "../img/g4/164083_h1.jpg", imgAfter: "../img/g4/164083_h2.jpg", src: "召しませ／ナイトクラブ", link: "https://gamerch.com/ensemble-star-music/164083" }
-      ,{ name: "制作所的秘密", star: "★★★★", img: "../img/g4/167355_h1.jpg", imgAfter: "../img/g4/167355_h2.jpg", src: "5周年記念スカウト コズプロ編 グループA", link: "https://gamerch.com/ensemble-star-music/167355" }
-      ,{ name: "善意的表里", star: "★★★★", img: "../img/g4/210638_h1.jpg", imgAfter: "../img/g4/210638_h2.jpg", src: "フィーチャースカウト つむぎ編", link: "https://gamerch.com/ensemble-star-music/210638" }
-      ,{ name: "潮声中的风向", star: "★★★★", img: "../img/g4/280449_h1.jpg", imgAfter: "../img/g4/280449_h2.jpg", src: "スカウト！潮騒マリーナ", link: "https://gamerch.com/ensemble-star-music/280449" }
-      ,{ name: "贯彻的摇滚", star: "★★★★", img: "../img/g4/292171_h1.jpg", imgAfter: "../img/g4/292171_h2.jpg", src: "6周年記念スカウト SOUL編 グループB", link: "https://gamerch.com/ensemble-star-music/292171" }
-      ,{ name: "轮番交替", star: "★★★★", img: "../img/g4/382347_h1.jpg", imgAfter: "../img/g4/382347_h2.jpg", src: "フィーチャースカウト 茨編2", link: "https://gamerch.com/ensemble-star-music/382347" }
-      ,{ name: "秘密与惊喜", star: "★★★★", img: "../img/g4/396107_h1.jpg", imgAfter: "../img/g4/396107_h2.jpg", src: "7周年記念スカウト TAILS編 グループB", link: "https://gamerch.com/ensemble-star-music/396107" }
-      ,{ name: "即兴点歌", star: "★★★★", img: "../img/g4/769345_h1.jpg", imgAfter: "../img/g4/769345_h2.jpg", src: "スゴロク旅！BGMはナンバーエイト", link: "https://gamerch.com/ensemble-star-music/769345" }
-      ,{ name: "雨滴街道", star: "★★★★", img: "../img/g4/773999_h1.jpg", imgAfter: "../img/g4/773999_h2.jpg", src: "スカウト！雨垂れショーウィンドウ", link: "https://gamerch.com/ensemble-star-music/773999" }
-      ,{ name: "三点钟的执事", star: "★★★★", img: "../img/g4/203894_h1.jpg", imgAfter: "../img/g4/203894_h2.jpg", src: "SHUFFLE×夜の帳とバトラー", link: "https://gamerch.com/ensemble-star-music/203894" }
-      ,{ name: "［感謝と言う誠実さを］HiMERU", star: "★★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［変わる飛行蜂］HiMERU", star: "★★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［注がれる熱］HiMERU", star: "★★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［読み取りデコレート］HiMERU", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
     ],
       outfits: [
         { name: "虹色开花 scr 房间衣装＆MV衣装", note: "玩家投稿整理（basic&music 满破数值）", src: "日服情报微博 @EnsembleStars", link: "https://weibo.com/u/5517236683" }
@@ -3081,14 +3038,14 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
       id: "jun", name: "涟纯", jp: "漣ジュン", unit: "Eden",
       info: "二箱『覚醒の試練』★5（06-15，日服）",
       cards: [
-{ name: "第一张五星（Saga 花后）", star: "★★★★★", img: "", src: "官方卡面（堆糖图库）", link: "https://m.duitang.com/blog/?id=1047742773" },
-        { name: "五星演出服卡面", star: "★★★★★", img: "", src: "官方卡面（堆糖图库）", link: "https://m.duitang.com/blog/?id=1249155505" },
+{ name: "第一张五星（Saga 花后）", star: "★★★★★", img: "assets/cards/jun_saga.png", src: "官方卡面（堆糖图库）", link: "https://m.duitang.com/blog/?id=1047742773" },
+        { name: "五星演出服卡面", star: "★★★★★", img: "assets/cards/jun_stage.png", src: "官方卡面（堆糖图库）", link: "https://m.duitang.com/blog/?id=1249155505" },
 {
         name: "斑鬣狗的狩猎",
         star: "★★★★★",
-        img: "img/g5/167773_h2.jpg",
-        before: "img/g5/167773_h1.jpg",
-        after: "img/g5/167773_h2.jpg",
+        img: "img/g5/167773_h2.png",
+        before: "img/g5/167773_h1.png",
+        after: "img/g5/167773_h2.png",
         src: "スカウト！ケモノサバイバル",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/167773",
@@ -3097,9 +3054,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "逆命前行之路",
         star: "★★★★★",
-        img: "img/g5/245785_h2.jpg",
-        before: "img/g5/245785_h1.jpg",
-        after: "img/g5/245785_h2.jpg",
+        img: "img/g5/245785_h2.png",
+        before: "img/g5/245785_h1.png",
+        after: "img/g5/245785_h2.png",
         src: "フィーチャースカウト ジュン編",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/245785",
@@ -3108,9 +3065,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "飞向云的彼岸",
         star: "★★★★★",
-        img: "img/g5/291022_h2.jpg",
-        before: "img/g5/291022_h1.jpg",
-        after: "img/g5/291022_h2.jpg",
+        img: "img/g5/291022_h2.png",
+        before: "img/g5/291022_h1.png",
+        after: "img/g5/291022_h2.png",
         src: "羽撃き◆雲散らすソリッドステージ",
         srcType: "event",
         link: "https://gamerch.com/ensemble-star-music/291022",
@@ -3119,9 +3076,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "硬派青春",
         star: "★★★★★",
-        img: "img/g5/364182_h2.jpg",
-        before: "img/g5/364182_h1.jpg",
-        after: "img/g5/364182_h2.jpg",
+        img: "img/g5/364182_h2.png",
+        before: "img/g5/364182_h1.png",
+        after: "img/g5/364182_h2.png",
         src: "スカウト！バンカラグラフィティ",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/364182",
@@ -3130,9 +3087,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "下定决心的新郎修行",
         star: "★★★★★",
-        img: "img/g5/764454_h2.jpg",
-        before: "img/g5/764454_h1.jpg",
-        after: "img/g5/764454_h2.jpg",
+        img: "img/g5/764454_h2.png",
+        before: "img/g5/764454_h1.png",
+        after: "img/g5/764454_h2.png",
         src: "花婿修行？／ウェディングマーチ！",
         srcType: "event",
         link: "https://gamerch.com/ensemble-star-music/764454",
@@ -3141,9 +3098,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "端正品行的野兽",
         star: "★★★★",
-        img: "img/g4/140600_h2.jpg",
-        before: "img/g4/140600_h1.jpg",
-        after: "img/g4/140600_h2.jpg",
+        img: "img/g4/140600_h2.png",
+        before: "img/g4/140600_h1.png",
+        after: "img/g4/140600_h2.png",
         src: "Music初期実装カード（2020年03月15日実装）",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/140600",
@@ -3152,9 +3109,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "制作所的风骨",
         star: "★★★★",
-        img: "img/g4/167350_h2.jpg",
-        before: "img/g4/167350_h1.jpg",
-        after: "img/g4/167350_h2.jpg",
+        img: "img/g4/167350_h2.png",
+        before: "img/g4/167350_h1.png",
+        after: "img/g4/167350_h2.png",
         src: "5周年記念スカウト コズプロ編 グループA",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/167350",
@@ -3163,9 +3120,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "购入新刊",
         star: "★★★★",
-        img: "img/g4/223875_h2.jpg",
-        before: "img/g4/223875_h1.jpg",
-        after: "img/g4/223875_h2.jpg",
+        img: "img/g4/223875_h2.png",
+        before: "img/g4/223875_h1.png",
+        after: "img/g4/223875_h2.png",
         src: "フィーチャースカウト 日和編",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/223875",
@@ -3174,9 +3131,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "以摇滚之心",
         star: "★★★★",
-        img: "img/g4/258992_h2.jpg",
-        before: "img/g4/258992_h1.jpg",
-        after: "img/g4/258992_h2.jpg",
+        img: "img/g4/258992_h2.png",
+        before: "img/g4/258992_h1.png",
+        after: "img/g4/258992_h2.png",
         src: "6周年記念スカウト LOVE編 グループE",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/258992",
@@ -3185,9 +3142,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "蔓延的纯白",
         star: "★★★★",
-        img: "img/g4/318228_h2.jpg",
-        before: "img/g4/318228_h1.jpg",
-        after: "img/g4/318228_h2.jpg",
+        img: "img/g4/318228_h2.png",
+        before: "img/g4/318228_h1.png",
+        after: "img/g4/318228_h2.png",
         src: "『SS』編／Final Stage 『SS』",
         srcType: "event",
         link: "https://gamerch.com/ensemble-star-music/318228",
@@ -3196,9 +3153,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "邂逅的光辉碎片",
         star: "★★★★",
-        img: "img/g4/349957_h2.jpg",
-        before: "img/g4/349957_h1.jpg",
-        after: "img/g4/349957_h2.jpg",
+        img: "img/g4/349957_h2.png",
+        before: "img/g4/349957_h1.png",
+        after: "img/g4/349957_h2.png",
         src: "追憶＊遊色が奏でるオブリガート",
         srcType: "event",
         link: "https://gamerch.com/ensemble-star-music/349957",
@@ -3207,9 +3164,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "率直之炎",
         star: "★★★★",
-        img: "img/g4/391085_h2.jpg",
-        before: "img/g4/391085_h1.jpg",
-        after: "img/g4/391085_h2.jpg",
+        img: "img/g4/391085_h2.png",
+        before: "img/g4/391085_h1.png",
+        after: "img/g4/391085_h2.png",
         src: "スカウト！舞闘会",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/391085",
@@ -3218,9 +3175,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "风骨与惊喜",
         star: "★★★★",
-        img: "img/g4/451801_h2.jpg",
-        before: "img/g4/451801_h1.jpg",
-        after: "img/g4/451801_h2.jpg",
+        img: "img/g4/451801_h2.png",
+        before: "img/g4/451801_h1.png",
+        after: "img/g4/451801_h2.png",
         src: "7周年記念スカウト TAILS編 グループE",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/451801",
@@ -3229,9 +3186,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "意气相投的热忱",
         star: "★★★★",
-        img: "img/g4/634070_h2.jpg",
-        before: "img/g4/634070_h1.jpg",
-        after: "img/g4/634070_h2.jpg",
+        img: "img/g4/634070_h2.png",
+        before: "img/g4/634070_h1.png",
+        after: "img/g4/634070_h2.png",
         src: "フィーチャースカウト 日和編2",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/634070",
@@ -3240,9 +3197,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "相互传递的一粒",
         star: "★★★★",
-        img: "img/g4/656735_h2.jpg",
-        before: "img/g4/656735_h1.jpg",
-        after: "img/g4/656735_h2.jpg",
+        img: "img/g4/656735_h2.png",
+        before: "img/g4/656735_h1.png",
+        after: "img/g4/656735_h2.png",
         src: "ショコラ◆格別な一粒Rouge＆Ruby",
         srcType: "event",
         link: "https://gamerch.com/ensemble-star-music/656735",
@@ -3252,66 +3209,41 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
         name: "不擅长的放风筝时光",
         star: "★★★★",
         img: "img/g4/199988_h2.jpg",
-        before: "img/g4/199988_h1.jpg",
+        before: "img/g4/199988_h1.png",
         after: "img/g4/199988_h2.jpg",
         src: "バラエティとタッグ／ボギータイム！",
         srcType: "event",
         link: "https://gamerch.com/ensemble-star-music/199988",
         note: "中文为意译（非官方，待国服官方译名校准）；h1=未开花 h2=开花；来源大类/细类待人工确认；MV未取到权威结论，暂留空"
       }
-      ,{ name: "斑鬣狗的狩猎", star: "★★★★★", img: "../img/g5/167773_h1.jpg", imgAfter: "../img/g5/167773_h2.jpg", src: "スカウト！ケモノサバイバル", link: "https://gamerch.com/ensemble-star-music/167773" }
-      ,{ name: "逆命前行之路", star: "★★★★★", img: "../img/g5/245785_h1.jpg", imgAfter: "../img/g5/245785_h2.jpg", src: "フィーチャースカウト ジュン編", link: "https://gamerch.com/ensemble-star-music/245785" }
-      ,{ name: "飞向云的彼岸", star: "★★★★★", img: "../img/g5/291022_h1.jpg", imgAfter: "../img/g5/291022_h2.jpg", src: "羽撃き◆雲散らすソリッドステージ", link: "https://gamerch.com/ensemble-star-music/291022" }
-      ,{ name: "硬派青春", star: "★★★★★", img: "../img/g5/364182_h1.jpg", imgAfter: "../img/g5/364182_h2.jpg", src: "スカウト！バンカラグラフィティ", link: "https://gamerch.com/ensemble-star-music/364182" }
-      ,{ name: "下定决心的新郎修行", star: "★★★★★", img: "../img/g5/764454_h1.jpg", imgAfter: "../img/g5/764454_h2.jpg", src: "花婿修行？／ウェディングマーチ！", link: "https://gamerch.com/ensemble-star-music/764454" }
-      ,{ name: "端正品行的野兽", star: "★★★★", img: "../img/g4/140600_h1.jpg", imgAfter: "../img/g4/140600_h2.jpg", src: "Music初期実装カード（2020年03月15日実装）", link: "https://gamerch.com/ensemble-star-music/140600" }
-      ,{ name: "制作所的风骨", star: "★★★★", img: "../img/g4/167350_h1.jpg", imgAfter: "../img/g4/167350_h2.jpg", src: "5周年記念スカウト コズプロ編 グループA", link: "https://gamerch.com/ensemble-star-music/167350" }
-      ,{ name: "购入新刊", star: "★★★★", img: "../img/g4/223875_h1.jpg", imgAfter: "../img/g4/223875_h2.jpg", src: "フィーチャースカウト 日和編", link: "https://gamerch.com/ensemble-star-music/223875" }
-      ,{ name: "以摇滚之心", star: "★★★★", img: "../img/g4/258992_h1.jpg", imgAfter: "../img/g4/258992_h2.jpg", src: "6周年記念スカウト LOVE編 グループE", link: "https://gamerch.com/ensemble-star-music/258992" }
-      ,{ name: "蔓延的纯白", star: "★★★★", img: "../img/g4/318228_h1.jpg", imgAfter: "../img/g4/318228_h2.jpg", src: "『SS』編／Final Stage 『SS』", link: "https://gamerch.com/ensemble-star-music/318228" }
-      ,{ name: "邂逅的光辉碎片", star: "★★★★", img: "../img/g4/349957_h1.jpg", imgAfter: "../img/g4/349957_h2.jpg", src: "追憶＊遊色が奏でるオブリガート", link: "https://gamerch.com/ensemble-star-music/349957" }
-      ,{ name: "率直之炎", star: "★★★★", img: "../img/g4/391085_h1.jpg", imgAfter: "../img/g4/391085_h2.jpg", src: "スカウト！舞闘会", link: "https://gamerch.com/ensemble-star-music/391085" }
-      ,{ name: "风骨与惊喜", star: "★★★★", img: "../img/g4/451801_h1.jpg", imgAfter: "../img/g4/451801_h2.jpg", src: "7周年記念スカウト TAILS編 グループE", link: "https://gamerch.com/ensemble-star-music/451801" }
-      ,{ name: "意气相投的热忱", star: "★★★★", img: "../img/g4/634070_h1.jpg", imgAfter: "../img/g4/634070_h2.jpg", src: "フィーチャースカウト 日和編2", link: "https://gamerch.com/ensemble-star-music/634070" }
-      ,{ name: "相互传递的一粒", star: "★★★★", img: "../img/g4/656735_h1.jpg", imgAfter: "../img/g4/656735_h2.jpg", src: "ショコラ◆格別な一粒Rouge＆Ruby", link: "https://gamerch.com/ensemble-star-music/656735" }
-      ,{ name: "不擅长的放风筝时光", star: "★★★★", img: "../img/g4/199988_h1.jpg", imgAfter: "../img/g4/199988_h2.jpg", src: "バラエティとタッグ／ボギータイム！", link: "https://gamerch.com/ensemble-star-music/199988" }
-      ,{ name: "［覚醒の試練］漣 ジュン", star: "★★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［涼風BEATS］漣 ジュン", star: "★★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［引き受けバディ］漣 ジュン", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［すれちがいデート］漣 ジュン", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
     ],
       outfits: [
         { name: "MV服装（原色/scr）＋房间服装＋SPP『EMBRACE』", note: "覚醒の試練 ★5 附赠", src: "日服情报微博 @EnsembleStars", link: "https://weibo.com/u/5517236683" }
       ]
     },
     {
-      id: "kanna", name: "Kanna", jp: "カンナ", unit: "Special for Princess!",
+      id: "kanna", name: "Kanna", jp: "カンナ",
       info: "国服『招募！EYE FITTING』★5（10-02 开启）；日服『噩梦』活动★3",
       cards: [
-        { name: "ユニコーンの笑顔（开花）", star: "★★★★★", img: "", src: "Ensemble Stars Wiki 官方卡面", link: "https://ensemble-stars.fandom.com/wiki/(Unicorn%27s_Smile)_Kanna" },
-        { name: "ES Idol（ESのアイドル）", star: "★★", img: "", src: "Ensemble Stars Wiki 官方卡面", link: "https://ensemble-stars.fandom.com/wiki/(ES_Idol)_Kanna" }
-      ,{ name: "［感謝は手短に］カンナ", star: "★★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［ロジック・アイ］カンナ", star: "★★★★★", img: "latest-preview/preview_img/cards/kanna_g5_2-after.png", imgAfter: "latest-preview/preview_img/cards/kanna_g5_2-after.png", src: "gamerch", link: "" }
-      ,{ name: "［王子の最善］カンナ", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［心の隠し味］カンナ", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［HIDDEN LIE］カンナ", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-    ],
+        { name: "ユニコーンの笑顔（开花）", star: "★★★★★", img: "assets/cards/kanna_unicorn.png", src: "Ensemble Stars Wiki 官方卡面", link: "https://ensemble-stars.fandom.com/wiki/(Unicorn%27s_Smile)_Kanna" },
+        { name: "ES Idol（ESのアイドル）", star: "★★", img: "assets/cards/kanna_esidol.png", src: "Ensemble Stars Wiki 官方卡面", link: "https://ensemble-stars.fandom.com/wiki/(ES_Idol)_Kanna" }
+      ],
       outfits: [
         { name: "LOGIC EYE MV 服装", note: "国服 EYE FITTING ★5 卡附赠（10-02 追加）", src: "官方 MV 展示公告", link: "https://weibo.com/u/5517236683" }
       ]
     },
     {
-      id: "kanata", name: "深海奏汰", jp: "深海奏汰", unit: "流星隊",
+      id: "kanata", name: "深海奏汰", jp: "深海奏汰", unit: "UNDEAD",
       info: "『招募！Ambassador／食道乐』★4（10-14，日服）",
       cards: [
-{ name: "赛车主题卡面", star: "★★★", img: "", src: "官方卡面（堆糖图库）", link: "https://m.duitang.com/blogs/tag/?name=%E3%81%99%E3%82%8D%E3%81%89%E3%82%82%E3%81%89%E3%81%97%E3%82%87%E3%82%93" },
-        { name: "青蛙主题卡面", star: "★★★★", img: "", src: "官方卡面（堆糖图库）", link: "https://m.duitang.com/album/?id=118484747" },
+{ name: "赛车主题卡面", star: "★★★", img: "assets/cards/kanata_race.png", src: "官方卡面（堆糖图库）", link: "https://m.duitang.com/blogs/tag/?name=%E3%81%99%E3%82%8D%E3%81%89%E3%82%82%E3%81%89%E3%81%97%E3%82%87%E3%82%93" },
+        { name: "青蛙主题卡面", star: "★★★★", img: "assets/cards/kanata_frog.png", src: "官方卡面（堆糖图库）", link: "https://m.duitang.com/album/?id=118484747" },
 {
         name: "并肩共斗「先生」",
         star: "★★★★★",
-        img: "img/g5/178676_h2.jpg",
-        before: "img/g5/178676_h1.jpg",
-        after: "img/g5/178676_h2.jpg",
+        img: "img/g5/178676_h2.png",
+        before: "img/g5/178676_h1.png",
+        after: "img/g5/178676_h2.png",
         src: "スカウト！サマースノー",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/178676",
@@ -3320,9 +3252,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "潜水艇与神明",
         star: "★★★★★",
-        img: "img/g5/260261_h2.jpg",
-        before: "img/g5/260261_h1.jpg",
-        after: "img/g5/260261_h2.jpg",
+        img: "img/g5/260261_h2.png",
+        before: "img/g5/260261_h1.png",
+        after: "img/g5/260261_h2.png",
         src: "『SS』編／2nd Stageサブマリン",
         srcType: "event",
         link: "https://gamerch.com/ensemble-star-music/260261",
@@ -3331,9 +3263,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "相连之海",
         star: "★★★★★",
-        img: "img/g5/299794_h2.jpg",
-        before: "img/g5/299794_h1.jpg",
-        after: "img/g5/299794_h2.jpg",
+        img: "img/g5/299794_h2.png",
+        before: "img/g5/299794_h1.png",
+        after: "img/g5/299794_h2.png",
         src: "フィーチャースカウト 奏汰編",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/299794",
@@ -3342,9 +3274,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "与鱼同歌",
         star: "★★★★★",
-        img: "img/g5/367226_h2.jpg",
-        before: "img/g5/367226_h1.jpg",
-        after: "img/g5/367226_h2.jpg",
+        img: "img/g5/367226_h2.png",
+        before: "img/g5/367226_h1.png",
+        after: "img/g5/367226_h2.png",
         src: "フィーチャースカウト 奏汰編2",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/367226",
@@ -3353,9 +3285,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "满怀感激",
         star: "★★★★★",
-        img: "img/g5/961149_h2.jpg",
-        before: "img/g5/961149_h1.jpg",
-        after: "img/g5/961149_h2.jpg",
+        img: "img/g5/961149_h2.png",
+        before: "img/g5/961149_h1.png",
+        after: "img/g5/961149_h2.png",
         src: "ありがとう10周年！！Ensemble FES SCOUT！！ 第四弾 グループA",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/961149",
@@ -3364,9 +3296,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "热爱海洋之人",
         star: "★★★★",
-        img: "img/g4/140550_h2.jpg",
-        before: "img/g4/140550_h1.jpg",
-        after: "img/g4/140550_h2.jpg",
+        img: "img/g4/140550_h2.png",
+        before: "img/g4/140550_h1.png",
+        after: "img/g4/140550_h2.png",
         src: "Music初期実装カード（2020年03月15日実装）",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/140550",
@@ -3375,9 +3307,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "水之生灵",
         star: "★★★★",
-        img: "img/g4/138226_h2.jpg",
-        before: "img/g4/138226_h1.jpg",
-        after: "img/g4/138226_h2.jpg",
+        img: "img/g4/138226_h2.png",
+        before: "img/g4/138226_h1.png",
+        after: "img/g4/138226_h2.png",
         src: "フィーチャースカウト みか編",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/138226",
@@ -3386,9 +3318,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "和流星队大家一起",
         star: "★★★★",
-        img: "img/g4/211848_h2.jpg",
-        before: "img/g4/211848_h1.jpg",
-        after: "img/g4/211848_h2.jpg",
+        img: "img/g4/211848_h2.png",
+        before: "img/g4/211848_h1.png",
+        after: "img/g4/211848_h2.png",
         src: "変身！星々を繋ぐコメットショウ",
         srcType: "event",
         link: "https://gamerch.com/ensemble-star-music/211848",
@@ -3397,9 +3329,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "月光舞会",
         star: "★★★★",
-        img: "img/g4/284765_h2.jpg",
-        before: "img/g4/284765_h1.jpg",
-        after: "img/g4/284765_h2.jpg",
+        img: "img/g4/284765_h2.png",
+        before: "img/g4/284765_h1.png",
+        after: "img/g4/284765_h2.png",
         src: "SHUFFLE×月光ミラーボール",
         srcType: "event",
         link: "https://gamerch.com/ensemble-star-music/284765",
@@ -3408,9 +3340,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "怒涛摇滚",
         star: "★★★★",
-        img: "img/g4/292165_h2.jpg",
-        before: "img/g4/292165_h1.jpg",
-        after: "img/g4/292165_h2.jpg",
+        img: "img/g4/292165_h2.png",
+        before: "img/g4/292165_h1.png",
+        after: "img/g4/292165_h2.png",
         src: "6周年記念スカウト SOUL編 グループB",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/292165",
@@ -3419,9 +3351,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "愿望的色彩",
         star: "★★★★",
-        img: "img/g4/334538_h2.jpg",
-        before: "img/g4/334538_h1.jpg",
-        after: "img/g4/334538_h2.jpg",
+        img: "img/g4/334538_h2.png",
+        before: "img/g4/334538_h1.png",
+        after: "img/g4/334538_h2.png",
         src: "スカウト！色彩百花",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/334538",
@@ -3430,9 +3362,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "同行惊喜",
         star: "★★★★",
-        img: "img/g4/353131_h2.jpg",
-        before: "img/g4/353131_h1.jpg",
-        after: "img/g4/353131_h2.jpg",
+        img: "img/g4/353131_h2.png",
+        before: "img/g4/353131_h1.png",
+        after: "img/g4/353131_h2.png",
         src: "7周年記念スカウト HEADS編 グループC",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/353131",
@@ -3441,9 +3373,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "新作滋味",
         star: "★★★★",
-        img: "img/g4/396353_h2.jpg",
-        before: "img/g4/396353_h1.jpg",
-        after: "img/g4/396353_h2.jpg",
+        img: "img/g4/396353_h2.png",
+        before: "img/g4/396353_h1.png",
+        after: "img/g4/396353_h2.png",
         src: "フィーチャースカウト 零編2",
         srcType: "scout",
         link: "https://gamerch.com/ensemble-star-music/396353",
@@ -3452,9 +3384,9 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "变化的原点",
         star: "★★★★",
-        img: "img/g4/748570_h2.jpg",
-        before: "img/g4/748570_h1.jpg",
-        after: "img/g4/748570_h2.jpg",
+        img: "img/g4/748570_h2.png",
+        before: "img/g4/748570_h1.png",
+        after: "img/g4/748570_h2.png",
         src: "Origin★星空を歌うAltered",
         srcType: "event",
         link: "https://gamerch.com/ensemble-star-music/748570",
@@ -3463,401 +3395,213 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
 {
         name: "新生乐园",
         star: "★★★★",
-        img: "img/g4/777703_h2.jpg",
-        before: "img/g4/777703_h1.jpg",
-        after: "img/g4/777703_h2.jpg",
+        img: "img/g4/777703_h2.png",
+        before: "img/g4/777703_h1.png",
+        after: "img/g4/777703_h2.png",
         src: "ぎゅっと☆好きを詰めたトロピカルパラダイス",
         srcType: "event",
         link: "https://gamerch.com/ensemble-star-music/777703",
         note: "中文为意译（非官方，待国服官方译名校准）；h1=未开花 h2=开花；归属以 ROLE_META 为准"
       }
-      ,{ name: "并肩共斗「先生」", star: "★★★★★", img: "../img/g5/178676_h1.jpg", imgAfter: "../img/g5/178676_h2.jpg", src: "スカウト！サマースノー", link: "https://gamerch.com/ensemble-star-music/178676" }
-      ,{ name: "潜水艇与神明", star: "★★★★★", img: "../img/g5/260261_h1.jpg", imgAfter: "../img/g5/260261_h2.jpg", src: "『SS』編／2nd Stageサブマリン", link: "https://gamerch.com/ensemble-star-music/260261" }
-      ,{ name: "相连之海", star: "★★★★★", img: "../img/g5/299794_h1.jpg", imgAfter: "../img/g5/299794_h2.jpg", src: "フィーチャースカウト 奏汰編", link: "https://gamerch.com/ensemble-star-music/299794" }
-      ,{ name: "与鱼同歌", star: "★★★★★", img: "../img/g5/367226_h1.jpg", imgAfter: "../img/g5/367226_h2.jpg", src: "フィーチャースカウト 奏汰編2", link: "https://gamerch.com/ensemble-star-music/367226" }
-      ,{ name: "满怀感激", star: "★★★★★", img: "../img/g5/961149_h1.jpg", imgAfter: "../img/g5/961149_h2.jpg", src: "ありがとう10周年！！Ensemble FES SCOUT！！ 第四弾 グループA", link: "https://gamerch.com/ensemble-star-music/961149" }
-      ,{ name: "热爱海洋之人", star: "★★★★", img: "../img/g4/140550_h1.jpg", imgAfter: "../img/g4/140550_h2.jpg", src: "Music初期実装カード（2020年03月15日実装）", link: "https://gamerch.com/ensemble-star-music/140550" }
-      ,{ name: "水之生灵", star: "★★★★", img: "../img/g4/138226_h1.jpg", imgAfter: "../img/g4/138226_h2.jpg", src: "フィーチャースカウト みか編", link: "https://gamerch.com/ensemble-star-music/138226" }
-      ,{ name: "和流星队大家一起", star: "★★★★", img: "../img/g4/211848_h1.jpg", imgAfter: "../img/g4/211848_h2.jpg", src: "変身！星々を繋ぐコメットショウ", link: "https://gamerch.com/ensemble-star-music/211848" }
-      ,{ name: "月光舞会", star: "★★★★", img: "../img/g4/284765_h1.jpg", imgAfter: "../img/g4/284765_h2.jpg", src: "SHUFFLE×月光ミラーボール", link: "https://gamerch.com/ensemble-star-music/284765" }
-      ,{ name: "怒涛摇滚", star: "★★★★", img: "../img/g4/292165_h1.jpg", imgAfter: "../img/g4/292165_h2.jpg", src: "6周年記念スカウト SOUL編 グループB", link: "https://gamerch.com/ensemble-star-music/292165" }
-      ,{ name: "愿望的色彩", star: "★★★★", img: "../img/g4/334538_h1.jpg", imgAfter: "../img/g4/334538_h2.jpg", src: "スカウト！色彩百花", link: "https://gamerch.com/ensemble-star-music/334538" }
-      ,{ name: "同行惊喜", star: "★★★★", img: "../img/g4/353131_h1.jpg", imgAfter: "../img/g4/353131_h2.jpg", src: "7周年記念スカウト HEADS編 グループC", link: "https://gamerch.com/ensemble-star-music/353131" }
-      ,{ name: "新作滋味", star: "★★★★", img: "../img/g4/396353_h1.jpg", imgAfter: "../img/g4/396353_h2.jpg", src: "フィーチャースカウト 零編2", link: "https://gamerch.com/ensemble-star-music/396353" }
-      ,{ name: "变化的原点", star: "★★★★", img: "../img/g4/748570_h1.jpg", imgAfter: "../img/g4/748570_h2.jpg", src: "Origin★星空を歌うAltered", link: "https://gamerch.com/ensemble-star-music/748570" }
-      ,{ name: "新生乐园", star: "★★★★", img: "../img/g4/777703_h1.jpg", imgAfter: "../img/g4/777703_h2.jpg", src: "ぎゅっと☆好きを詰めたトロピカルパラダイス", link: "https://gamerch.com/ensemble-star-music/777703" }
-      ,{ name: "［じゆうなたび］深海 奏汰", star: "★★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［かんしゃにあふれて］深海 奏汰", star: "★★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［はなたれるせんこう］深海 奏汰", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［『しょく』のめぐみ］深海 奏汰", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［らいど・びぃと］深海 奏汰", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
     ],
       outfits: [
         { name: "SPP『Deep into you』＋L2D＋私服2（秋〜冬）", note: "Ambassador ★4 附赠", src: "日服情报微博 @EnsembleStars", link: "https://weibo.com/u/5517236683" }
       ]
     },
     {
-      id: "subaru", name: "明星昴流", jp: "明星スバル", unit: "Trickstar",
+      id: "subaru", name: "明星昴流", jp: "明星スバル",
       info: "『爛漫スプリング』★5 卡池",
-      cards: [
-      { name: "［ONLY STAR］明星 スバル", star: "★★★★★", img: "latest-preview/preview_img/cards/jp-subaru-onlystar-after.png", imgAfter: "latest-preview/preview_img/cards/jp-subaru-onlystar-after.png", before: "latest-preview/preview_img/cards/jp-subaru-onlystar-before.png", src: "gamerch", link: "https://gamerch.com/ensemble-star-music/982140" }
-      ,{ name: "［増していく輝き］明星 スバル", star: "★★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［笑顔が大好きなバディ］明星 スバル", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［Trail Frontier］明星 スバル", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［自分の言葉］明星 スバル", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［星の余裕］明星 スバル", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-    ],
+      cards: [],
       outfits: [
-        { name: "MV衣装展示［爛漫スプリング］", img: "", note: "卡池五星 SPP＋MV衣装", src: "B站 视频展示", link: "https://www.bilibili.com/v/game/music" }
+        { name: "MV衣装展示［爛漫スプリング］", img: "assets/cards/mv_spring.png", note: "卡池五星 SPP＋MV衣装", src: "B站 视频展示", link: "https://www.bilibili.com/v/game/music" }
       ]
     },
     {
-      id: "mikanaru", name: "影片美伽 / 鸣上岚", jp: "影片みか／鳴上嵐", unit: "Valkyrie",
+      id: "mikanaru", name: "影片美伽 / 鸣上岚", jp: "影片みか／鳴上嵐",
       info: "『play \"tag\"』卡池衣装（2wink 舞台）",
-      cards: [
-      { name: "［オルゴールの番人］影片 みか", star: "★★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［戦乙女の鼓動］影片 みか", star: "★★★★★", img: "latest-preview/preview_img/cards/mikanaru_g5_2-after.png", imgAfter: "latest-preview/preview_img/cards/mikanaru_g5_2-after.png", src: "gamerch", link: "" }
-      ,{ name: "［機嫌のいいバディ］影片 みか", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-    ],
+      cards: [],
       outfits: [
-        { name: "卡池衣装『play \"tag\"』", img: "", note: "闺蜜组卡池衣装舞台展示", src: "B站 视频展示", link: "https://www.bilibili.com/v/game/music" }
+        { name: "卡池衣装『play \"tag\"』", img: "assets/cards/mv_tag.png", note: "闺蜜组卡池衣装舞台展示", src: "B站 视频展示", link: "https://www.bilibili.com/v/game/music" }
       ]
     },
     {
       id: "hokuto", name: "冰鹰北斗", jp: "氷鷹北斗", unit: "Trickstar",
       info: "Trickstar 队长，冷静沉着的策略家",
-      cards: [
-      { name: "［世界を染める絆］氷鷹 北斗", star: "★★★★★", img: "latest-preview/preview_img/cards/jp-hokuto-kizuna-after.png", imgAfter: "latest-preview/preview_img/cards/jp-hokuto-kizuna-after.png", before: "latest-preview/preview_img/cards/jp-hokuto-kizuna-before.png", src: "gamerch", link: "https://gamerch.com/ensemble-star-music/982142" }
-      ,{ name: "［いつでも本気のバディ］氷鷹 北斗", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［駆ける経験］氷鷹 北斗", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［運命の会話］氷鷹 北斗", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［星の奪い合い］氷鷹 北斗", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-    ],
+      cards: [],
       outfits: []
     },
     {
       id: "chiaki", name: "守泽千秋", jp: "守沢千秋", unit: "流星隊",
       info: "流星隊 队长，热血正义的英雄",
-      cards: [
-      { name: "［感謝に燃える心］守沢 千秋", star: "★★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［次世代の任務］守沢 千秋", star: "★★★★★", img: "latest-preview/preview_img/cards/chiaki_g5_2-after.png", imgAfter: "latest-preview/preview_img/cards/chiaki_g5_2-after.png", src: "gamerch", link: "" }
-      ,{ name: "［導き出す閃光］守沢 千秋", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［運命の一声］守沢 千秋", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-    ],
+      cards: [],
       outfits: []
     },
     {
       id: "hinata", name: "葵日向", jp: "葵ひなた", unit: "2wink",
       info: "2wink 成员，葵裕太的双胞胎哥哥",
-      cards: [
-      { name: "［逃せないスプラッシュ］葵 ひなた", star: "★★★★★", img: "latest-preview/preview_img/cards/hinata_g5_1-after.png", imgAfter: "latest-preview/preview_img/cards/hinata_g5_1-after.png", src: "gamerch", link: "" }
-    ],
+      cards: [],
       outfits: []
     },
     {
       id: "eichi", name: "天祥院英智", jp: "天祥院英智", unit: "fine",
       info: "fine 队长，STARMAKER PRODUCTION 会长",
-      cards: [
-      { name: "［現実を変える絆］天祥院 英智", star: "★★★★★", img: "latest-preview/preview_img/cards/jp-eichi-kizuna-after.png", imgAfter: "latest-preview/preview_img/cards/jp-eichi-kizuna-after.png", src: "gamerch", link: "" }
-      ,{ name: "［運命の演奏者］天祥院 英智", star: "★★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［ONLY GLOW］天祥院 英智", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［強く繊細なバディ］天祥院 英智", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［満ちるMusica］天祥院 英智", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［運命の出会い］天祥院 英智", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［Rulerの王冠］天祥院 英智", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［満たされる想い］天祥院 英智", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-    ],
+      cards: [],
       outfits: []
     },
     {
       id: "wataru", name: "日日树涉", jp: "日日樹渉", unit: "fine",
       info: "fine 成员，戏剧社成员，充满神秘感的表演者",
-      cards: [
-      { name: "［薔薇園のRuler］日々樹 渉", star: "★★★★★", img: "latest-preview/preview_img/cards/jp-wataru-bara-after.png", imgAfter: "latest-preview/preview_img/cards/jp-wataru-bara-after.png", src: "gamerch", link: "" }
-      ,{ name: "［響くMusica］日々樹 渉", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［華麗な仕掛け人］日々樹 渉", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［愉快を愛するバディ］日々樹 渉", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［希望の演奏者］日々樹 渉", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-    ],
+      cards: [],
       outfits: []
     },
     {
       id: "tori", name: "姬宫桃李", jp: "姫宮桃李", unit: "fine",
       info: "fine 成员，大小姐般的傲娇少年",
-      cards: [
-      { name: "［思い出デコレート］姫宮 桃李", star: "★★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［Rulerの矜持］姫宮 桃李", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［重なるMusica］姫宮 桃李", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［羽ばたく演奏者］姫宮 桃李", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-    ],
+      cards: [],
       outfits: []
     },
     {
       id: "tsumugi", name: "伏见弓弦", jp: "伏見弓弦", unit: "fine",
       info: "fine 成员，完美的管家型角色",
-      cards: [
-      { name: "［高鳴るMusica］伏見 弓弦", star: "★★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［心地良い空間］伏見 弓弦", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［変わる演奏者］伏見 弓弦", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［Rulerの謁見］伏見 弓弦", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-    ],
+      cards: [],
       outfits: []
     },
     {
       id: "izumi", name: "濑名泉", jp: "瀬名泉", unit: "Knights",
       info: "Knights 成员，模特气质的冷酷少年",
-      cards: [
-      { name: "［お姫さまを守る剣］瀬名 泉", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" },
-      { name: "［体調管理のバディ］瀬名 泉", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" },
-      { name: "［ファーストスカッシュ］瀬名 泉", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" },
-      { name: "［騎士の選択］瀬名 泉", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" },
-      { name: "［永遠の絆の夏］瀬名 泉", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-    ],
+      cards: [],
       outfits: []
     },
     {
       id: "ritsu", name: "朔间凛月", jp: "朔間凛月", unit: "Knights",
       info: "Knights 成员，喜欢睡觉的吸血鬼少年",
-      cards: [
-      { name: "［自分らしいペース］朔間 凛月", star: "★★★★★", img: "latest-preview/preview_img/cards/jp-ritsu-princess-after.png", imgAfter: "latest-preview/preview_img/cards/jp-ritsu-princess-after.png", src: "gamerch", link: "" }
-      ,{ name: "［お姫さまと過ごす一夜］朔間 凛月", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［影に潜むバディ］朔間 凛月", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［オルゴールの譜面］朔間 凛月", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［騎士のチャンス］朔間 凛月", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-    ],
+      cards: [],
       outfits: []
     },
     {
       id: "tomoya", name: "真白友也", jp: "真白友也", unit: "Ra*bits",
       info: "Ra*bits 成员，认真努力的优等生",
-      cards: [
-      { name: "［駆ける舞台］真白 友也", star: "★★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［波音BEATS］真白 友也", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［等身大なバディ］真白 友也", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［ウサギのこだわり］真白 友也", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［食の親しみ］真白 友也", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-    ],
+      cards: [],
       outfits: []
     },
     {
-      id: "niki", name: "椎名丹希", jp: "椎名ニキ", unit: "Crazy:B",
+      id: "niki", name: "仁兔成鸣", jp: "仁兎なずな", unit: "Ra*bits",
       info: "Ra*bits 队长，可爱系的少年",
-      cards: [
-      { name: "［感謝で満たして］椎名 ニキ", star: "★★★★★", img: "", imgAfter: "latest-preview/preview_img/cards/jp-niki-rabbit-after.png", src: "gamerch", link: "" }
-      ,{ name: "［じっくり準備時間］椎名 ニキ", star: "★★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［衝動の飛行蜂］椎名 ニキ", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［お料理上手なバディ］椎名 ニキ", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［美味しい約束］椎名 ニキ", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［微睡BEATS］椎名 ニキ", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-    ],
+      cards: [],
       outfits: []
     },
     {
       id: "mitsuru", name: "天满光", jp: "天満光", unit: "Ra*bits",
       info: "Ra*bits 成员，运动万能的元气少年",
-      cards: [
-      { name: "［追い越す未来］天満 光", star: "★★★★★", img: "latest-preview/preview_img/cards/jp-mitsuru-mirai-after.png", imgAfter: "latest-preview/preview_img/cards/jp-mitsuru-mirai-after.png", src: "gamerch", link: "" }
-      ,{ name: "［巡り来る期待］天満 光", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［舞台での顔］天満 光", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［変えない信念］天満 光", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［ウサギの親交］天満 光", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-    ],
+      cards: [],
       outfits: []
     },
     {
-      id: "adonis", name: "乙狩阿多尼斯", jp: "乙狩アドニス", unit: "UNDEAD",
+      id: "adonis", name: "紫之创", jp: "紫之創", unit: "Ra*bits",
       info: "Ra*bits 成员，节俭的花道家",
-      cards: [
-      { name: "［フォームと目線］乙狩 アドニス", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" },
-      { name: "［思いやりバディ］乙狩 アドニス", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" },
-      { name: "［追いかける友］乙狩 アドニス", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-    ],
+      cards: [],
       outfits: []
     },
     {
-      id: "keito", name: "莲巳敬人", jp: "蓮巳敬人", unit: "紅月",
+      id: "keito", name: "莲巳敬人", jp: "蓮巳敬人", unit: "红月",
       info: "红月 队长，严格的和风青年",
-      cards: [
-      { name: "［まだ知らない自分］蓮巳 敬人", star: "★★★★★", img: "latest-preview/preview_img/cards/jp-keito-jibun-after.png", imgAfter: "latest-preview/preview_img/cards/jp-keito-jibun-after.png", src: "gamerch", link: "" }
-      ,{ name: "［赤き月夜の誘い］蓮巳 敬人", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［抜かりなきバディ］蓮巳 敬人", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［オルゴールの記憶］蓮巳 敬人", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［ディテール・アイ］蓮巳 敬人", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-    ],
+      cards: [],
       outfits: []
     },
     {
-      id: "kuro", name: "鬼龙红郎", jp: "鬼龍紅郎", unit: "紅月",
+      id: "kuro", name: "鬼龙红郎", jp: "鬼龍紅郎", unit: "红月",
       info: "红月 成员，不良少年气质的武士",
-      cards: [
-      { name: "［向かい合う信念］鬼龍 紅郎", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" },
-      { name: "［未来を叶える絆］鬼龍 紅郎", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" },
-      { name: "［赤き月夜の拳］鬼龍 紅郎", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" },
-      { name: "［熱く誓いを立てる夏］鬼龍 紅郎", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" },
-      { name: "［衝突スプラッシュ］鬼龍 紅郎", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" },
-      { name: "［豪快で器用なバディ］鬼龍 紅郎", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-    ],
+      cards: [],
       outfits: []
     },
     {
       id: "rei", name: "朔间零", jp: "朔間零", unit: "UNDEAD",
       info: "UNDEAD 队长，诡异的吸血鬼前辈",
-      cards: [
-      { name: "［巡り来る順番］朔間 零", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" },
-      { name: "［ONLY BRIGHT］朔間 零", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" },
-      { name: "［追いかける記憶］朔間 零", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-    ],
+      cards: [],
       outfits: []
     },
     {
       id: "koga", name: "大神晃牙", jp: "大神晃牙", unit: "UNDEAD",
       info: "UNDEAD 成员，狼系少年，喜欢狗",
-      cards: [
-      { name: "［追いかける魂］大神 晃牙", star: "★★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［音楽ラバーバディ］大神 晃牙", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［譲れない信念］大神 晃牙", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［いつか来るデート］大神 晃牙", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［譲れない戦闘］大神 晃牙", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［応酬スプラッシュ］大神 晃牙", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-    ],
+      cards: [],
       outfits: []
     },
     {
       id: "kaoru", name: "羽风薰", jp: "羽風薫", unit: "UNDEAD",
       info: "UNDEAD 成员，轻浮的海洋爱好者",
-      cards: [
-      { name: "［Perfect Shot］羽風 薫", star: "★★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［秘密の関係］羽風 薫", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［追いかける足取り］羽風 薫", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-    ],
+      cards: [],
       outfits: []
     },
-    
+    {
+      id: "adonis", name: "乙狩阿多尼斯", jp: "乙狩アドニス", unit: "UNDEAD",
+      info: "UNDEAD 成员，沉默寡言的外国少年",
+      cards: [],
+      outfits: []
+    },
     {
       id: "rinne", name: "天城燐音", jp: "天城燐音", unit: "Crazy:B",
       info: "Crazy:B 队长，热情奔放的冲绳少年",
-      cards: [
-      { name: "［感謝の分だけ勝負］天城 燐音", star: "★★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［自由を感じる絆］天城 燐音", star: "★★★★★", img: "latest-preview/preview_img/cards/rinne_g5_2-after.png", imgAfter: "latest-preview/preview_img/cards/rinne_g5_2-after.png", src: "gamerch", link: "" }
-      ,{ name: "［燃えるライブ］天城 燐音", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［貫く飛行蜂］天城 燐音", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［上がって下がって］天城 燐音", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-    ],
+      cards: [],
       outfits: []
     },
     {
-      id: "hiyori2", name: "巴日和", jp: "巴日和", unit: "Eden",
+      id: "hiyori2", name: "樱河琥珀", jp: "桜河こはく", unit: "Crazy:B",
       info: "Crazy:B 成员，关西腔的可爱少年",
-      cards: [
-      { name: "［貴公子の装い］巴 日和", star: "★★★★★", img: "latest-preview/preview_img/cards/hiyori2_g5_1-after.png", imgAfter: "latest-preview/preview_img/cards/hiyori2_g5_1-after.png", src: "gamerch", link: "" },
-      { name: "［絆の試練］巴 日和", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" },
-      { name: "［愛を語るバディ］巴 日和", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" },
-      { name: "［本当の要望］巴 日和", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-    ],
+      cards: [],
       outfits: []
     },
     {
       id: "mamm", name: "三毛缟斑", jp: "三毛縞斑", unit: "MaM",
       info: "MaM 唯一成员，自由奔放的前辈",
-      cards: [
-      { name: "［巡り来る未来］三毛縞 斑", star: "★★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［Party Vibe］三毛縞 斑", star: "★★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［母なる信念］三毛縞 斑", star: "★★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［裏切らない期待］三毛縞 斑", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［ヒーローの力］三毛縞 斑", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［実演の任務］三毛縞 斑", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-    ],
+      cards: [],
       outfits: []
     },
     {
       id: "tiger", name: "南云铁虎", jp: "南雲鉄虎", unit: "流星隊",
       info: "流星隊 成员，热血的空手道少年",
-      cards: [
-      { name: "［感謝は拳と胸に］南雲 鉄虎", star: "★★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［障害を乗り越える絆］南雲 鉄虎", star: "★★★★★", img: "latest-preview/preview_img/cards/tiger_g5_2-after.png", imgAfter: "latest-preview/preview_img/cards/tiger_g5_2-after.png", src: "gamerch", link: "" }
-      ,{ name: "［友情デコレート］南雲 鉄虎", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［心身成長中のバディ］南雲 鉄虎", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［流れ星の奮闘］南雲 鉄虎", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［交わし合う信念］南雲 鉄虎", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［差し込む閃光］南雲 鉄虎", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-    ],
+      cards: [],
       outfits: []
     },
     {
       id: "shinobu", name: "仙石忍", jp: "仙石忍", unit: "流星隊",
       info: "流星隊 成员，忍者爱好者的矮小少年",
-      cards: [
-      { name: "［感謝と笑顔の術］仙石 忍", star: "★★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［切り裂く閃光］仙石 忍", star: "★★★★★", img: "latest-preview/preview_img/cards/shinobu_g5_2-after.png", imgAfter: "latest-preview/preview_img/cards/shinobu_g5_2-after.png", src: "gamerch", link: "" }
-      ,{ name: "［地上に光る星］仙石 忍", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［仲間想いのバディ］仙石 忍", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［流れ星の期待］仙石 忍", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-    ],
+      cards: [],
       outfits: []
     },
     {
       id: "tsumugi2", name: "青叶纺", jp: "青葉つむぎ", unit: "Switch",
       info: "Switch 成员，喜欢恐怖故事的作家",
-      cards: [
-      { name: "［感謝と励みを感じて］青葉 つむぎ", star: "★★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［語りかける熱］青葉 つむぎ", star: "★★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［魔法使いの願望］青葉 つむぎ", star: "★★★★★", img: "latest-preview/preview_img/cards/jp-tsumugi-ruler-after.png", imgAfter: "latest-preview/preview_img/cards/jp-tsumugi-ruler-after.png", src: "gamerch", link: "" }
-      ,{ name: "［変わりゆくルート］青葉 つむぎ", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［クイック・アイ］青葉 つむぎ", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［物腰柔らかバディ］青葉 つむぎ", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［巡り来る希望］青葉 つむぎ", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［残響BEATS］青葉 つむぎ", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-    ],
+      cards: [],
       outfits: []
     },
     {
       id: "sora", name: "春川宙", jp: "春川宙", unit: "Switch",
       info: "Switch 成员，宇宙系的神秘少年",
-      cards: [
-      { name: "［感謝の輪を広げに］春川 宙", star: "★★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［新世界の任務］春川 宙", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［感受性豊かバディ］春川 宙", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［ぬくもりメイキング］春川 宙", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［魔法使いの余裕］春川 宙", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-    ],
+      cards: [],
       outfits: []
     },
     {
       id: "hiyori3", name: "天城一彩", jp: "天城一彩", unit: "ALKALOID",
       info: "ALKALOID 成员，淳朴的冲绳少年",
-      cards: [
-      { name: "［ONLY SHINE］天城 一彩", star: "★★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［正直で天然なバディ］天城 一彩", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［兵隊の新記録］天城 一彩", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［信じるコトノハ］天城 一彩", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［夏の水飛沫］天城 一彩", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-    ],
+      cards: [],
       outfits: []
     },
     {
-      id: "nikki", name: "白鸟蓝良", jp: "白鳥藍良", unit: "ALKALOID",
+      id: "nikki", name: "白井须磨子", jp: "白井須磨子", unit: "ALKALOID",
       info: "ALKALOID 成员，冷静沉着的学生会长",
       cards: [],
       outfits: []
     },
     {
-      id: "maz2", name: "风早巽", jp: "風早巽", unit: "ALKALOID",
+      id: "maz2", name: "福泽重", jp: "福沢重", unit: "ALKALOID",
       info: "ALKALOID 成员，温和的邻家少年",
       cards: [],
       outfits: []
     },
     {
-      id: "yun", name: "梦限梦限", jp: "ユメ", unit: "Special for Princess!",
+      id: "yun", name: "更屋敷日向", jp: "更屋敷ひなた", unit: "ALKALOID",
       info: "ALKALOID 成员，神秘的归国子女",
-      cards: [
-      { name: "［感謝は自分らしく］ユメ", star: "★★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［いつでも強気］ユメ", star: "★★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［王子が見る夢］ユメ", star: "★★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［自分世界のバディ］ユメ", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［惹かれる興味］ユメ", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［DREAMY LIE］ユメ", star: "★★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-      ,{ name: "［終わらない夏］ユメ", star: "★★★", img: "", imgAfter: "", src: "gamerch", link: "" }
-    ],
+      cards: [],
       outfits: []
     },
   ];
@@ -4616,7 +4360,7 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
   function encStarNum(s) { const m = String(s || "").match(/★/g); return m ? m.length : 0; }
   function encRoles() {
     const G = window.EsGacha; if (!G) return [];
-    const fix = {};
+    const fix = { mao: "Trickstar", kanata: "流星隊", subaru: "Trickstar", mikanaru: "2wink", kanna: "Special for Princess!" };
     const old = G.ENCY.map((r) => ({
       id: r.id, name: r.name, jp: r.jp || "", unit: fix[r.id] || r.unit || "其他", info: r.info || "", kind: "old",
       cards: (r.cards || []).map((c) => ({ ...c, before: c.before || c.img || "", after: c.after || "", stars: encStarNum(c.star) })),
@@ -4631,20 +4375,7 @@ window.ES_HEAD_NAME = {"HiMERU":"HiMERU","エス":"Esu","カンナ":"Kanna","ユ
     return old.concat(recent);
   }
   function encRole(id) { return encRoles().find((r) => r.id === id) || null; }
-  function encLatestCard(r) {
-    const cards = r.cards || [];
-    // 优先：有图的五星卡（取最后一张=最新的）
-    const g5WithImg = cards.filter((c) => c.star === "★★★★★" && c.img);
-    if (g5WithImg.length > 0) return g5WithImg[g5WithImg.length - 1];
-    // 其次：有图的任意卡
-    const anyWithImg = cards.filter((c) => c.img);
-    if (anyWithImg.length > 0) return anyWithImg[anyWithImg.length - 1];
-    // 再次：五星卡（无图也取）
-    const g5 = cards.filter((c) => c.star === "★★★★★");
-    if (g5.length > 0) return g5[g5.length - 1];
-    // 最后：第一张
-    return cards[0] || null;
-  }
+  function encLatestCard(r) { return (r.cards || []).find((c) => c.img) || (r.cards || [])[0] || null; }
   function encGroupList() {
     return [
       { name: "Trickstar", sub: "トリックスター", color: "#d2595f", prod: "Star Production" },
@@ -6722,11 +6453,9 @@ function keysTag(s) {
   }).sort(function(a,b){return b.dateISO.localeCompare(a.dateISO);});}
   function singleCardPic(c){
     var low=c.lowQuality?'<span class="pv-low">待官方替换</span>':"";
-    var hasAfter=!!(c.imgReady&&c.after);
-    var toggleBtn=hasAfter?'<button class="pv-flip-btn" data-card-id="'+pvEsc(c.id)+'" title="切换花前/花后">切换开花</button>':"";
     var curImg=c.img?(c.img):"";
     var imgHtml=c.imgReady?'<img src="'+pvEsc(PV_ASSET+curImg)+'" alt="'+pvEsc(c.card||"")+'" class="pv-card-img" id="pv-img-'+pvEsc(c.id)+'">':'<div class="pv-empty"><span>待补卡面</span></div>';
-    return '<div class="pv-single-pic"><span class="pv-star">★5</span>'+low+toggleBtn+imgHtml+'</div>';
+    return '<div class="pv-single-pic"><span class="pv-star">★5</span>'+low+imgHtml+'</div>';
   }
   function cardPic(c){
     return singleCardPic(c);
@@ -6746,7 +6475,13 @@ function keysTag(s) {
     var badge=pvTagBadge(c.tag,c.kind,c.sourceType);
     var link=c.sourceUrl?'<a class="pv-link" href="'+pvEsc(c.sourceUrl)+'" target="_blank" rel="noopener">来源 ↗</a>':'';
     var period=(c.startISO||c.endISO)?('<div class="pv-period">'+(c.startISO?("起 "+pvHM(c.startISO)):"")+(c.endISO?(" ～ 止 "+pvHM(c.endISO)):"")+'</div>'):"";
-    return '<div class="pv-card" onclick="pvShowStarDetail('+JSON.stringify(c).replace(/"/g,'&quot;')+')">'+cardPic(c)+'<div class="pv-cbody"><div class="pv-char">'+pvEsc(c.char||"—")+'</div><div class="pv-cname">'+pvEsc(c.card||"（卡名待补）")+'</div><div class="pv-src">'+badge+'<span class="pv-date">'+pvEsc(c.dateISO)+'</span></div>'+period+link+'</div></div>';
+    // 花前/花后切换按钮（参考图鉴样式）
+    var hasAfter=!!(c.imgReady&&c.after);
+    var bloomSwitch='<div class="pv-bloom-switch">'+
+      '<button type="button" class="active" data-mode="before" data-card-id="'+pvEsc(c.id)+'">未开花</button>'+
+      '<button type="button" data-mode="after" data-card-id="'+pvEsc(c.id)+'"'+(hasAfter?'':' disabled')+'>开花</button>'+
+      '</div>';
+    return '<div class="pv-card" onclick="pvShowStarDetail('+JSON.stringify(c).replace(/"/g,'&quot;')+')">'+cardPic(c)+bloomSwitch+'<div class="pv-cbody"><div class="pv-char">'+pvEsc(c.char||"—")+'</div><div class="pv-cname">'+pvEsc(c.card||"（卡名待补）")+'</div><div class="pv-src">'+badge+'<span class="pv-date">'+pvEsc(c.dateISO)+'</span></div>'+period+link+'</div></div>';
   }
   function bannerHTML(b){
     var media=(b.imgReady&&b.img)?'<img src="'+pvEsc(PV_ASSET+b.img)+'" alt="'+pvEsc(b.title)+'">':'<div class="pv-ph">宣传图待补</div>';
@@ -7254,26 +6989,31 @@ function keysTag(s) {
       eb.textContent=open?"角色图鉴 ▾":"角色图鉴 ▴";
     });}
   })();
-  // 切换花前/花后
+  // 切换花前/花后（未开花/开花双按钮，参考图鉴样式）
   (function(){
     document.addEventListener("click",function(e){
-      var btn=e.target&&e.target.closest?e.target.closest(".pv-flip-btn"):null;
+      var btn=e.target&&e.target.closest?e.target.closest(".pv-bloom-switch button"):null;
       if(!btn)return;
+      e.stopPropagation();
+      var mode=btn.getAttribute("data-mode");
       var cardId=btn.getAttribute("data-card-id");
       var imgEl=document.getElementById("pv-img-"+cardId);
       if(!imgEl)return;
       var all=(typeof PREVIEW_CARDS!=="undefined"?PREVIEW_CARDS:[]);
       var card=all.find(function(c){return c.id===cardId;});
       if(!card)return;
-      var cur=imgEl.src.split("/").pop();
-      var before=(card.before||card.img||"").split("/").pop();
-      var after=(card.after||"").split("/").pop();
-      if(cur===before&&after){
-        imgEl.src=PV_ASSET+card.after;
-        btn.textContent="切换花前";
-      }else{
+      // 切换图片
+      if(mode==="before"){
         imgEl.src=PV_ASSET+(card.before||card.img);
-        btn.textContent="切换开花";
+      }else if(mode==="after"&&card.after){
+        imgEl.src=PV_ASSET+card.after;
+      }
+      // 更新active状态
+      var switchEl=btn.closest(".pv-bloom-switch");
+      if(switchEl){
+        switchEl.querySelectorAll("button").forEach(function(b){
+          b.classList.toggle("active",b===btn);
+        });
       }
     });
   })();
