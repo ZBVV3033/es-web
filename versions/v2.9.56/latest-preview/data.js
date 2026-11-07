@@ -403,7 +403,7 @@ const ENC_RECENT = [
     info:"Music 当期 Bright me up!!スカウト Stage：凪砂 ★5［追いかける熱］（10-25 15:00~11-10 15:00，已核2026；卡面就位、低清待官方替换）",
     cards:[
       { name:"［追いかける熱］乱凪砂（Music ★5）", star:"★★★★★",
-        img:"latest-preview/preview_img/cards/jp-stage-nagisa.png",
+        img:"",
         src:"Gamerch 单卡1026378（第三方低清，待官方高清替换）",
         link:"https://gamerch.com/ensemble-star-music/1026378",
         note:"五红星框+本人目视确认；同池★4円果望見、★3遊木真，不得混入★5" }
@@ -411,7 +411,7 @@ const ENC_RECENT = [
   { id:"en-cn-jun-20261031", server:"CN", dateISO:"2026-10-31", name:"涟纯", jp:"漣ジュン", unit:"CN · 2026-10-31",
     info:"国服活动『试炼！追寻属于自己的Golden Dream』唯一★5【觉醒的试炼】涟纯（活动10-31 12:00~11-08 22:00；名称档期官方微博核实，卡面已就位）",
     cards:[
-      { name:"【觉醒的试炼】涟纯（活动 ★5）", star:"★★★★★", img:"latest-preview/preview_img/cards/cn-s5-jun-goldendream.jpg",
+      { name:"【觉醒的试炼】涟纯（活动 ★5）", star:"★★★★★", img:"",
         src:"国服官方微博 5359324940993658",
         link:"https://m.weibo.cn/detail/5359324940993658",
         note:"同池★4巴日和、★3乱凪砂、★3七种茨；官方宣传图" }
@@ -419,7 +419,7 @@ const ENC_RECENT = [
   { id:"en-cn-natsume-20261030", server:"CN", dateISO:"2026-10-30", name:"逆先夏目", jp:"逆先夏目", unit:"CN · 2026-10-30",
     info:"国服限定卡池『招募！夏至夜风』★5【一起悠然度过的夏天】逆先夏目（卡池10-30 12:00~11-13 12:00；名称档期官方微博核实，卡面已就位）",
     cards:[
-      { name:"【一起悠然度过的夏天】逆先夏目（卡池 ★5）", star:"★★★★★", img:"latest-preview/preview_img/cards/cn-s5-natsume-summer.jpg",
+      { name:"【一起悠然度过的夏天】逆先夏目（卡池 ★5）", star:"★★★★★", img:"",
         src:"国服官方微博 5358962552604799",
         link:"https://m.weibo.cn/detail/5358962552604799",
         note:"同池★4鬼龙红郎等；官方宣传图" }
@@ -427,7 +427,7 @@ const ENC_RECENT = [
   { id:"en-cn-leo-20261017", server:"CN", dateISO:"2026-10-17", name:"月永雷欧", jp:"月永レオ", unit:"CN · 2026-10-17",
     info:"国服巡演活动 世界巡演篇 Knights VS Trickstar ★5《骑士的本心》（既有时间线记录；卡面已就位）",
     cards:[
-      { name:"骑士的本心 · 月永雷欧（巡演活动 ★5）", star:"★★★★★", img:"latest-preview/preview_img/cards/cn-s5-leo-knights.jpg",
+      { name:"骑士的本心 · 月永雷欧（巡演活动 ★5）", star:"★★★★★", img:"",
         src:"官方微博 5353887864718344",
         link:"https://m.weibo.cn/detail/5353887864718344",
         note:"时间线记录条目；官方宣传图" }
@@ -435,7 +435,7 @@ const ENC_RECENT = [
   { id:"en-cn-makoto-20261016", server:"CN", dateISO:"2026-10-16", name:"游木真", jp:"遊木真", unit:"CN · 2026-10-16",
     info:"国服卡池『招募！好战骑士与奇策之星』★5《星星的谋略》（既有时间线记录；卡面已就位）",
     cards:[
-      { name:"星星的谋略 · 游木真（卡池 ★5）", star:"★★★★★", img:"latest-preview/preview_img/cards/cn-makoto-knights-before.png",
+      { name:"星星的谋略 · 游木真（卡池 ★5）", star:"★★★★★", img:"",
         src:"Gamerch 987976［星の駆け引き］",
         link:"https://gamerch.com/ensemble-star-music/987976",
         note:"卡池 ★5；同池★4仙石忍、★3天满光；第三方低清待官方替换" }
@@ -443,7 +443,7 @@ const ENC_RECENT = [
   { id:"en-cn-souma-20261012", server:"CN", dateISO:"2026-10-12", name:"神崎飒马", jp:"神崎颯馬", unit:"CN · 2026-10-12",
     info:"国服 Bright me up!!招募 Stage：飒马 ★5《锦簇花路》（近30天窗口内已结束往期；仅作最近月填充，卡面已就位）",
     cards:[
-      { name:"锦簇花路 · 神崎飒马（Stage ★5）", star:"★★★★★", img:"latest-preview/preview_img/cards/jp-souma-michisuji-before.png",
+      { name:"锦簇花路 · 神崎飒马（Stage ★5）", star:"★★★★★", img:"",
         src:"Gamerch 987172［彩られる道筋］",
         link:"https://gamerch.com/ensemble-star-music/987172",
         note:"Stage ★5；金色边框+五颗星已验证；第三方低清待官方替换" }
@@ -451,7 +451,7 @@ const ENC_RECENT = [
   { id:"en-jp-midori-20261031", server:"JP", dateISO:"2026-10-31", name:"高峯翠", jp:"高峯翠", unit:"JP · 2026-10-31",
     info:"Music World Tour 篇 AREA07「2wink VS 流星隊」EVENT 活动奖励 ★5 高峯翠（10-31 15:00~11-08 22:00，已核2026；卡面已就位）",
     cards:[
-      { name:"AREA07 流星隊側 EVENT報酬 ★5 高峯翠（Music ★5）", star:"★★★★★", img:"latest-preview/preview_img/cards/jp-midori-area07.png",
+      { name:"AREA07 流星隊側 EVENT報酬 ★5 高峯翠（Music ★5）", star:"★★★★★", img:"",
         src:"Gamerch 964926［感謝は実感と共に］",
         link:"https://gamerch.com/ensemble-star-music/964926",
         note:"活动奖励 ★5；同奖 ★4葵ひなた、★3守沢千秋/深海奏汰；第三方低清待官方替换" }
@@ -459,9 +459,38 @@ const ENC_RECENT = [
   { id:"en-jp-yuta-20261030", server:"JP", dateISO:"2026-10-30", name:"葵裕太", jp:"葵ゆうた", unit:"JP · 2026-10-30",
     info:"Music AREA07 同時開催 SCOUT ★5 葵ゆうた（10-30 15:00~11-14 15:00，已核2026；卡面已就位）",
     cards:[
-      { name:"AREA07 SCOUT ★5 葵ゆうた（Music ★5）", star:"★★★★★", img:"latest-preview/preview_img/cards/jp-yuta-area07.png",
+      { name:"AREA07 SCOUT ★5 葵ゆうた（Music ★5）", star:"★★★★★", img:"",
         src:"Gamerch 964957［想いを繋ぐ絆］",
         link:"https://gamerch.com/ensemble-star-music/964957",
         note:"招募 pickup ★5；同池★4南雲鉄虎、★3仙石忍；第三方低清待官方替换" }
+    ], outfits:[] }
+,
+  
+,
+  { id:"en-jp-tsukasa-20261010", server:"JP", dateISO:"2026-10-10", name:"朱樱司", jp:"朱桜司", unit:"JP · 2026-10-10",
+    info:"Basic Bright me up!!スカウト Stage：司 ☆5［自信を武器に］（2026-10-10 追加，已核年份；与归档2020旧司卡193430不是同一张；wiki五亮星觉醒竖版就位、低清待官方替换）",
+    cards:[
+      { name:"［自信を武器に］朱桜司（Basic ☆5 觉醒）", star:"★★★★★",
+        img:"latest-preview/preview_img/cards/jp-basic-tsukasa-20261010.jpg",
+        src:"Gamerch Basic 1021078（2026-10-10 追加，レアリティ☆5 Lv60；第三方低清觉醒竖版，待官方高清替换）",
+        link:"https://gamerch.com/ensemble-star-basic/1021078",
+        note:"五亮星框+朱樱司本人目视确认；Basic 体系；禁止与 archive 的2020旧司卡193430混用" }
+    ], outfits:[] },
+  { id:"en-jp-mao-20261014", server:"JP", dateISO:"2026-10-14", name:"衣更真绪", jp:"衣更真緒", unit:"JP · 2026-10-14",
+    info:"Basic スカウト！Ambassador／ショクドウラク ☆5［食への探求］（2026-10-14 追加，已核年份；wiki五亮星觉醒竖版就位、低清待官方替换）",
+    cards:[
+      { name:"［食への探求］衣更真緒（Basic ☆5 觉醒）", star:"★★★★★",
+        img:"latest-preview/preview_img/cards/jp-basic-mao-20261014.jpg",
+        src:"Gamerch Basic 1021904（2026-10-14 追加，レアリティ☆5 Lv60；第三方低清觉醒竖版，待官方高清替换）",
+        link:"https://gamerch.com/ensemble-star-basic/1021904",
+        note:"五亮星框+衣更真绪本人目视确认；Basic 体系" }
+    ], outfits:[] },
+  { id:"en-jp-raika-20261015", server:"JP", dateISO:"2026-10-15", name:"Raika", jp:"ライカ", unit:"JP · 2026-10-15",
+    info:"Basic 活动『悪夢★暗闇とらいむLIEト』☆5［SWEET LIE］（10-15 15:00~10-24 22:00，已核2026；卡面已就位）",
+    cards:[
+      { name:"［SWEET LIE］ライカ（Basic 活动 ☆5）", star:"★★★★★", img:"latest-preview/preview_img/cards/jp-raika-sweetlie.jpg",
+        src:"Gamerch Basic 1022639（追加日2026-10-15）",
+        link:"https://gamerch.com/ensemble-star-basic/1022639",
+        note:"Special for Princess!；Basic 活动卡；第三方低清待官方替换" }
     ], outfits:[] }
 ];
